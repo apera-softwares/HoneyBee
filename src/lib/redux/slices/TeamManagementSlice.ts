@@ -1,19 +1,16 @@
-// src/redux/slices/userManagementSlice.ts
-
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { BACKEND_API } from "@/api";
 
-export const fetchUsers = createAsyncThunk(
-    "user/fetchUsers",
+export const fetchTeams = createAsyncThunk(
+    "user/fetchTeams",
     async (obj: any, thunkAPI) => {
       try {
         const state: any = thunkAPI.getState();
         const token = state.user?.user?.token; 
+        const {page,limit} = obj
 
-        const {order,role,page,limit,name} = obj
-
-        const response = await axios.get(`${BACKEND_API}admin/users?page=${page}&&role=${role}&&name=${name}&&order=${order}&&limit=${limit}`, {
+        const response = await axios.get(`${BACKEND_API}team?page=${page}&&limit=${limit}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -21,15 +18,13 @@ export const fetchUsers = createAsyncThunk(
   
         return response.data;
       } catch (error: any) {
-        return thunkAPI.rejectWithValue(error.response?.data?.message || "Failed to fetch users");
+        return thunkAPI.rejectWithValue(error.response?.data?.message || "Failed to fetch Teams");
       }
     }
   );
 
-
-
-  export const CreateUser = createAsyncThunk(
-    "user/Create",
+  export const CreateTeam = createAsyncThunk(
+    "team/Create",
     async (obj: any, thunkAPI) => {
       try {
         const state: any = thunkAPI.getState();
@@ -37,7 +32,7 @@ export const fetchUsers = createAsyncThunk(
         const { id, ...rest } = obj;
   
         const response = await axios.post(
-          `${BACKEND_API}admin/user`,
+          `${BACKEND_API}team`,
           rest, 
           {
             headers: {
@@ -49,14 +44,14 @@ export const fetchUsers = createAsyncThunk(
         return response.data;
       } catch (error: any) {
         return thunkAPI.rejectWithValue(
-          error.response?.data?.message || "Failed to Create user"
+          error.response?.data?.message || "Failed to Create Team"
         );
       }
     }
   );
 
-  export const UpdateUser = createAsyncThunk(
-    "user/Update",
+  export const UpdateTeam = createAsyncThunk(
+    "team/Update",
     async (obj: any, thunkAPI) => {
       try {
         const state: any = thunkAPI.getState();
@@ -64,7 +59,7 @@ export const fetchUsers = createAsyncThunk(
         const { id, ...rest } = obj; 
   
         const response = await axios.put(
-          `${BACKEND_API}admin/user/${id}`,
+          `${BACKEND_API}team/${id}`,
           rest, 
           {
             headers: {
@@ -76,76 +71,77 @@ export const fetchUsers = createAsyncThunk(
         return response.data;
       } catch (error: any) {
         return thunkAPI.rejectWithValue(
-          error.response?.data?.message || "Failed to update user"
+          error.response?.data?.message || "Failed to update Team"
         );
       }
     }
   );
   
 
-interface UserState {
-  users: any[];
+interface TeamState {
+  teams: any[];
   loading: boolean;
   error: string | null;
 }
 
-const initialState: UserState = {
-  users: [],
+const initialState: TeamState = {
+  teams: [],
   loading: false,
   error: null,
 };
 
-const userManagementSlice = createSlice({
-  name: "userManagement",
+const teamManagementSlice = createSlice({
+  name: "TeamManagement",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
 
-    //Get Users
+    //Get Teams
     builder
-      .addCase(fetchUsers.pending, (state) => {
+      .addCase(fetchTeams.pending, (state) => {
         state.loading = true;
         state.error = null;
-        state.users = [];
+        state.teams = [];
       })
-      .addCase(fetchUsers.fulfilled, (state, action) => {
+      .addCase(fetchTeams.fulfilled, (state, action) => {
         state.loading = false;
-        state.users = action.payload;
+        state.teams = action.payload;
       })
-      .addCase(fetchUsers.rejected, (state, action) => {
+      .addCase(fetchTeams.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });
 
 
-      //Create User
+      //Create Team
+
       builder
-      .addCase(CreateUser.pending, (state) => {
+      .addCase(CreateTeam.pending, (state) => {
         state.loading = true;
         state.error = null;
-        state.users = [];
+        state.teams = [];
       })
-      .addCase(CreateUser.fulfilled, (state, action) => {
+      .addCase(CreateTeam.fulfilled, (state, action) => {
         state.loading = false;
-        state.users = action.payload;
+        state.teams = action.payload;
       })
-      .addCase(CreateUser.rejected, (state, action) => {
+      .addCase(CreateTeam.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });
 
-      //Update User
+      //Update Team
       builder
-      .addCase(UpdateUser.pending, (state) => {
+      .addCase(UpdateTeam.pending, (state) => {
         state.loading = true;
         state.error = null;
-        state.users = [];
+        state.teams = [];
       })
-      .addCase(UpdateUser.fulfilled, (state, action) => {
+      .addCase(UpdateTeam.fulfilled, (state, action) => {
         state.loading = false;
-        state.users = action.payload;
+        state.teams = action.payload;
       })
-      .addCase(UpdateUser.rejected, (state, action) => {
+      .addCase(UpdateTeam.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });
@@ -155,4 +151,4 @@ const userManagementSlice = createSlice({
   },
 });
 
-export default userManagementSlice.reducer;
+export default teamManagementSlice.reducer;

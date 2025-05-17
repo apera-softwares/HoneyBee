@@ -3,11 +3,12 @@ import React, { useState } from "react";
 import CommonHeading from "@/components/common/CommonHeading";
 import { CiSearch } from "react-icons/ci";
 import { HiOutlinePlus } from "react-icons/hi";
-import UserAddEditModal from "@/components/user/UserAddEditModal";
-import UserTable from "@/components/user/UserTable";
 import { Toaster } from "react-hot-toast";
+import TeamAddEdit from "@/components/team/TeamAddEdit";
+import TeamTable from "@/components/team/TeamTable";
 
 export default function UserManagement() {
+
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [SearchInput, setSearchInput] = useState("")
     const [filterRole, setFilterRole] = useState("")
@@ -22,8 +23,7 @@ export default function UserManagement() {
                 <div className=" w-auto">
                     <CommonHeading
                         pageTitle="Team Management"
-                        description="Manage all Team's manager and members"
-                    />
+                        description="Manage all Team's manager and members"/>
                 </div>
 
                 {/* Right: Actions */}
@@ -66,19 +66,13 @@ export default function UserManagement() {
                         <option value="desc">des to asc</option>
                     </select>
 
-                    {/* Upload Button */}
-                    {/* <div className="w-32 h-11 relative rounded-md">
-                        <div className="w-32 h-11 left-0 top-0 absolute bg-amber-500 rounded-md" />
-                        <div className="left-[36px] top-[14.43px] absolute justify-start text-white text-sm font-medium font-['Montserrat']">CSV/PDF</div>
-                    </div> */}
-
                 </div>
             </div>
 
             {/* Table */}
             <div className="mt-6">
-                <UserTable searchText={SearchInput} role={filterRole} order={order} />
-                <UserAddEditModal isOpen={isModalOpen} closeModal={() => setIsModalOpen(false)} type="add" />
+                <TeamTable searchText={SearchInput} role={filterRole} order={order} />
+                <TeamAddEdit isOpen={isModalOpen} closeModal={() => setIsModalOpen(false)} type="add" />
 
             </div>
         </div>
