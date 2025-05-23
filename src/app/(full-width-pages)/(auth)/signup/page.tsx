@@ -2,11 +2,11 @@
 import AuthRigthSidebar from "@/components/AuthRigthSidebar";
 import { INPUT_CLASS, INPUT_REQUIRED_ERROR_CLASS } from "@/constant/constantClassName";
 import Image from "next/image";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import Logo from '../../../../assets/logo/logo.png'
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import { useAppDispatch,useAppSelector } from "@/lib/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { userSignup } from "@/lib/redux/slices/userSlice";
 import Loader from "@/components/ui/loader/Loader";
 
@@ -30,7 +30,7 @@ export default function CreateAccountPage() {
     const dispatch = useAppDispatch()
 
     const loggedInUser = useAppSelector((state) => state.user.user);
-    
+
     useEffect(() => {
 
         if (loggedInUser) {

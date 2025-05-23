@@ -9,15 +9,15 @@ interface CommonHeadingProps {
 const CommonHeading: React.FC<CommonHeadingProps> = ({ pageTitle, description }) => {
   return (
     <div className="mb-6">
-    <h1
-        className="text-2xl sm:text-3xl font-semibold text-gray-800 dark:text-white/90"
+      <h1
+        className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white/90"
         x-text="pageName"
-    >
+      >
         {pageTitle}      </h1>
-    <div className=" font-medium text-[#1F1C3B]">
+      <div className=" font-medium text-[#1F1C3B]">
         {description}
+      </div>
     </div>
-</div>
   );
 };
 

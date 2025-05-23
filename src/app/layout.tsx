@@ -1,12 +1,17 @@
-"use client"
 import { Montserrat } from 'next/font/google';
 import './globals.css';
 import { SidebarProvider } from '@/context/SidebarContext';
 import { ThemeProvider } from '@/context/ThemeContext';
 import ReduxProvider from '@/lib/redux/provider';
 import { Toaster } from 'react-hot-toast';
+import { Metadata } from 'next';
 
 
+export const metadata: Metadata = {
+  title:
+    "Honeybee Harry's",
+  description: "Admin Dashboard",
+};
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -30,9 +35,9 @@ export default function RootLayout({
         }}>
         <ReduxProvider>
           <ThemeProvider>
-            <SidebarProvider> <Toaster/>{children}</SidebarProvider>
+            <SidebarProvider> <Toaster />{children}</SidebarProvider>
           </ThemeProvider>
-         
+
         </ReduxProvider>
       </body>
     </html>

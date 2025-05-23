@@ -47,11 +47,11 @@ const navItems: NavItem[] = [
     name: "Landing page and submit referral",
     path: "/referral",
   },
-  // {
-  //   icon: <Users />,
-  //   name: "Member",
-  //   path: "/profile",
-  // },
+  {
+    icon: <Users />,
+    name: "Member",
+    path: "/members",
+  },
   {
     icon: <CoinHand />,
     name: "A-Team",

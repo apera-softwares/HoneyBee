@@ -34,16 +34,16 @@ const ServiceCard: React.FC<ISectionCardProps> = ({
         <Image
           src={images[current]}
           alt={title}
-          className="lg:w-[200px] lg:h-[200px] w-full  object-cover object-center rounded-xl"
+          fill
+          className="object-cover object-center rounded-xl"
         />
 
         {/* Left Arrow */}
         <button
           onClick={prevSlide}
           disabled={isFirst}
-          className={`absolute left-3 top-1/2 -translate-y-1/2 bg-white rounded-full w-8 h-8 flex items-center justify-center shadow transition-opacity ${
-            isFirst ? "opacity-50 cursor-not-allowed" : "opacity-100"
-          }`}
+          className={`absolute left-3 top-1/2 -translate-y-1/2 bg-white rounded-full w-8 h-8 flex items-center justify-center shadow transition-opacity ${isFirst ? "opacity-50 cursor-not-allowed" : "opacity-100"
+            }`}
         >
           <TbArrowNarrowLeft className="text-xl text-gray-800" />
         </button>
@@ -52,9 +52,8 @@ const ServiceCard: React.FC<ISectionCardProps> = ({
         <button
           onClick={nextSlide}
           disabled={isLast}
-          className={`absolute right-3 top-1/2 -translate-y-1/2 bg-white rounded-full w-8 h-8 flex items-center justify-center shadow transition-opacity ${
-            isLast ? "opacity-50 cursor-not-allowed" : "opacity-100"
-          }`}
+          className={`absolute right-3 top-1/2 -translate-y-1/2 bg-white rounded-full w-8 h-8 flex items-center justify-center shadow transition-opacity ${isLast ? "opacity-50 cursor-not-allowed" : "opacity-100"
+            }`}
         >
           <TbArrowNarrowRight className="text-xl text-gray-800" />
         </button>
@@ -64,9 +63,8 @@ const ServiceCard: React.FC<ISectionCardProps> = ({
           {images.map((_, i) => (
             <span
               key={i}
-              className={`w-2 h-2 rounded-full ${
-                i === current ? "bg-[#FF7403]" : "bg-white"
-              }`}
+              className={`w-2 h-2 rounded-full ${i === current ? "bg-[#FF7403]" : "bg-white"
+                }`}
             />
           ))}
         </div>
@@ -74,7 +72,7 @@ const ServiceCard: React.FC<ISectionCardProps> = ({
 
       {/* Right: Content */}
       <div className="w-full lg:w-[60%] flex flex-col justify-center">
-        <h2 className="text-2xl font-bold text-gray-800 mb-4">{title}</h2>
+        <h2 className="text-xl font-bold text-gray-800 mb-2">{title}</h2>
         <ul className=" mb-4">
           {points.map((point, idx) => (
             <li key={idx} className="text-gray-600 text-sm leading-relaxed">
