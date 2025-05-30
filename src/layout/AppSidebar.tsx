@@ -143,7 +143,7 @@ const team_B: NavItem[] = [
 
   {
     icon: <CoinHand />,
-    name: "A-Team",
+    name: "Lead",
     path: "/a-team",
   },
 

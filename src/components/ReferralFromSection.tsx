@@ -8,8 +8,6 @@ import { BACKEND_API } from "@/api";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { createReferral } from "@/lib/redux/slices/referralSlice";
 import SearchAndSelectMemberModal from "./referral/SearchAndSelectMemberModal";
-// import SearchAndSelectMemberProductModal from "./referral/SearchAndSelectMemberProductModal";
-import SearchAndSelectPreferredSalesModal from "./referral/SearchAndSelectPreferredSalesPersonModal";
 import toast, { Toaster } from "react-hot-toast";
 
 interface FormDataState {
@@ -22,7 +20,6 @@ interface FormDataState {
   MemberFirstName: string;
   MemberLastName: string;
   notes: string;
-  preferredSalesPersonId: string;
   status: string;
   productId: string;
   teamMemberId: string;
@@ -47,12 +44,16 @@ type LocationData = {
   [key: string]: [number, "city", string, number] | [number, "state"];
 };
 
-const statusList = [{ label: "Pitched", value: "Pitched" }, { label: "Pending", value: "Pending" }, { label: "Payout", value: "Payout" }, { label: "Sold", value: "Sold" }];
+
 const ReferralFromSection = () => {
 
 
   const dispatch = useAppDispatch();
   const loggedInUser = useAppSelector((state) => state.user.user);
+  const loggedInUserProfile = useAppSelector((state) => state.userProfile.userProfile);
+  console.log("logged user",loggedInUser);
+  console.log("logged userProfile",loggedInUserProfile);
+
   const [formData, setFormData] = useState<FormDataState>({
     firstName: "",
     lastName: "",
@@ -63,10 +64,9 @@ const ReferralFromSection = () => {
     MemberFirstName: "",
     MemberLastName: "",
     notes: "",
-    preferredSalesPersonId: "",
-    status: "",
+    status: "Pending",
     productId: "",
-    teamMemberId: "",
+    teamMemberId:loggedInUser?.userId,
     cityId: "",
     stateId: "",
   })
@@ -80,7 +80,6 @@ const ReferralFromSection = () => {
     MemberFirstName: "",
     MemberLastName: "",
     notes: "",
-    preferredSalesPersonId: "",
     status: "",
     productId: "",
     teamMemberId: "",
@@ -90,19 +89,14 @@ const ReferralFromSection = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedMember, setSelectedMember] = useState<any | null>(null);
   const [selectedMemberProduct, setSelectedMemberProduct] = useState<any | null>(null);
-  const [selectedPreferredSalesPerson, setSelectedPreferredSalesPerson] = useState<any | null>(null);
-  const [isMemberSelectModalOpen, setIsMemberSelectedModalOpen] = useState<boolean>(false);
-  // const [isMemberProductSelectModalOpen,setIsMemberProductSelectModalOpen]= useState<boolean>(false);
-  const [isPreferredSalesPersonSelectModalOpen, setIsPreferredSalesPersonSelectModalOpen] = useState<boolean>(false);
   const [stateCityList, setStateCityList] = useState<any[]>([])
   const [isStateCityDropdownOpen, setIsStateCityDropdownOpen] = useState(false);
   const [stateCityName, setStateCityName] = useState('');
   const [selectedStateCity, setSelectedStateCity] = useState<ParsedLocation | null>(null);
   const stateCityDropdownRef = useRef<HTMLDivElement | null>(null);
-  const memberProductDropdownRef = useRef<HTMLDivElement | null>(null);
-  const [isMemberProductDropdownOpen, setIsMemberProductDropdownOpen] = useState(false);
+
   const [memberProductName, setMemberProductName] = useState<string>("");
-  const [memberProductsList, setMemberProductsList] = useState<any[]>([]);
+  const [memberProductsList, setMemberProductsList] = useState<any[]>([{label:"solar panel",value:"12345"},{label:"solar panel 2",value:"12346"},{label:"solar panel 3",value:"12347"}]);
 
 
 
@@ -182,7 +176,7 @@ const ReferralFromSection = () => {
 
   const fetchMemberProducts = async () => {
     if (!memberProductName.trim()) {
-      setMemberProductsList([]);
+      //setMemberProductsList([]);
       return;
     }
 
@@ -199,7 +193,7 @@ const ReferralFromSection = () => {
           },
         }
       );
-      setMemberProductsList(response?.data?.data || []);
+     // setMemberProductsList(response?.data?.data || []);
 
     } catch (error: any) {
       console.log("error while fetching member products", error)
@@ -320,12 +314,12 @@ const ReferralFromSection = () => {
 
 
     // Validate members firstName
-    if (!selectedMember) {
-      tempErrors.MemberFirstName = "Member is required";
-      isValidData = false;
-    } else {
-      tempErrors.MemberFirstName = "";
-    }
+    // if (!selectedMember) {
+    //   tempErrors.MemberFirstName = "Member is required";
+    //   isValidData = false;
+    // } else {
+    //   tempErrors.MemberFirstName = "";
+    // }
 
 
 
@@ -338,24 +332,6 @@ const ReferralFromSection = () => {
 
     }
 
-    //validate preferred sales person
-    if (!selectedPreferredSalesPerson) {
-      tempErrors.preferredSalesPersonId = "Preferred salesperson is required";
-      isValidData = false;
-    } else {
-
-      tempErrors.preferredSalesPersonId = "";
-
-    }
-
-
-    // Validate status
-    if (formData.status.trim() === "") {
-      tempErrors.status = "Status is required";
-      isValidData = false;
-    } else {
-      tempErrors.status = "";
-    }
 
     // Validate notes
     if (formData.notes.trim() === "") {
@@ -376,11 +352,6 @@ const ReferralFromSection = () => {
       setStateCityName("");
       setStateCityList([]);
     }
-    if (memberProductDropdownRef.current && !memberProductDropdownRef.current.contains(e.target as Node)) {
-      setIsMemberProductDropdownOpen(false);
-      setMemberProductName("");
-      setMemberProductsList([]);
-    }
   };
 
 
@@ -389,10 +360,6 @@ const ReferralFromSection = () => {
     setIsStateCityDropdownOpen(true);
   };
 
-  const handleOpenMemberProductDropdown = () => {
-    if (!selectedMember) return;
-    setIsMemberProductDropdownOpen(true);
-  };
 
   const handleSelectStateCity = (value: any) => {
 
@@ -447,49 +414,22 @@ const ReferralFromSection = () => {
 
       setSelectedMemberProduct(product);
       setFormData((prev: FormDataState) => ({ ...prev, productId: product?.id }));
-      setIsMemberProductDropdownOpen(false);
       setMemberProductName("");
-      setMemberProductsList([]);
+      //setMemberProductsList([]);
       return;
     }
     setSelectedMemberProduct(null);
     setFormData((prev: FormDataState) => ({ ...prev, productId: "" }));
   }
 
-  const handlePreferredSalesPersonSelect = (person: any) => {
 
-    if (person) {
-      setSelectedPreferredSalesPerson(person);
-      setFormData((prev: FormDataState) => ({ ...prev, preferredSalesPersonId: person?.id }))
-      return;
-    }
-    setSelectedPreferredSalesPerson(null);
-    setFormData((prev: FormDataState) => ({ ...prev, preferredSalesPersonId: "" }))
-    return;
-
-
-  }
-
-  const handleOpenSelectMemberModal = () => {
-    setIsMemberSelectedModalOpen(true);
-  }
-  const handlecloseSelectMemberModal = () => {
-    setIsMemberSelectedModalOpen(false);
-  }
-  // const handleOpenSelectMemberProductModal=()=>{
-  //   if(!selectedMember) return ;
-  //    setIsMemberProductSelectModalOpen(true);
+  // const handleOpenSelectMemberModal = () => {
+  //   setIsMemberSelectedModalOpen(true);
   // }
-  // const handlecloseSelectMemberProductModal = ()=>{
-  //   setIsMemberProductSelectModalOpen(false);
+  // const handlecloseSelectMemberModal = () => {
+  //   setIsMemberSelectedModalOpen(false);
   // }
 
-  const handleOpenSelectPreferredSalesPersonModal = () => {
-    setIsPreferredSalesPersonSelectModalOpen(true);
-  }
-  const handlecloseSelectPreferredSalesPersonModal = () => {
-    setIsPreferredSalesPersonSelectModalOpen(false);
-  }
 
 
   const handleClearFormData = () => {
@@ -503,10 +443,9 @@ const ReferralFromSection = () => {
       MemberFirstName: "",
       MemberLastName: "",
       notes: "",
-      preferredSalesPersonId: "",
-      status: "",
+      status: "Pending",
       productId: "",
-      teamMemberId: "",
+      teamMemberId:loggedInUser?.userId,
       cityId: "",
       stateId: "",
     });
@@ -520,7 +459,6 @@ const ReferralFromSection = () => {
       MemberFirstName: "",
       MemberLastName: "",
       notes: "",
-      preferredSalesPersonId: "",
       status: "",
       productId: "",
       teamMemberId: "",
@@ -529,10 +467,9 @@ const ReferralFromSection = () => {
     });
     setSelectedMember(null);
     setSelectedMemberProduct(null);
-    setSelectedPreferredSalesPerson(null);
     setSelectedStateCity(null);
   }
-
+console.log("referral form data",formData);
   return (
     <div className="w-full max-w-[1500px] bg-white p-8 rounded-xl mb-14 md:mb-20">
       <Toaster />
@@ -684,105 +621,37 @@ const ReferralFromSection = () => {
               />
               <span className={`${REQUIRED_ERROR}`}>{errors.postalCode || ""}</span>
             </div>
-            <div className="w-full">
+            {/* <div className="w-full">
               <input
                 type="text"
                 placeholder={`Member's first and last name`}
                 className={`${FORM_INPUT_CLASS}`}
                 readOnly
-                value={selectedMember ? `${selectedMember?.user?.firstName || ""} ${selectedMember?.user?.lastName || ""} ${selectedMember?.user?.role || ""} ` : ""}
-                onClick={handleOpenSelectMemberModal}
+                value={loggedInUserProfile ? `${loggedInUserProfile?.firstName || ""} ${loggedInUserProfile?.lastName || ""} ${loggedInUserProfile?.role || ""} ` : ""}
 
               />
               <span className={`${REQUIRED_ERROR}`}>{errors.MemberFirstName || ""}</span>
-            </div>
-            <div className="w-full relative " ref={memberProductDropdownRef}>
-              <input
-                type="text"
-                placeholder="Product Referring"
-                className={`${FORM_INPUT_CLASS}`}
-                readOnly
-                value={selectedMemberProduct ? `${selectedMemberProduct?.name || ""}` : ""}
-                onClick={handleOpenMemberProductDropdown}
-              />
-              <span className={`${REQUIRED_ERROR}`}>{errors.productId || ""}</span>
+            </div> */}
+            <div className="w-full relative " >
 
-              {isMemberProductDropdownOpen && (
-                <div className="absolute z-50 top-full left-0 w-full bg-white border border-gray-200 rounded-md shadow-lg mt-1 px-2 py-2">
-                  {selectedMemberProduct && (
-                    <div className="mb-2 flex items-center justify-between gap-2 px-3 py-1 bg-gray-100 rounded">
-                      <span className="text-sm text-gray-800 text-wrap ">
-                        {`${selectedMemberProduct?.name}`}
-                      </span>
-                      <button
-                        onClick={() => handleMemberProductSelect(null)}
-                        className="ml-2 text-gray-500 hover:text-red-500 transition-all duration-300 "
-                      >
-                        ✕
-                      </button>
-                    </div>
-                  )}
-                  <input
-                    type="text"
-                    placeholder="Search member product"
-                    value={memberProductName}
-                    onChange={(e) => setMemberProductName(e.target.value)}
-                    className="w-full px-3 py-2 rounded-md outline-none border border-gray-200 mb-1  "
-                    autoFocus
-                  />
-                  <ul className="max-h-48 overflow-y-auto ">
-                    {memberProductsList.length > 0 ? (
-                      memberProductsList.map((member, index) => (
-                        <li
-                          key={index}
-                          onClick={() => {
-                            handleMemberProductSelect(member);
-                          }}
-                          className="px-3 py-2 hover:bg-gray-100 rounded cursor-pointer"
-                        >
-                          {`${member?.name || ""}`}
-                        </li>
-                      ))
-                    ) : (
-                      <li className=" px-3 py-1 text-gray-400">{memberProductName.trim().length > 0 && memberProductsList.length === 0 ? "No result found" : ""}</li>
-                    )}
-                  </ul>
-                </div>
-              )}
-            </div>
-          </div>
-          <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-16 ">
-
-            <div className="w-full">
-              <input
-                type="text"
-                placeholder="Preferred salesperson"
-                className={`${FORM_INPUT_CLASS}`}
-                readOnly
-                value={selectedPreferredSalesPerson ? `${selectedPreferredSalesPerson?.firstName || ""} ${selectedPreferredSalesPerson?.lastName || ""}` : ""}
-                onClick={handleOpenSelectPreferredSalesPersonModal}
-              />
-              <span className={`${REQUIRED_ERROR}`}>{errors.preferredSalesPersonId || ""}</span>
-            </div>
-            <div className="w-full">
               <select
-                name="status"
+                name="productId"
                 className={`${FORM_INPUT_CLASS}`}
                 value={`${formData.status}`}
                 onChange={handleChange}
               >
-                <option className="" value="">Select Status</option>
+                <option className="" value="">Select Product</option>
                 {
-                  statusList.map((item: { label: string, value: string }) => (<option key={item.value} value={item.value}>{item.label}</option>))
+                   memberProductsList.map((item: { label: string, value: string }) => (<option key={item.value} value={item.value}>{item.label}</option>))
                 }
 
 
               </select>
-              <span className={`${REQUIRED_ERROR}`}>{errors.status || ""}</span>
+       
+              <span className={`${REQUIRED_ERROR}`}>{errors.productId || ""}</span>
+
             </div>
-
           </div>
-
 
           <div className="w-full grid grid-cols-1 ">
             <div className="w-full">
@@ -818,9 +687,7 @@ const ReferralFromSection = () => {
 
       </div>
 
-      <SearchAndSelectMemberModal isOpen={isMemberSelectModalOpen} closeModal={handlecloseSelectMemberModal} selectedMember={selectedMember} onMemberSelect={handleSelectMember} />
-      {/* <SearchAndSelectMemberProductModal isOpen={isMemberProductSelectModalOpen} closeModal={handlecloseSelectMemberProductModal} memberId={selectedMember?.id} selectedProduct={selectedMemberProduct} onProductSelect={handleMemberProductSelect} /> */}
-      <SearchAndSelectPreferredSalesModal isOpen={isPreferredSalesPersonSelectModalOpen} closeModal={handlecloseSelectPreferredSalesPersonModal} selectedPreferredSalesPerson={selectedPreferredSalesPerson} onPreferredSalesPersonSelect={handlePreferredSalesPersonSelect} />
+      {/* <SearchAndSelectMemberModal isOpen={isMemberSelectModalOpen} closeModal={handlecloseSelectMemberModal} selectedMember={selectedMember} onMemberSelect={handleSelectMember} /> */}
 
     </div>
   );
