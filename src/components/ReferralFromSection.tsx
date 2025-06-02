@@ -7,8 +7,8 @@ import axios from "axios";
 import { BACKEND_API } from "@/api";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { createReferral } from "@/lib/redux/slices/referralSlice";
-import SearchAndSelectMemberModal from "./referral/SearchAndSelectMemberModal";
 import toast, { Toaster } from "react-hot-toast";
+import Select from "./form/Select";
 
 interface FormDataState {
   firstName: string;
@@ -17,14 +17,10 @@ interface FormDataState {
   email: string;
   address: string;
   postalCode: string;
-  MemberFirstName: string;
-  MemberLastName: string;
-  notes: string;
-  status: string;
-  productId: string;
-  teamMemberId: string;
   cityId?: string;
   stateId?: string;
+   productId: string;
+  notes: string;
 }
 
 type ParsedLocation = | {
@@ -44,7 +40,6 @@ type LocationData = {
   [key: string]: [number, "city", string, number] | [number, "state"];
 };
 
-
 const ReferralFromSection = () => {
 
 
@@ -61,14 +56,11 @@ const ReferralFromSection = () => {
     email: "",
     address: "",
     postalCode: "",
-    MemberFirstName: "",
-    MemberLastName: "",
-    notes: "",
-    status: "Pending",
-    productId: "",
-    teamMemberId:loggedInUser?.userId,
     cityId: "",
     stateId: "",
+    productId: "",
+    notes: "",
+ 
   })
   const [errors, setErrors] = useState<FormDataState>({
     firstName: "",
@@ -77,17 +69,12 @@ const ReferralFromSection = () => {
     email: "",
     address: "",
     postalCode: "",
-    MemberFirstName: "",
-    MemberLastName: "",
-    notes: "",
-    status: "",
-    productId: "",
-    teamMemberId: "",
     cityId: "",
     stateId: "",
+    productId: "",
+    notes: "",
   })
   const [loading, setLoading] = useState<boolean>(false);
-  const [selectedMember, setSelectedMember] = useState<any | null>(null);
   const [selectedMemberProduct, setSelectedMemberProduct] = useState<any | null>(null);
   const [stateCityList, setStateCityList] = useState<any[]>([])
   const [isStateCityDropdownOpen, setIsStateCityDropdownOpen] = useState(false);
@@ -185,7 +172,7 @@ const ReferralFromSection = () => {
 
 
     try {
-      const response = await axios.get(`${BACKEND_API}product/${selectedMember?.id}?name=${memberProductName.trim()}&limit=10`,
+      const response = await axios.get(`${BACKEND_API}product/${loggedInUser?.userId}?name=${memberProductName.trim()}&limit=10`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -209,16 +196,24 @@ const ReferralFromSection = () => {
   const handleSubmitReferrals = async () => {
 
     try {
+      
+      const payload={
+        ...formData,
+        teamMemberId:loggedInUser?.userId,
+        MemberFirstName:loggedInUserProfile?.firstName,
+        MemberLastName:loggedInUserProfile?.lastName,
+        status: "Pending",
+      }
 
+      
       if (!validateFormData()) return;
-
       setLoading(true);
-      await dispatch(createReferral(formData)).unwrap();
+      await dispatch(createReferral(payload)).unwrap();
       toast.success("Created referral successfully");
       handleClearFormData();
 
     } catch (error: any) {
-      console.error("Error while creating referral:", error);
+      console.log("Error while creating referral:", error);
       const errorMessage =
         typeof error === "string"
           ? error
@@ -313,17 +308,8 @@ const ReferralFromSection = () => {
     }
 
 
-    // Validate members firstName
-    // if (!selectedMember) {
-    //   tempErrors.MemberFirstName = "Member is required";
-    //   isValidData = false;
-    // } else {
-    //   tempErrors.MemberFirstName = "";
-    // }
 
-
-
-    if (!selectedMemberProduct) {
+    if (formData.productId.trim()==="") {
       tempErrors.productId = "Product is required";
       isValidData = false;
     } else {
@@ -393,20 +379,7 @@ const ReferralFromSection = () => {
     setFormData((prev: FormDataState) => ({ ...prev, [name]: value }));
 
   }
-  const handleSelectMember = (member: any) => {
 
-
-    if (member) {
-
-      setSelectedMember(member);
-      setFormData((prev: FormDataState) => ({ ...prev, MemberFirstName: member?.user?.firstName, MemberLastName: member?.user?.lastName, teamMemberId: member?.id }));
-      return;
-
-    }
-    setSelectedMember(null);
-    setFormData((prev: FormDataState) => ({ ...prev, MemberFirstName: "", MemberLastName: "", teamMemberId: "" }));
-
-  }
 
   const handleMemberProductSelect = (product: any) => {
 
@@ -423,55 +396,38 @@ const ReferralFromSection = () => {
   }
 
 
-  // const handleOpenSelectMemberModal = () => {
-  //   setIsMemberSelectedModalOpen(true);
-  // }
-  // const handlecloseSelectMemberModal = () => {
-  //   setIsMemberSelectedModalOpen(false);
-  // }
-
-
 
   const handleClearFormData = () => {
     setFormData({
-      firstName: "",
-      lastName: "",
-      phoneNumber: "",
-      email: "",
-      address: "",
-      postalCode: "",
-      MemberFirstName: "",
-      MemberLastName: "",
-      notes: "",
-      status: "Pending",
-      productId: "",
-      teamMemberId:loggedInUser?.userId,
-      cityId: "",
-      stateId: "",
+        firstName: "",
+        lastName: "",
+        phoneNumber: "",
+        email: "",
+        address: "",
+        postalCode: "",
+        cityId: "",
+        stateId: "",
+        productId: "",
+        notes: "",
     });
     setErrors({
-      firstName: "",
-      lastName: "",
-      phoneNumber: "",
-      email: "",
-      address: "",
-      postalCode: "",
-      MemberFirstName: "",
-      MemberLastName: "",
-      notes: "",
-      status: "",
-      productId: "",
-      teamMemberId: "",
-      cityId: "",
-      stateId: "",
+        firstName: "",
+        lastName: "",
+        phoneNumber: "",
+        email: "",
+        address: "",
+        postalCode: "",
+        cityId: "",
+        stateId: "",
+        productId: "",
+        notes: "",
     });
-    setSelectedMember(null);
     setSelectedMemberProduct(null);
     setSelectedStateCity(null);
   }
 console.log("referral form data",formData);
   return (
-    <div className="w-full max-w-[1500px] bg-white p-8 rounded-xl mb-14 md:mb-20">
+    <div className="w-full max-w-[1500px] bg-white px-6 sm:px-8 py-8 rounded-xl">
       <Toaster />
       <div className="w-full ">
         <div className="w-full space-y-10 lg:space-y-14 mb-8">
@@ -621,36 +577,17 @@ console.log("referral form data",formData);
               />
               <span className={`${REQUIRED_ERROR}`}>{errors.postalCode || ""}</span>
             </div>
-            {/* <div className="w-full">
-              <input
-                type="text"
-                placeholder={`Member's first and last name`}
-                className={`${FORM_INPUT_CLASS}`}
-                readOnly
-                value={loggedInUserProfile ? `${loggedInUserProfile?.firstName || ""} ${loggedInUserProfile?.lastName || ""} ${loggedInUserProfile?.role || ""} ` : ""}
+            <div className="w-full">
+                    <Select
+                     options={memberProductsList}
+                     placeholder="Select Product"
+                     defaultValue={formData.productId}
+                     onChange={(value)=>setFormData((prev:FormDataState)=>({...prev,productId:value}))}
+                    />
 
-              />
-              <span className={`${REQUIRED_ERROR}`}>{errors.MemberFirstName || ""}</span>
-            </div> */}
-            <div className="w-full relative " >
-
-              <select
-                name="productId"
-                className={`${FORM_INPUT_CLASS}`}
-                value={`${formData.status}`}
-                onChange={handleChange}
-              >
-                <option className="" value="">Select Product</option>
-                {
-                   memberProductsList.map((item: { label: string, value: string }) => (<option key={item.value} value={item.value}>{item.label}</option>))
-                }
-
-
-              </select>
-       
               <span className={`${REQUIRED_ERROR}`}>{errors.productId || ""}</span>
-
             </div>
+         
           </div>
 
           <div className="w-full grid grid-cols-1 ">
@@ -666,7 +603,7 @@ console.log("referral form data",formData);
             </div>
           </div>
         </div>
-        <div className="w-full flex items-center justify-center sm:justify-end gap-6 flex-wrapj mb-8 md:mb-12 ">
+        <div className="w-full flex items-center justify-center sm:justify-end gap-3 sm:gap-6 flex-wrap  ">
           {/* <div className=" w-full  md:w-3/5 flex items-start gap-3 text-sm font-medium  ">
       
              <Checkbox checked={true} onChange={()=>{}} />
@@ -686,8 +623,6 @@ console.log("referral form data",formData);
         </div>
 
       </div>
-
-      {/* <SearchAndSelectMemberModal isOpen={isMemberSelectModalOpen} closeModal={handlecloseSelectMemberModal} selectedMember={selectedMember} onMemberSelect={handleSelectMember} /> */}
 
     </div>
   );
