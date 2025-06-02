@@ -24,34 +24,31 @@ export default function AdminLayout({
 
   return (
     <AuthGuard>
-        <div className="min-h-screen xl:flex ">
-      <div className="z-49">
-        <Toaster
-          position="top-center"
-          reverseOrder={false}
-        />
-      </div>
-      {/* Sidebar and Backdrop */}
-      <AppSidebar />
-      <Backdrop />
-      {/* Main Content Area */}
-      <div
-        className={`flex-1 transition-all  duration-300 ease-in-out ${mainContentMargin}`}
-      >
+      <div className="min-h-screen xl:flex ">
+        <div className="z-49">
+          <Toaster
+            position="top-center"
+            reverseOrder={false}
+          />
+        </div>
+        {/* Sidebar and Backdrop */}
+        <AppSidebar />
+        <Backdrop />
+        {/* Main Content Area */}
+        <div
+          className={`flex-1 transition-all  duration-300 ease-in-out ${mainContentMargin}`}>
+          {/* Header */}
+          <AppHeader />
+          {/* Page Content */}
+          <div className="relative  w-full min-h-[calc(100vh-140px)] max-w-(--breakpoint-2xl)  mx-auto p-4  md:p-6  ">
+            {children}
 
-
-        {/* Header */}
-        <AppHeader />
-        {/* Page Content */}
-        <div className="relative  w-full min-h-[calc(100vh-140px)] max-w-(--breakpoint-2xl)  mx-auto p-4  md:p-6  ">
-          {children}
- 
-          <div className=" w-64  h-40 md:w-80  md:h-56   absolute -z-10 bottom-0 left-0 transform -translate-x-1/2  bg-amber-300 rounded-full blur-[280px]" />
-          <div className="w-64  h-40 md:w-80  md:h-56  absolute -z-10 top-40 right-0 bg-amber-300 rounded-full blur-[280px]" />
+            <div className=" w-64  h-40 md:w-80  md:h-56   absolute -z-10 bottom-0 left-0 transform -translate-x-1/2  bg-amber-300 rounded-full blur-[280px]" />
+            <div className="w-64  h-40 md:w-80  md:h-56  absolute -z-10 top-40 right-0 bg-amber-300 rounded-full blur-[280px]" />
           </div>
-      </div>
+        </div>
 
-    </div>
+      </div>
     </AuthGuard>
   );
 }

@@ -45,6 +45,7 @@ const AppHeader: React.FC = () => {
     };
   }, []);
 
+
   return (
     <header className="sticky top-0 flex w-full bg-white z-9999 shadow-xs">
       <div className="flex flex-col items-center justify-between grow lg:flex-row lg:px-6">

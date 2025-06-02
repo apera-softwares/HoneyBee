@@ -8,6 +8,7 @@ import UserTable from "@/components/user/UserTable";
 import { Toaster } from "react-hot-toast";
 
 export default function UserManagement() {
+
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [SearchInput, setSearchInput] = useState("")
     const [filterRole, setFilterRole] = useState("")
