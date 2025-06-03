@@ -42,7 +42,8 @@ type LocationData = {
 };
 
 const products=[{label:"solar panel",value:"12345"},{label:"solar panel 2",value:"12346"},{label:"solar panel 3",value:"12347"}]
-const ReferralFromSection = () => {
+
+const ReferralFormSection = () => {
 
 
   const dispatch = useAppDispatch();
@@ -765,4 +766,4 @@ console.log("member product",memberProductsList);
   );
 };
 
-export default ReferralFromSection;
+export default ReferralFormSection;

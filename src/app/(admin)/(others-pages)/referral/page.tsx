@@ -1,5 +1,5 @@
 import CommonHeading from "@/components/common/CommonHeading";
-import ReferralFromSection from "@/components/ReferralFromSection";
+import ReferralFormSection from "@/components/ReferralFormSection";
 import ServiceCard from "@/components/ServiceCard";
 import { SERVICES } from "@/data/services";
 import React from "react";
@@ -41,7 +41,7 @@ export default function Referral() {
                 </h1>
 
             </div>
-            <ReferralFromSection />
+            <ReferralFormSection />
 
         </div>
     );
