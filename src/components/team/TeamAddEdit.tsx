@@ -20,20 +20,20 @@ interface TeamAddEditProps {
 }
 
 const TeamAddEdit: React.FC<TeamAddEditProps> = ({ isOpen, closeModal, teamData, type }) => {
+
     const ITEM_PER_PAGE = 5;
     const [usersData, setUsersData] = useState<any[]>([]);
     const [formData, setFormData] = useState({
         id: "",
         name: "",
-        managerId: ""
     });
 
     const [errors, setErrors] = useState({
         name: "",
+        member: ""
     })
 
     const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
     const { loading } = useSelector((state: RootState) => state.UserManagement);
     const [searchText, setSearchText] = useState("")
     const [selectedMember, setSelectedMember] = useState<any | null>(null);
@@ -49,39 +49,41 @@ const TeamAddEdit: React.FC<TeamAddEditProps> = ({ isOpen, closeModal, teamData,
             setFormData({
                 id: teamData?.id || "",
                 name: teamData?.name || "",
-                managerId: ""
             });
         }
     }, [teamData]);
 
     useEffect(() => {
-        dispatch(fetchUsers({ page: currentPage, limit: ITEM_PER_PAGE, name: searchText, role: "B_TEAM", order: "" })).then((res: any) => {
-            if (res.meta.requestStatus === "fulfilled") {
-                if (res.payload) {
-                    setUsersData(res.payload.data || []);
-                    const lastPage = res.payload.lastPage;
-                    setTotalPages(lastPage);
-                } else {
-                    setUsersData([]);
-                    setTotalPages(1);
-                }
-            } else {
-                console.log("Failed to fetch users:", res.payload || "Unknown error");
-            }
-        });
+        if (!searchText.trim()) return;
 
-    }, [dispatch, currentPage, searchText]);
+        const delayDebounce = setTimeout(() => {
+            dispatch(fetchUsers({ page: currentPage, limit: ITEM_PER_PAGE, name: searchText, role: "B_TEAM", order: "" }))
+                .then((res: any) => {
+                    if (res.meta.requestStatus === "fulfilled") {
+                        if (res.payload) {
+                            setUsersData(res.payload.data || []);
+                        } else {
+                            setUsersData([]);
+                        }
+                    } else {
+                        console.log("Failed to fetch users:", res.payload || "Unknown error");
+                    }
+                });
+        }, 500); // debounce by 500ms
+
+        return () => clearTimeout(delayDebounce);
+    }, [searchText, currentPage, dispatch]);
+
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
-
     const validateFormData = () => {
         let isValidData = true;
         const tempErrors = { ...errors };
 
-        // Validate firstName
+        // Validate name
         if (formData.name.trim() === "") {
             tempErrors.name = "Team name is required";
             isValidData = false;
@@ -89,9 +91,18 @@ const TeamAddEdit: React.FC<TeamAddEditProps> = ({ isOpen, closeModal, teamData,
             tempErrors.name = "";
         }
 
+        // Validate selectedMember
+        if (!selectedMember && userProfile.role == "ADMIN") {
+            tempErrors.member = "Team Member is required";
+            isValidData = false;
+        } else {
+            tempErrors.member = "";
+        }
+
         setErrors(tempErrors);
         return isValidData;
     };
+
 
     console.log(teamData, "Team Data 1")
 
@@ -106,7 +117,6 @@ const TeamAddEdit: React.FC<TeamAddEditProps> = ({ isOpen, closeModal, teamData,
                     console.log(res.payload)
                     closeModal();
                     clear()
-                } else {
                 }
             } else {
                 console.log("Failed to Update Team:", res.payload || "Unknown error");
@@ -118,7 +128,7 @@ const TeamAddEdit: React.FC<TeamAddEditProps> = ({ isOpen, closeModal, teamData,
     const handleAddUser = () => {
         console.log("Form Data: Add Team", formData);
         if (!validateFormData()) return
-        dispatch(CreateTeam(formData)).then((res: any) => {
+        dispatch(CreateTeam({ name: formData?.name, mangerId: selectedMember?.id })).then((res: any) => {
             if (res.meta.requestStatus === "fulfilled") {
                 if (res.payload) {
                     toast.success("Team Created successful!");
@@ -126,7 +136,6 @@ const TeamAddEdit: React.FC<TeamAddEditProps> = ({ isOpen, closeModal, teamData,
                     console.log(res.payload)
                     closeModal();
                     clear()
-                } else {
                 }
             } else {
                 console.log("Failed to Create Team:", res.payload || "Unknown error");
@@ -139,8 +148,11 @@ const TeamAddEdit: React.FC<TeamAddEditProps> = ({ isOpen, closeModal, teamData,
         setFormData({
             id: "",
             name: "",
-            managerId: ""
         })
+        setErrors({
+            name: "",
+            member: "",
+        });
     }
 
     return (
@@ -162,9 +174,6 @@ const TeamAddEdit: React.FC<TeamAddEditProps> = ({ isOpen, closeModal, teamData,
                         <h5 className="font-semibold text-gray-800 text-xl sm:text-2xl lg:text-3xl dark:text-white/90">
                             {type == "add" ? "Create New Team" : "Edit Team Name"}
                         </h5>
-                        {/* <span className="text-md">
-                            Add a new Team to the Honeybee Hive. add Members, team.
-                        </span> */}
                     </div>
                 </div>
 
@@ -183,7 +192,7 @@ const TeamAddEdit: React.FC<TeamAddEditProps> = ({ isOpen, closeModal, teamData,
                             <span className={REQUIRED_ERROR}>{errors.name}</span>
                         </div>
 
-                        {userProfile?.role == "ADMIN" && <div className="mb-4 relative">
+                        {userProfile?.role == "ADMIN" && type == "add" && <div className="mb-4 relative">
                             <label className="block font-medium mb-1">
                                 Add Team Manager
                             </label>
@@ -211,9 +220,9 @@ const TeamAddEdit: React.FC<TeamAddEditProps> = ({ isOpen, closeModal, teamData,
                                     ))}
                                 </ul>
                             )}
-                            {/* <span className={REQUIRED_ERROR}>{errors.member}</span> */}
+                            <span className={REQUIRED_ERROR}>{errors.member}</span>
                         </div>}
-                        {selectedMember && (
+                        {selectedMember && type == "add" && (
                             <div className="p-4 border rounded-md bg-gray-50 flex justify-between items-center mb-4">
                                 <div>
 

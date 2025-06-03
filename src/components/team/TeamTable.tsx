@@ -13,9 +13,10 @@ import Spinner from "../common/Spinner";
 import Pagination from "../tables/Pagination";
 import { Toaster } from "react-hot-toast";
 import TeamAddEdit from "./TeamAddEdit";
-import { fetchTeams } from "@/lib/redux/slices/teamManagementSlice";
+import { fetchTeams, fetchTeamsByUserId } from "@/lib/redux/slices/teamManagementSlice";
 import { MdRemoveRedEye } from "react-icons/md";
 import { useRouter } from "next/navigation";
+import { useAppSelector } from "@/lib/redux/hooks";
 
 
 interface TeamTableProps {
@@ -33,25 +34,47 @@ const TeamTable: React.FC<TeamTableProps> = ({ searchText, role, order }) => {
     const { loading } = useSelector((state: RootState) => state.TeamManagement);
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [editTeamData, setEditTeamData] = useState<any>({});
+    const { userProfile } = useAppSelector((state) => state.userProfile);
+
 
     const router = useRouter()
 
     useEffect(() => {
-        dispatch(fetchTeams({ page: currentPage, limit: ITEM_PER_PAGE })).then((res: any) => {
-            if (res.meta.requestStatus === "fulfilled") {
-                if (res.payload) {
-                    setTeamData(res.payload.data || []);
-                    console.log(res.payload)
-                    const lastPage = res.payload.lastPage;
-                    setTotalPages(lastPage);
+
+        if (userProfile.role == "ADMIN") {
+            dispatch(fetchTeams({ page: currentPage, limit: ITEM_PER_PAGE })).then((res: any) => {
+                if (res.meta.requestStatus === "fulfilled") {
+                    if (res.payload) {
+                        setTeamData(res.payload.data || []);
+                        console.log(res.payload)
+                        const lastPage = res.payload.lastPage;
+                        setTotalPages(lastPage);
+                    } else {
+                        setTeamData([]);
+                        setTotalPages(1);
+                    }
                 } else {
-                    setTeamData([]);
-                    setTotalPages(1);
+                    console.log("Failed to fetch Teams:", res.payload || "Unknown error");
                 }
-            } else {
-                console.log("Failed to fetch Teams:", res.payload || "Unknown error");
-            }
-        });
+            });
+        } else {
+            dispatch(fetchTeamsByUserId({ page: currentPage, limit: ITEM_PER_PAGE })).then((res: any) => {
+                if (res.meta.requestStatus === "fulfilled") {
+                    if (res.payload) {
+                        setTeamData(res.payload.data || []);
+                        console.log(res.payload)
+                        const lastPage = res.payload.lastPage;
+                        setTotalPages(lastPage);
+                    } else {
+                        setTeamData([]);
+                        setTotalPages(1);
+                    }
+                } else {
+                    console.log("Failed to fetch Teams:", res.payload || "Unknown error");
+                }
+            });
+        }
+
     }, [dispatch, currentPage, searchText, role, isModalOpen, order]);
 
     const handlePageChange = (page: any) => {
