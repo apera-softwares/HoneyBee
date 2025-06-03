@@ -4,8 +4,8 @@ import Button from "../ui/button/Button";
 import { Modal } from "../ui/modal";
 import { Users1 } from "../../icons/index";
 import { FORM_INPUT_CLASS, REQUIRED_ERROR } from "@/constant/constantClassName";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/lib/redux/store";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "@/lib/redux/store";
 import toast from "react-hot-toast";
 import { CreateTeam, fetchTeams, UpdateTeam } from "@/lib/redux/slices/teamManagementSlice";
 import { fetchUsers } from "@/lib/redux/slices/userManagementSlice";
@@ -33,8 +33,6 @@ const TeamAddEdit: React.FC<TeamAddEditProps> = ({ isOpen, closeModal, teamData,
         member: ""
     })
 
-    const [currentPage, setCurrentPage] = useState(1);
-    const { loading } = useSelector((state: RootState) => state.UserManagement);
     const [searchText, setSearchText] = useState("")
     const [selectedMember, setSelectedMember] = useState<any | null>(null);
     const { userProfile } = useAppSelector((state) => state.userProfile);
@@ -57,7 +55,7 @@ const TeamAddEdit: React.FC<TeamAddEditProps> = ({ isOpen, closeModal, teamData,
         if (!searchText.trim()) return;
 
         const delayDebounce = setTimeout(() => {
-            dispatch(fetchUsers({ page: currentPage, limit: ITEM_PER_PAGE, name: searchText, role: "B_TEAM", order: "" }))
+            dispatch(fetchUsers({ page: 1, limit: ITEM_PER_PAGE, name: searchText, role: "B_TEAM", order: "" }))
                 .then((res: any) => {
                     if (res.meta.requestStatus === "fulfilled") {
                         if (res.payload) {
@@ -72,7 +70,7 @@ const TeamAddEdit: React.FC<TeamAddEditProps> = ({ isOpen, closeModal, teamData,
         }, 500); // debounce by 500ms
 
         return () => clearTimeout(delayDebounce);
-    }, [searchText, currentPage, dispatch]);
+    }, [searchText, dispatch]);
 
 
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
