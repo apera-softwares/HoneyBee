@@ -19,7 +19,8 @@ interface FormDataState {
   postalCode: string;
   cityId?: string;
   stateId?: string;
-   productId: string;
+  teamMemberId:string;
+  productId: string;
   notes: string;
 }
 
@@ -40,6 +41,7 @@ type LocationData = {
   [key: string]: [number, "city", string, number] | [number, "state"];
 };
 
+const products=[{label:"solar panel",value:"12345"},{label:"solar panel 2",value:"12346"},{label:"solar panel 3",value:"12347"}]
 const ReferralFromSection = () => {
 
 
@@ -58,6 +60,7 @@ const ReferralFromSection = () => {
     postalCode: "",
     cityId: "",
     stateId: "",
+    teamMemberId:"",
     productId: "",
     notes: "",
  
@@ -71,6 +74,7 @@ const ReferralFromSection = () => {
     postalCode: "",
     cityId: "",
     stateId: "",
+    teamMemberId:"",
     productId: "",
     notes: "",
   })
@@ -83,9 +87,18 @@ const ReferralFromSection = () => {
   const stateCityDropdownRef = useRef<HTMLDivElement | null>(null);
 
   const [memberProductName, setMemberProductName] = useState<string>("");
-  const [memberProductsList, setMemberProductsList] = useState<any[]>([{label:"solar panel",value:"12345"},{label:"solar panel 2",value:"12346"},{label:"solar panel 3",value:"12347"}]);
+  const [memberProductsList, setMemberProductsList] = useState<any[]>(products);
+
+  const[teamName,setTeamName]= useState<string>("");
+  const[selectedMemberTeam,setSelectedMemberTeam]= useState<any>(null);
+  const[memberTeamsList,setMemberTeamsList]=useState<any[]>([]);
+  const[isMemberTeamDropdownOpen,setIsMemberTeamDropdownOpen] = useState<boolean>(false)
+  const memberTeamDropdownRef = useRef<HTMLDivElement | null>(null);
 
 
+  useEffect(() => {
+    fetchMemberProducts();
+  }, []);
 
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
@@ -101,6 +114,14 @@ const ReferralFromSection = () => {
 
     return () => clearTimeout(timeoutId);
   }, [stateCityName]);
+
+   useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      getTeamByUserId();
+    }, 300); // debounce
+
+    return () => clearTimeout(timeoutId);
+  }, [teamName]);
 
   useEffect(() => {
 
@@ -162,8 +183,28 @@ const ReferralFromSection = () => {
 
 
   const fetchMemberProducts = async () => {
-    if (!memberProductName.trim()) {
-      //setMemberProductsList([]);
+  
+    try {
+      const token = loggedInUser?.token;
+      const response = await axios.get(`${BACKEND_API}product/${loggedInUser?.userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'ngrok-skip-browser-warning': 'true',
+          },
+        }
+      );
+     //setMemberProductsList(response?.data?.data || []);
+
+    } catch (error: any) {
+      console.log("error while fetching member products", error)
+
+    } 
+  };
+
+    const getTeamByUserId = async () => {
+    if (!teamName.trim()) {
+      setMemberTeamsList([]);
       return;
     }
 
@@ -172,7 +213,7 @@ const ReferralFromSection = () => {
 
 
     try {
-      const response = await axios.get(`${BACKEND_API}product/${loggedInUser?.userId}?name=${memberProductName.trim()}&limit=10`,
+      const response = await axios.get(`${BACKEND_API}team/getTeamByUserId/${loggedInUser?.userId}?name=${teamName.trim()}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -180,16 +221,14 @@ const ReferralFromSection = () => {
           },
         }
       );
-     // setMemberProductsList(response?.data?.data || []);
+    
+     setMemberTeamsList(response?.data?.data||[])
 
     } catch (error: any) {
       console.log("error while fetching member products", error)
 
-    } finally {
-
-    }
+    } 
   };
-
 
 
 
@@ -199,12 +238,9 @@ const ReferralFromSection = () => {
       
       const payload={
         ...formData,
-        teamMemberId:loggedInUser?.userId,
-        MemberFirstName:loggedInUserProfile?.firstName,
-        MemberLastName:loggedInUserProfile?.lastName,
-        status: "Pending",
+        status:"Pending",
       }
-
+      console.log("referral payload",payload);
       
       if (!validateFormData()) return;
       setLoading(true);
@@ -309,6 +345,15 @@ const ReferralFromSection = () => {
 
 
 
+    if (formData.teamMemberId.trim()==="") {
+      tempErrors.teamMemberId = "Team  is required";
+      isValidData = false;
+    } else {
+
+      tempErrors.teamMemberId = "";
+
+    }
+
     if (formData.productId.trim()==="") {
       tempErrors.productId = "Product is required";
       isValidData = false;
@@ -338,12 +383,22 @@ const ReferralFromSection = () => {
       setStateCityName("");
       setStateCityList([]);
     }
+
+    if (memberTeamDropdownRef.current && !memberTeamDropdownRef.current.contains(e.target as Node)) {
+      setIsMemberTeamDropdownOpen(false);
+      setTeamName("");
+      setMemberTeamsList([])
+    }
   };
 
 
 
   const handleOpenStateCityDropdown = () => {
     setIsStateCityDropdownOpen(true);
+  };
+
+   const handleOpenMemberTeamDropdown = () => {
+    setIsMemberTeamDropdownOpen(true);
   };
 
 
@@ -367,6 +422,29 @@ const ReferralFromSection = () => {
       ...prev,
       stateId: "",
       cityId: "",
+    }));
+
+
+  };
+
+  const handleSelectMemberTeam = (value: any) => {
+
+    if (value) {
+      setSelectedMemberTeam(value);
+      setIsMemberTeamDropdownOpen(false);
+      setFormData((prev: FormDataState) => ({
+        ...prev,
+        teamMemberId:value?.id
+      }));
+      setMemberTeamsList([]);
+      setTeamName("");
+      return;
+    }
+
+    setSelectedMemberTeam(null);
+    setFormData((prev: FormDataState) => ({
+      ...prev,
+      teamMemberId:"",
     }));
 
 
@@ -407,6 +485,7 @@ const ReferralFromSection = () => {
         postalCode: "",
         cityId: "",
         stateId: "",
+        teamMemberId:"",
         productId: "",
         notes: "",
     });
@@ -419,6 +498,7 @@ const ReferralFromSection = () => {
         postalCode: "",
         cityId: "",
         stateId: "",
+        teamMemberId:"",
         productId: "",
         notes: "",
     });
@@ -426,6 +506,7 @@ const ReferralFromSection = () => {
     setSelectedStateCity(null);
   }
 console.log("referral form data",formData);
+console.log("member product",memberProductsList);
   return (
     <div className="w-full max-w-[1500px] bg-white px-6 sm:px-8 py-8 rounded-xl">
       <Toaster />
@@ -577,6 +658,63 @@ console.log("referral form data",formData);
               />
               <span className={`${REQUIRED_ERROR}`}>{errors.postalCode || ""}</span>
             </div>
+             <div className="relative w-full" ref={memberTeamDropdownRef}>
+              <input
+                type="text"
+                readOnly
+                value={
+                  selectedMemberTeam
+                  ? `${selectedMemberTeam?.name||""}`   
+                    : ""
+                }
+                onClick={handleOpenMemberTeamDropdown}
+                placeholder="Select Team"
+                className={`${FORM_INPUT_CLASS} cursor-pointer`}
+              />
+              <span className={`${REQUIRED_ERROR}`}>{errors.teamMemberId || ""}</span>
+
+              {isMemberTeamDropdownOpen && (
+                <div className="absolute z-50 top-full left-0 w-full bg-white border border-gray-200 rounded-md shadow-lg mt-1 px-2 py-2">
+                  {selectedMemberTeam && (
+                    <div className="mb-2 flex items-center justify-between gap-2 px-3 py-1 bg-gray-100 rounded">
+                      <span className="text-sm text-gray-800">
+                        {`${selectedMemberTeam?.name}`
+                        }
+                      </span>
+                      <button
+                        onClick={() => handleSelectMemberTeam(null)}
+                        className="ml-2 text-gray-500 hover:text-red-500 transition-all duration-300 "
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  )}
+                  <input
+                    type="text"
+                    placeholder="Search "
+                    value={teamName}
+                    onChange={(e) => setTeamName(e.target.value)}
+                    className="w-full px-3 py-2 rounded-md outline-none border border-gray-200 mb-1 "
+                    autoFocus
+                  />
+                  <ul className="max-h-48 overflow-y-auto">
+                    {memberTeamsList.length > 0 ? (
+                      memberTeamsList.map((item, index) => (
+                        <li
+                          key={index}
+                          onClick={() => handleSelectMemberTeam(item)}
+                          className="px-3 py-2 hover:bg-gray-100 rounded cursor-pointer"
+                        >
+                          {`${item?.name}`}
+                        </li>
+                      ))
+                    ) : (
+                      <li className=" px-3 py-1 text-gray-400">{teamName.trim().length > 0 && memberTeamsList.length === 0 ? "No result found" : ""}</li>
+                    )}
+                  </ul>
+                </div>
+              )}
+            </div>
             <div className="w-full">
                     <Select
                      options={memberProductsList}
@@ -584,7 +722,6 @@ console.log("referral form data",formData);
                      defaultValue={formData.productId}
                      onChange={(value)=>setFormData((prev:FormDataState)=>({...prev,productId:value}))}
                     />
-
               <span className={`${REQUIRED_ERROR}`}>{errors.productId || ""}</span>
             </div>
          
