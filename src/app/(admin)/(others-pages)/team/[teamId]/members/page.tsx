@@ -38,7 +38,7 @@ export default function UserManagement() {
     }, [dispatch, currentPage, isModalOpen, isAddModalOpen]);
 
     const getTeamMembers = () => {
-        dispatch(fetchTeamMembers({ id: teamId, page: currentPage, limit:ITEM_PER_PAGE, search:"" })).then((res: any) => {
+        dispatch(fetchTeamMembers({ id: teamId, page: currentPage, limit: ITEM_PER_PAGE, search: "" })).then((res: any) => {
             if (res.meta.requestStatus === "fulfilled") {
                 if (res.payload) {
                     setTeamDataMembers(res.payload.data || []);
@@ -152,6 +152,10 @@ export default function UserManagement() {
                                             <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Email</TableCell>
                                             <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Role</TableCell>
                                             <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Verified</TableCell>
+                                            <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">
+                                                Designation
+                                            </TableCell>
+
                                             <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Actions</TableCell>
                                         </TableRow>
                                     </TableHeader>
@@ -161,7 +165,7 @@ export default function UserManagement() {
                                                 <TableRow key={member?.id}>
                                                     <TableCell className="px-5 py-4 text-start">
                                                         <span className="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
-                                                            {(currentPage-1)*ITEM_PER_PAGE+index + 1}
+                                                            {(currentPage - 1) * ITEM_PER_PAGE + index + 1}
                                                         </span>
                                                     </TableCell>
                                                     <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
@@ -173,6 +177,7 @@ export default function UserManagement() {
                                                     <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                                                         {member?.user?.role}
                                                     </TableCell>
+
                                                     <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                                                         <Badge
                                                             size="sm"
@@ -186,14 +191,36 @@ export default function UserManagement() {
                                                             {member?.user?.verified ? "Verified" : "Not verified"}
                                                         </Badge>
                                                     </TableCell>
-                                                    <TableCell className="px-4 py-3 text-red-500 text-theme-sm dark:text-gray-400">
-                                                        <div className="flex items-center gap-1 cursor-pointer" onClick={() => {
-                                                            setMembeId(member?.id)
-                                                            setIsModalOpen(true)
-                                                        }}>
-                                                            <RiDeleteBin6Line className="h-5 w-5 text-red-500 cursor-pointer" />Remove
-                                                        </div>
+                                                    <TableCell className="px-4 py-3 text-start text-theme-sm">
+                                                        {!member?.isMemberOnly ? (
+                                                            <span className="text-green-600 flex items-center gap-1 font-bold">
+                                                                L1 Manager <svg className="w-4 h-4 text-green-500" fill="currentColor" viewBox="0 0 20 20"><path fillRule="evenodd" d="M16.707 5.293a1 1 0 00-1.414 0L8 12.586 4.707 9.293a1 1 0 10-1.414 1.414l4 4a1 1 0 001.414 0l8-8a1 1 0 000-1.414z" clipRule="evenodd" /></svg>
+                                                            </span>
+                                                        ) : (
+                                                            <span className="text-gray-500 dark:text-gray-400">Member</span>
+                                                        )}
                                                     </TableCell>
+
+                                                    <TableCell className="px-4 py-3 text-theme-sm text-start">
+                                                        {!member?.isMemberOnly ? (
+                                                            <div className="flex items-center gap-1 text-gray-400 cursor-not-allowed">
+                                                                <RiDeleteBin6Line className="h-5 w-5" />
+                                                                Remove
+                                                            </div>
+                                                        ) : (
+                                                            <div
+                                                                className="flex items-center gap-1 text-red-500 cursor-pointer"
+                                                                onClick={() => {
+                                                                    setMembeId(member?.id);
+                                                                    setIsModalOpen(true);
+                                                                }}
+                                                            >
+                                                                <RiDeleteBin6Line className="h-5 w-5" />
+                                                                Remove
+                                                            </div>
+                                                        )}
+                                                    </TableCell>
+
 
                                                 </TableRow>
                                             ))
@@ -214,9 +241,9 @@ export default function UserManagement() {
                     </div>
                 </div>
                 <TeamDeleteConfirm isOpen={isModalOpen} closeModal={() => {
-                        setIsModalOpen(false)
-                        setMembeId("")
-                    }} onDeleteConfirm={handleDeleteMember} type="Remove" name="Member" />
+                    setIsModalOpen(false)
+                    setMembeId("")
+                }} onDeleteConfirm={handleDeleteMember} type="Remove" name="Member" />
 
                 <MemberAddModal isOpen={isAddModalOpen} closeModal={() => setIsAddModalOpen(false)} id={teamId?.toString()} />
 

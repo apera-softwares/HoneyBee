@@ -147,6 +147,11 @@ const team_B: NavItem[] = [
     path: "/a-team",
   },
 
+  {
+    icon: <Users />,
+    name: "Team",
+    path: "/team",
+  },
 
 
 ];

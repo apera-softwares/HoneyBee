@@ -22,6 +22,27 @@ export const fetchTeams = createAsyncThunk(
       }
     }
   );
+  export const fetchTeamsByUserId = createAsyncThunk(
+    "team/fetchTeams",
+    async (obj: any, thunkAPI) => {
+      try {
+        const state: any = thunkAPI.getState();
+        const token = state.user?.user?.token; 
+        const id = state.user?.user?.userId;
+        const {page,limit} = obj
+
+        const response = await axios.get(`${BACKEND_API}team/getTeamByUserId/${id}?page=${page}&&limit=${limit}`,  {
+          headers: { Authorization: `Bearer ${token}`, 
+         'ngrok-skip-browser-warning': 'true',
+       },
+        });
+  
+        return response.data;
+      } catch (error: any) {
+        return thunkAPI.rejectWithValue(error.response?.data?.message || "Failed to fetch Teams");
+      }
+    }
+  );
 
   export const fetchTeamMembers = createAsyncThunk(
     "team/fetchTeamMembers",
@@ -50,6 +71,8 @@ export const fetchTeams = createAsyncThunk(
       try {
         const state: any = thunkAPI.getState();
         const token = state.user?.user?.token;
+
+        console.log(obj,"create team and assign manage to team")
   
         const response = await axios.post(
           `${BACKEND_API}team`,

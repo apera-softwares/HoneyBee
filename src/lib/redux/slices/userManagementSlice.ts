@@ -26,8 +26,6 @@ export const fetchUsers = createAsyncThunk(
     }
   );
 
-
-
   export const CreateUser = createAsyncThunk(
     "user/Create",
     async (obj: any, thunkAPI) => {
