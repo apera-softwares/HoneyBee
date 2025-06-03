@@ -9,10 +9,10 @@ import {
 import Badge from "../ui/badge/Badge";
 // import { FiEdit } from "react-icons/fi";
 import { useAppDispatch,useAppSelector } from "@/lib/redux/hooks";
-import { fetchReferrals } from "@/lib/redux/slices/referralSlice";
+import { fetchReferrals,updateReferral } from "@/lib/redux/slices/referralSlice";
 import Spinner from "../common/Spinner";
 import Pagination from "../tables/Pagination";
-import { Toaster } from "react-hot-toast";
+import toast,{ Toaster } from "react-hot-toast";
 
 interface ReferralTableProps {
     searchText: string;
@@ -29,9 +29,12 @@ type BadgeColor =
 const ReferralTable: React.FC<ReferralTableProps> = ({ searchText }) => {
     const ITEM_PER_PAGE = 5;
     const dispatch = useAppDispatch();
+    const loggedInUserProfile = useAppSelector((state)=>state.userProfile.userProfile);
     const {referralList,loading} = useAppSelector((state)=>state.referral)
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
+    const [updatingReferralId, setUpdatingReferralId] = useState<string | null>(null);
+    const [statusUpdateloading,setStatusUpdateLoading]=useState<boolean>(false);
 
     useEffect(()=>{
        getReferrals(currentPage);
@@ -57,6 +60,40 @@ const ReferralTable: React.FC<ReferralTableProps> = ({ searchText }) => {
         }
 
    }
+
+     const handleUpdateReferralsStatus = async (item:any,status:string) => {
+
+
+        console.log("passed data while updating status",item,status);
+        return ;
+
+    try {
+      
+     
+      setUpdatingReferralId(item?.id);
+      setStatusUpdateLoading(true);
+       const payload={
+        status:status,
+      }
+      await dispatch(updateReferral(payload)).unwrap();
+      toast.success("Update  status successfully");
+      getReferrals(currentPage);
+
+
+    } catch (error: any) {
+      console.log("Error while update referral:", error);
+      const errorMessage =
+        typeof error === "string"
+          ? error
+          : error?.message || "Failed to update status";
+
+      toast.error(errorMessage);
+    }
+    finally {
+      setStatusUpdateLoading(false);
+      setUpdatingReferralId(item?.id);
+    }
+  };
 
     const handlePageChange = (page: any) => {
         setCurrentPage(page);
@@ -95,7 +132,10 @@ const ReferralTable: React.FC<ReferralTableProps> = ({ searchText }) => {
                                     <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Referred By</TableCell>
                                     <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Status</TableCell>
                                      <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Submitted On</TableCell>
-                                     {/* <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Actions</TableCell> */}
+                                     {
+                                        loggedInUserProfile?.role !=="B_TEAM" && ( <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Actions</TableCell>)
+                                     }
+                                    
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -134,16 +174,42 @@ const ReferralTable: React.FC<ReferralTableProps> = ({ searchText }) => {
                                                    item?.submittedOn?.slice(0,10)||""
                                                   }
                                             </TableCell>
-                                             {/* <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                                                  Update Status
-                                            </TableCell> */}
+
+                                            {
+                                                loggedInUserProfile?.role!=="B_TEAM" && (  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                                                    {/* {updatingReferralId === item?.id ? (
+    <div className="flex items-center">
+       <div className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full animate-spin" />
+    </div>
+  ) : (
+    <select
+      className="px-2 py-1 border border-gray-300 rounded-md text-sm"
+      value={item?.status}
+      onChange={(e) =>
+        handleUpdateReferralsStatus(item?.id, e.target.value)
+      }
+    >
+      <option value="" disabled>
+        Update Status
+      </option>
+      <option value="Pending">Pending</option>
+      <option value="Pitched">Pitched</option>
+      <option value="Sold">Sold</option>
+      <option value="Payout">Payout</option>
+    </select>
+  )} */}                                
+     <Spinner  /> 
+                                            </TableCell>)
+
+                                            }
+                                           
                                         </TableRow>
 
                                     ))
                                 ) : (
                                     <TableRow>
                                         <TableCell className="text-center py-6 text-gray-500">
-                                            No referrals found.
+                                            No referrals found. 
                                         </TableCell>
                                     </TableRow>
                                 )}
