@@ -1,5 +1,5 @@
 import CommonHeading from "@/components/common/CommonHeading";
-import ReferralFromSection from "@/components/ReferralFromSection";
+import ReferralFormSection from "@/components/ReferralFormSection";
 import ServiceCard from "@/components/ServiceCard";
 import { SERVICES } from "@/data/services";
 import React from "react";
@@ -7,8 +7,8 @@ import React from "react";
 
 export default function Referral() {
     return (
-        <div>
-               <div className="flex flex-col lg:flex-row items-start justify-between lg:items-center gap-4 mb-8 ">
+        <div className="w-full">
+            <div className="flex flex-col lg:flex-row items-start justify-between lg:items-center gap-4 mb-8 ">
                 {/* Left: Heading */}
                 <div className=" w-auto">
                     <CommonHeading
@@ -34,14 +34,14 @@ export default function Referral() {
             </div>
             </div>
 
-            <div className="mb-4 mt-10">
+            <div className=" mt-10">
                 <h1 className="text-3xl font-semibold text-gray-800 dark:text-white/90"
                     x-text="pageName">
                     Referral Submission Form
                 </h1>
 
             </div>
-            <ReferralFromSection />
+            <ReferralFormSection />
 
         </div>
     );

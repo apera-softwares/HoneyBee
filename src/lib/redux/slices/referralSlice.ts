@@ -17,7 +17,7 @@ export const createReferral = createAsyncThunk(
       return response.data;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || "Failed to create referral "
+        error?.response?.data?.message || "Failed to create referral "
       );
     }
   }
