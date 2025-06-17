@@ -9,7 +9,7 @@ import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { createReferral } from "@/lib/redux/slices/referralSlice";
 import SearchAndSelectMemberModal from "./referral/SearchAndSelectMemberModal";
 // import SearchAndSelectMemberProductModal from "./referral/SearchAndSelectMemberProductModal";
-import SearchAndSelectPreferredSalesModal from "./referral/SearchAndSelectPreferredSalesPersonModal";
+//import SearchAndSelectPreferredSalesModal from "./referral/SearchAndSelectPreferredSalesPersonModal";
 import toast, { Toaster } from "react-hot-toast";
 
 interface FormDataState {
@@ -22,7 +22,6 @@ interface FormDataState {
   MemberFirstName: string;
   MemberLastName: string;
   notes: string;
-  preferredSalesPersonId: string;
   status: string;
   productId: string;
   teamMemberId: string;
@@ -63,7 +62,6 @@ const ReferralFromSection = () => {
     MemberFirstName: "",
     MemberLastName: "",
     notes: "",
-    preferredSalesPersonId: "",
     status: "",
     productId: "",
     teamMemberId: "",
@@ -80,7 +78,6 @@ const ReferralFromSection = () => {
     MemberFirstName: "",
     MemberLastName: "",
     notes: "",
-    preferredSalesPersonId: "",
     status: "",
     productId: "",
     teamMemberId: "",
@@ -90,10 +87,10 @@ const ReferralFromSection = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [selectedMember, setSelectedMember] = useState<any | null>(null);
   const [selectedMemberProduct, setSelectedMemberProduct] = useState<any | null>(null);
-  const [selectedPreferredSalesPerson, setSelectedPreferredSalesPerson] = useState<any | null>(null);
+  // const [selectedPreferredSalesPerson, setSelectedPreferredSalesPerson] = useState<any | null>(null);
   const [isMemberSelectModalOpen, setIsMemberSelectedModalOpen] = useState<boolean>(false);
   // const [isMemberProductSelectModalOpen,setIsMemberProductSelectModalOpen]= useState<boolean>(false);
-  const [isPreferredSalesPersonSelectModalOpen, setIsPreferredSalesPersonSelectModalOpen] = useState<boolean>(false);
+  //const [isPreferredSalesPersonSelectModalOpen, setIsPreferredSalesPersonSelectModalOpen] = useState<boolean>(false);
   const [stateCityList, setStateCityList] = useState<any[]>([])
   const [isStateCityDropdownOpen, setIsStateCityDropdownOpen] = useState(false);
   const [stateCityName, setStateCityName] = useState('');
@@ -339,14 +336,14 @@ const ReferralFromSection = () => {
     }
 
     //validate preferred sales person
-    if (!selectedPreferredSalesPerson) {
-      tempErrors.preferredSalesPersonId = "Preferred salesperson is required";
-      isValidData = false;
-    } else {
+    // if (!selectedPreferredSalesPerson) {
+    //   tempErrors.preferredSalesPersonId = "Preferred salesperson is required";
+    //   isValidData = false;
+    // } else {
 
-      tempErrors.preferredSalesPersonId = "";
+    //   tempErrors.preferredSalesPersonId = "";
 
-    }
+    // }
 
 
     // Validate status
@@ -456,19 +453,19 @@ const ReferralFromSection = () => {
     setFormData((prev: FormDataState) => ({ ...prev, productId: "" }));
   }
 
-  const handlePreferredSalesPersonSelect = (person: any) => {
+  // const handlePreferredSalesPersonSelect = (person: any) => {
 
-    if (person) {
-      setSelectedPreferredSalesPerson(person);
-      setFormData((prev: FormDataState) => ({ ...prev, preferredSalesPersonId: person?.id }))
-      return;
-    }
-    setSelectedPreferredSalesPerson(null);
-    setFormData((prev: FormDataState) => ({ ...prev, preferredSalesPersonId: "" }))
-    return;
+  //   if (person) {
+  //     setSelectedPreferredSalesPerson(person);
+  //     setFormData((prev: FormDataState) => ({ ...prev, preferredSalesPersonId: person?.id }))
+  //     return;
+  //   }
+  //   setSelectedPreferredSalesPerson(null);
+  //   setFormData((prev: FormDataState) => ({ ...prev, preferredSalesPersonId: "" }))
+  //   return;
 
 
-  }
+  // }
 
   const handleOpenSelectMemberModal = () => {
     setIsMemberSelectedModalOpen(true);
@@ -484,12 +481,12 @@ const ReferralFromSection = () => {
   //   setIsMemberProductSelectModalOpen(false);
   // }
 
-  const handleOpenSelectPreferredSalesPersonModal = () => {
-    setIsPreferredSalesPersonSelectModalOpen(true);
-  }
-  const handlecloseSelectPreferredSalesPersonModal = () => {
-    setIsPreferredSalesPersonSelectModalOpen(false);
-  }
+  // const handleOpenSelectPreferredSalesPersonModal = () => {
+  //   setIsPreferredSalesPersonSelectModalOpen(true);
+  // }
+  // const handlecloseSelectPreferredSalesPersonModal = () => {
+  //   setIsPreferredSalesPersonSelectModalOpen(false);
+  // }
 
 
   const handleClearFormData = () => {
@@ -503,7 +500,6 @@ const ReferralFromSection = () => {
       MemberFirstName: "",
       MemberLastName: "",
       notes: "",
-      preferredSalesPersonId: "",
       status: "",
       productId: "",
       teamMemberId: "",
@@ -520,7 +516,6 @@ const ReferralFromSection = () => {
       MemberFirstName: "",
       MemberLastName: "",
       notes: "",
-      preferredSalesPersonId: "",
       status: "",
       productId: "",
       teamMemberId: "",
@@ -529,7 +524,7 @@ const ReferralFromSection = () => {
     });
     setSelectedMember(null);
     setSelectedMemberProduct(null);
-    setSelectedPreferredSalesPerson(null);
+    //setSelectedPreferredSalesPerson(null);
     setSelectedStateCity(null);
   }
 
@@ -753,7 +748,7 @@ const ReferralFromSection = () => {
           </div>
           <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-16 ">
 
-            <div className="w-full">
+            {/* <div className="w-full">
               <input
                 type="text"
                 placeholder="Preferred salesperson"
@@ -763,7 +758,7 @@ const ReferralFromSection = () => {
                 onClick={handleOpenSelectPreferredSalesPersonModal}
               />
               <span className={`${REQUIRED_ERROR}`}>{errors.preferredSalesPersonId || ""}</span>
-            </div>
+            </div> */}
             <div className="w-full">
               <select
                 name="status"
@@ -820,7 +815,7 @@ const ReferralFromSection = () => {
 
       <SearchAndSelectMemberModal isOpen={isMemberSelectModalOpen} closeModal={handlecloseSelectMemberModal} selectedMember={selectedMember} onMemberSelect={handleSelectMember} />
       {/* <SearchAndSelectMemberProductModal isOpen={isMemberProductSelectModalOpen} closeModal={handlecloseSelectMemberProductModal} memberId={selectedMember?.id} selectedProduct={selectedMemberProduct} onProductSelect={handleMemberProductSelect} /> */}
-      <SearchAndSelectPreferredSalesModal isOpen={isPreferredSalesPersonSelectModalOpen} closeModal={handlecloseSelectPreferredSalesPersonModal} selectedPreferredSalesPerson={selectedPreferredSalesPerson} onPreferredSalesPersonSelect={handlePreferredSalesPersonSelect} />
+      {/* <SearchAndSelectPreferredSalesModal isOpen={isPreferredSalesPersonSelectModalOpen} closeModal={handlecloseSelectPreferredSalesPersonModal} selectedPreferredSalesPerson={selectedPreferredSalesPerson} onPreferredSalesPersonSelect={handlePreferredSalesPersonSelect} /> */}
 
     </div>
   );
