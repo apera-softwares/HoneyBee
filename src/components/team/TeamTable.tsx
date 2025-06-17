@@ -17,6 +17,7 @@ import { fetchTeams, fetchTeamsByUserId } from "@/lib/redux/slices/teamManagemen
 import { MdRemoveRedEye } from "react-icons/md";
 import { useRouter } from "next/navigation";
 import { useAppSelector } from "@/lib/redux/hooks";
+import { UserRole } from "@/constant/userRoles";
 
 
 interface TeamTableProps {
@@ -41,12 +42,12 @@ const TeamTable: React.FC<TeamTableProps> = ({ searchText, role, order }) => {
 
     useEffect(() => {
 
-        if (userProfile.role == "ADMIN") {
+        if (userProfile.role === UserRole.ADMIN) {
             dispatch(fetchTeams({ page: currentPage, limit: ITEM_PER_PAGE })).then((res: any) => {
                 if (res.meta.requestStatus === "fulfilled") {
                     if (res.payload) {
                         setTeamData(res.payload.data || []);
-                        console.log(res.payload)
+                        //console.log(res.payload)
                         const lastPage = res.payload.lastPage;
                         setTotalPages(lastPage);
                     } else {
@@ -61,8 +62,7 @@ const TeamTable: React.FC<TeamTableProps> = ({ searchText, role, order }) => {
             dispatch(fetchTeamsByUserId({ page: currentPage, limit: ITEM_PER_PAGE })).then((res: any) => {
                 if (res.meta.requestStatus === "fulfilled") {
                     if (res.payload) {
-                        setTeamData(res.payload.data || []);
-                        console.log(res.payload)
+                        setTeamData(res.payload || []);
                         const lastPage = res.payload.lastPage;
                         setTotalPages(lastPage);
                     } else {
@@ -147,7 +147,7 @@ const TeamTable: React.FC<TeamTableProps> = ({ searchText, role, order }) => {
                                 ) : (
                                     <TableRow>
                                         <TableCell className="text-center py-6 text-gray-500">
-                                            No users found.
+                                            No team found.
                                         </TableCell>
                                     </TableRow>
                                 )}
@@ -156,10 +156,13 @@ const TeamTable: React.FC<TeamTableProps> = ({ searchText, role, order }) => {
                     )}
                 </div>
             </div>
-            <div className=" w-full flex justify-end  px-4 py-6 ">
+            {
+               userProfile?.role !== UserRole.B_TEAM && (            
+               <div className=" w-full flex justify-end  px-4 py-6 ">
                 <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+            </div>)
+            }
 
-            </div>
             <TeamAddEdit isOpen={isModalOpen} closeModal={() => setIsModalOpen(false)} teamData={editTeamData} type="update" />
 
         </div>

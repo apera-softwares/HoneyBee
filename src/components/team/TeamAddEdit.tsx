@@ -37,8 +37,8 @@ const TeamAddEdit: React.FC<TeamAddEditProps> = ({ isOpen, closeModal, teamData,
     const [selectedMember, setSelectedMember] = useState<any | null>(null);
     const { userProfile } = useAppSelector((state) => state.userProfile);
 
-    console.log(usersData, "All team B users")
-    console.log(selectedMember, "selectedMember")
+    //console.log(usersData, "All team B users")
+    //console.log(selectedMember, "selectedMember")
 
     const dispatch = useDispatch<AppDispatch>();
 
@@ -102,17 +102,17 @@ const TeamAddEdit: React.FC<TeamAddEditProps> = ({ isOpen, closeModal, teamData,
     };
 
 
-    console.log(teamData, "Team Data 1")
+    //console.log(teamData, "Team Data 1")
 
     const handleEdit = () => {
-        console.log("Form Data: Update User", formData);
+        //console.log("Form Data: Update User", formData);
         if (!validateFormData()) return
         dispatch(UpdateTeam(formData)).then((res: any) => {
             if (res.meta.requestStatus === "fulfilled") {
                 if (res.payload) {
                     toast.success("Team Updated successful!");
                     dispatch(fetchTeams({ page: 1, limit: 5 }))
-                    console.log(res.payload)
+                    //console.log(res.payload)
                     closeModal();
                     clear()
                 }
@@ -124,14 +124,14 @@ const TeamAddEdit: React.FC<TeamAddEditProps> = ({ isOpen, closeModal, teamData,
     };
 
     const handleAddUser = () => {
-        console.log("Form Data: Add Team", formData);
+        //console.log("Form Data: Add Team", formData);
         if (!validateFormData()) return
         dispatch(CreateTeam({ name: formData?.name, mangerId: selectedMember?.id })).then((res: any) => {
             if (res.meta.requestStatus === "fulfilled") {
                 if (res.payload) {
                     toast.success("Team Created successful!");
-                    console.log("Team Created successful!");
-                    console.log(res.payload)
+                    //console.log("Team Created successful!");
+                    //console.log(res.payload)
                     closeModal();
                     clear()
                 }
