@@ -10,9 +10,9 @@ import React from "react";
 export default function Referral() {
     //const router = useRouter();
 
-    const handleRedirectToLandingPage = ()=>{
-        //router.push("");
-    }
+    // const handleRedirectToLandingPage = ()=>{
+    //     //router.push("");
+    // }
     return (
         <div>
             <div className="flex flex-col lg:flex-row items-start lg:justify-between  gap-4 mb-8 ">
@@ -24,9 +24,9 @@ export default function Referral() {
                     />
                 </div>
                 <div className="">
-                    <button  className=" px-6 py-3.5 rounded-md text-sm text-white bg-primary hover:bg-primary-hover transition-all duration-500"
+                    {/* <button  className=" px-6 py-3.5 rounded-md text-sm text-white bg-primary hover:bg-primary-hover transition-all duration-500"
                     onClick={handleRedirectToLandingPage}
-                    >Landing Page</button>
+                    >Landing Page</button> */}
                 </div>
             </div>
             <div className=" overflow-x-auto  no-scrollbar ">

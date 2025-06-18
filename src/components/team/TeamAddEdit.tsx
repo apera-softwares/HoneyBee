@@ -137,7 +137,7 @@ const TeamAddEdit: React.FC<TeamAddEditProps> = ({ isOpen, closeModal, teamData,
                 }
             } else {
                 console.log("Failed to Create Team:", res.payload || "Unknown error");
-                toast.error("Failed to Create Team");
+                toast.error(res?.payload||"Failed to Create Team");
             }
         });
     }
