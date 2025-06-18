@@ -152,6 +152,11 @@ const team_B: NavItem[] = [
     name: "Team",
     path: "/team",
   },
+  {
+    icon: <BoxCubeIcon />,
+    name: "Select Product",
+    path: "/product-catalog/select-for-self",
+  },
 
 
 ];
