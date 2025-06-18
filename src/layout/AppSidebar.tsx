@@ -54,7 +54,7 @@ const navItems: NavItem[] = [
   },
   {
     icon: <CoinHand />,
-    name: "A-Team",
+    name: "Referrals",
     path: "/a-team",
   },
 
@@ -115,7 +115,7 @@ const team_A: NavItem[] = [
   },
   {
     icon: <CoinHand />,
-    name: "A-Team",
+    name: "Referrals",
     path: "/a-team",
   },
 
@@ -143,7 +143,7 @@ const team_B: NavItem[] = [
 
   {
     icon: <CoinHand />,
-    name: "A-Team",
+    name: "Referrals",
     path: "/a-team",
   },
 

@@ -1,0 +1,128 @@
+"use client";
+import React, { useState, useEffect } from "react";
+// import { EcommerceMetrics } from "@/components/ecommerce/EcommerceMetrics";
+//import MonthlyTarget from "@/components/ecommerce/MonthlyTarget";
+// import MonthlySalesChart from "@/components/ecommerce/MonthlySalesChart";
+import StatisticsChart from "@/components/ecommerce/StatisticsChart";
+import RecentOrders from "@/components/ecommerce/RecentOrders";
+import TeamCard from "@/components/team/TeamCard";
+// import DemographicCard from "@/components/ecommerce/DemographicCard";
+import axios from "axios";
+import { useAppSelector } from "@/lib/redux/hooks";
+import { BACKEND_API } from "@/api";
+
+const BTeamDashboard = () => {
+  const [team, setTeam] = useState<any>(null);
+  const [teamMembers, setTeamMembers] = useState<any>([]);
+  const { user: loggedInUser } = useAppSelector((state) => state.user);
+  const { userProfile } = useAppSelector((state) => state.userProfile);
+  const memberId =
+    userProfile?.teamMember?.find((member: any) => member.isMemberOnly === true)
+      ?.id || null;
+
+  useEffect(() => {
+    getTeamUserById();
+  }, [memberId]);
+
+  const getTeamUserById = async () => {
+    if (!memberId) return;
+
+    try {
+      const token = loggedInUser?.token;
+      const response = await axios.get(
+        `${BACKEND_API}team/getTeamByTeamMember/${memberId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "ngrok-skip-browser-warning": "true",
+          },
+        }
+      );
+
+      const teamData = response.data?.data || null;
+      setTeam(teamData);
+
+      if (teamData?.teamId) {
+        const teamId = teamData.teamId;
+        getTeamMembersByTeamId(teamId);
+      }
+    } catch (error: any) {
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          console.error(" error  while getting team", error.response.data);
+        } else {
+          console.error("error while getting team", error?.message);
+        }
+      } else {
+        console.error("Unexpected Error while getting team:", error);
+      }
+    }
+  };
+
+  const getTeamMembersByTeamId = async (teamId: string) => {
+    try {
+      const token = loggedInUser?.token;
+      const response = await axios.get(`${BACKEND_API}team/members/${teamId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "ngrok-skip-browser-warning": "true",
+        },
+      });
+
+      const teamsMembersData = response.data?.data || [];
+      setTeamMembers(teamsMembersData);
+    } catch (error: any) {
+      if (axios.isAxiosError(error)) {
+        if (error.response) {
+          console.error(
+            " error response while getting team members",
+            error.response.data
+          );
+        } else {
+          console.error("error while getting team members", error?.message);
+        }
+      } else {
+        console.error("Unexpected Error while getting team members", error);
+      }
+    }
+  };
+
+  return (
+    <div className="w-full">
+      {/* <div className="col-span-12 space-y-6 xl:col-span-7">
+        <EcommerceMetrics />
+
+        <MonthlySalesChart />
+      </div> */}
+
+      <div className="w-full grid grid-cols-12 gap-5 mb-5">
+        <div
+          className={`col-span-12 ${
+            team?.teamId ? "lg:col-span-8" : ""
+          } `}
+        >
+          <StatisticsChart />
+        </div>
+        {team?.teamId && (
+          <div className="col-span-12 lg:col-span-4 lg:h-full">
+            <TeamCard team={team} teamMembers={teamMembers} />
+          </div>
+        )}
+      </div>
+      {/* 
+      <div className="col-span-12">
+        <StatisticsChart />
+      </div>
+
+      <div className="col-span-12 xl:col-span-5">
+        <DemographicCard />
+      </div> */}
+
+      <div className="col-span-12 xl:col-span-7">
+        <RecentOrders />
+      </div>
+    </div>
+  );
+};
+
+export default BTeamDashboard;
