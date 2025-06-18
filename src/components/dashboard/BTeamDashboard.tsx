@@ -99,12 +99,12 @@ const BTeamDashboard = () => {
         <div
           className={`col-span-12 ${
             team?.teamId ? "lg:col-span-8" : ""
-          } mb-5 lg:mb-0`}
+          } `}
         >
           <StatisticsChart />
         </div>
         {team?.teamId && (
-          <div className="col-span-12 lg:col-span-4 mb-5">
+          <div className="col-span-12 lg:col-span-4 lg:h-full">
             <TeamCard team={team} teamMembers={teamMembers} />
           </div>
         )}
