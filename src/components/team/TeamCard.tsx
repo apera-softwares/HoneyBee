@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import ChangeTeamModal from "./ChangeTeamModal";
+import { FiEdit } from "react-icons/fi";
 
 interface TeamCard {
   team: any;
@@ -10,9 +11,18 @@ const TeamCard: React.FC<TeamCard> = ({ team, teamMembers }) => {
   const [showChangeTeamModal, setShowChangeTeamModal] =
     useState<boolean>(false);
   return (
-    <div className="relative w-full h-full rounded-2xl border border-gray-200 bg-white px-4 py-5 text-gray-500">
-      <h3 className="font-medium mb-1">Team</h3>
-      <div className="w-full">
+    <div className="relative w-full h-full rounded-2xl border border-gray-200 bg-white p-5 text-gray-500">
+      <div className="w-full flex items-start justify-between gap-3 mb-4 ">
+        <h3 className="text-lg font-medium">Team</h3>
+        <button
+          onClick={() => setShowChangeTeamModal(true)}
+          className=" bg-primary/40 hover:bg-primary/50 text-white rounded-lg  p-2  text-center outline-none flex items-center justify-center transition-all duration-300"
+        >
+          <FiEdit className="text-white" />
+        </button>
+      </div>
+
+      <div className="w-full ">
         <h2 className=" text-lg font-medium mb-6 pb-2  border-b border-gray-200">
           {team?.team?.name || ""}
         </h2>
@@ -37,14 +47,6 @@ const TeamCard: React.FC<TeamCard> = ({ team, teamMembers }) => {
             </ul>
           </div>
         </div>
-      </div>
-      <div className="w-full flex justify-end mt-6 lg:mt-10 ">
-                   <button
-              onClick={() => setShowChangeTeamModal(true)}
-              className=" bg-primary hover:bg-primary-hover text-white rounded-md text-md  py-2 px-6  text-center outline-none flex items-center justify-center"
-            >
-              Change Team
-            </button>
       </div>
       <ChangeTeamModal
         isOpen={showChangeTeamModal}

@@ -15,10 +15,7 @@ import Spinner from "../common/Spinner";
 import Pagination from "../tables/Pagination";
 import { Toaster } from "react-hot-toast";
 
-
-interface ProductCatalogTableProps {}
-
-const DashboardProductsTable: React.FC<ProductCatalogTableProps> = () => {
+const DashboardProductsTable = () => {
   const dispatch = useDispatch<AppDispatch>();
   const ITEM_PER_PAGE = 5;
   const [currentPage, setCurrentPage] = useState<number>(1);
