@@ -4,8 +4,9 @@ import React from "react";
 //import MonthlyTarget from "@/components/ecommerce/MonthlyTarget";
 // import MonthlySalesChart from "@/components/ecommerce/MonthlySalesChart";
 import StatisticsChart from "@/components/ecommerce/StatisticsChart";
-import RecentOrders from "@/components/ecommerce/RecentOrders";
+//import RecentOrders from "@/components/ecommerce/RecentOrders";
 // import DemographicCard from "@/components/ecommerce/DemographicCard";
+import DashboardProductsTable from "../product-catalog/DashboardProductsTable";
 
 const ATeamDashboard = () => {
   return (
@@ -32,7 +33,7 @@ const ATeamDashboard = () => {
       </div> */}
 
       <div className="col-span-12 xl:col-span-7">
-        <RecentOrders />
+        <DashboardProductsTable/>
       </div>
     </div>
   );
