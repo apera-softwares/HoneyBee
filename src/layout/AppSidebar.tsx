@@ -153,7 +153,7 @@ const team_B: NavItem[] = [
     path: "/team",
   },
   {
-    icon: <BoxCubeIcon />,
+    icon: <GridIcon />,
     name: "Select Product",
     path: "/product-catalog/select-for-self",
   },
