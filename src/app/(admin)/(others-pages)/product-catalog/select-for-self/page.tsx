@@ -77,7 +77,11 @@ export default function SelectForSelect() {
   };
 
   const handleAssignProductToSelf = async (productId: string) => {
-    if (!memberId) return;
+
+    if (!memberId) {
+      toast.error("You are not a member of any team.");
+      return;
+    }
     if (assignedProducts.length >= MAX_ALLOWED_PRODUCTS) {
       toast.error("You can select up to 3 products");
       return;

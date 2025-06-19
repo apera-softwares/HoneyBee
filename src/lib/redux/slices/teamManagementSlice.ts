@@ -8,10 +8,19 @@ export const fetchTeams = createAsyncThunk(
     try {
       const state: any = thunkAPI.getState();
       const token = state.user?.user?.token;
-      const { page, limit } = obj;
+      const { page, limit,name } = obj;
+
+      const queryParams = new URLSearchParams({
+          page: String(page),
+          limit: String(limit),
+      });
+
+      if (name) {
+      queryParams.append("name",name);
+      }
 
       const response = await axios.get(
-        `${BACKEND_API}team?page=${page}&&limit=${limit}`,
+        `${BACKEND_API}team?${queryParams.toString()}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -228,7 +237,7 @@ const teamManagementSlice = createSlice({
       })
       .addCase(fetchTeams.fulfilled, (state, action) => {
         state.loading = false;
-        state.teams = action.payload;
+        state.teams = action.payload.data;
       })
       .addCase(fetchTeams.rejected, (state, action) => {
         state.loading = false;
