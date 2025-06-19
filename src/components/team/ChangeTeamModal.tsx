@@ -82,7 +82,7 @@ const ChangeTeamModal: React.FC<ChangeTeamModalProps> = ({
       );
 
       console.log("team change response data", response.data);
-      toast.success("Team changes successfull");
+      toast.success("Team changed successfully");
       await dispatch(getUserProfile());
       handleCloseModal();
     } catch (error: any) {
