@@ -66,7 +66,7 @@ export default function UserDropdown() {
         </span>
         <div className="">
           <div className="flex items-center w-full">
-            <span className="block mr-1 font-medium text-theme-sm">{userProfile?.firstName}</span>
+            <span className="block mr-1 font-medium text-theme-sm">{userProfile?.firstName?.length > 6 ? userProfile?.firstName?.slice(0,6) :userProfile?.firstName||""}</span>
             <svg
               className={`stroke-gray-500 dark:stroke-gray-400 transition-transform duration-200 ${isOpen ? "rotate-180" : ""
                 }`}

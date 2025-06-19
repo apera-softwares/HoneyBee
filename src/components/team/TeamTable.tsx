@@ -24,9 +24,10 @@ interface TeamTableProps {
     searchText: string;
     role: string;
     order: string;
+    isCreateTeamModalOpen?:boolean,
 }
 
-const TeamTable: React.FC<TeamTableProps> = ({ searchText, role, order }) => {
+const TeamTable: React.FC<TeamTableProps> = ({ searchText, role, order,isCreateTeamModalOpen }) => {
     const ITEM_PER_PAGE = 5;
     const dispatch = useDispatch<AppDispatch>();
     const [teamData, setTeamData] = useState<any[]>([]);
@@ -42,7 +43,7 @@ const TeamTable: React.FC<TeamTableProps> = ({ searchText, role, order }) => {
 
     useEffect(() => {
 
-        if (userProfile.role === UserRole.ADMIN) {
+        if (userProfile?.role === UserRole.ADMIN) {
             dispatch(fetchTeams({ page: currentPage, limit: ITEM_PER_PAGE })).then((res: any) => {
                 if (res.meta.requestStatus === "fulfilled") {
                     if (res.payload) {
@@ -75,7 +76,7 @@ const TeamTable: React.FC<TeamTableProps> = ({ searchText, role, order }) => {
             });
         }
 
-    }, [dispatch, currentPage, searchText, role, isModalOpen, order]);
+    }, [dispatch, currentPage, searchText, role, isModalOpen, order,isCreateTeamModalOpen,userProfile]);
 
     const handlePageChange = (page: any) => {
         setCurrentPage(page);
