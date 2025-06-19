@@ -2,16 +2,12 @@
 import React, { useState } from "react";
 import CommonHeading from "@/components/common/CommonHeading";
 import { CiSearch } from "react-icons/ci";
-import UserAddEditModal from "@/components/user/UserAddEditModal";
 // import UserTable from "@/components/user/UserTable";
 import { Toaster } from "react-hot-toast";
-import ServiceCard from "@/components/ServiceCard";
-import { SERVICES } from "@/data/services";
 import ReferralTable from "@/components/referral/ReferralTable";
 import LeadCard from "@/components/LeadCard";
 
 export default function UserManagement() {
-    const [isModalOpen, setIsModalOpen] = useState(false)
     const [SearchInput, setSearchInput] = useState("")
 
     return (
@@ -114,23 +110,7 @@ export default function UserManagement() {
                 {/* <UserTable searchText={SearchInput} role="A_TEAM" order="" from="team-a" /> */}
                 <ReferralTable searchText={SearchInput} />
 
-                         <div className=" overflow-x-auto  no-scrollbar my-6 ">
-                          <div className=" max-w-[900px] flex space-x-5 ">
-                {SERVICES && SERVICES?.length > 0 ? (
-                    SERVICES?.map((serviceItems: any) => (
-                        <ServiceCard
-                            key={serviceItems?.id}
-                            title={serviceItems?.title}
-                            points={serviceItems?.servicesPoints}
-                            images={serviceItems?.images}
-                        />
-                    ))
-                ) : (
-                    <div></div>
-                )}
-            </div>
-            </div>
-                <UserAddEditModal isOpen={isModalOpen} closeModal={() => setIsModalOpen(false)} type="add" />
+
             </div>
         </div>
     );

@@ -1,7 +1,7 @@
 "use client";
-import { FORM_INPUT_CLASS, REQUIRED_ERROR } from "@/constant/constantClassName";
-import React, { useState, useEffect,useRef } from "react";
-import { useAppDispatch,useAppSelector } from "@/lib/redux/hooks";
+import { FORM_INPUT_CLASS, REQUIRED_ERROR, TEXT_SIZE } from "@/constant/constantClassName";
+import React, { useState, useEffect, useRef } from "react";
+import { useAppDispatch } from "@/lib/redux/hooks";
 import { createProductCatalog, fetchProductCatalogs, updateProductCatalog } from "@/lib/redux/slices/productCatalogSlice";
 import axios from "axios";
 import { BACKEND_API } from "@/api";
@@ -9,8 +9,8 @@ import toast from "react-hot-toast";
 import Radio from "../form/input/Radio";
 import Button from "../ui/button/Button";
 import Loader from "../ui/loader/Loader";
-
-
+import ImageUploading from 'react-images-uploading';
+import { RiImageAddFill } from "react-icons/ri";
 
 interface FormState {
   name: string;
@@ -20,7 +20,7 @@ interface FormState {
   elevatorPitch: string;
   stateId: string;
   status: string;
-  preferredSalesPersonId:string;
+  preferredSalesPersonId: string;
 }
 
 interface PaginationState {
@@ -33,8 +33,6 @@ interface FiltersState {
   status: string,
 }
 
-
-
 interface AddEditProductCatalogFormProps {
 
   filters: FiltersState,
@@ -45,103 +43,67 @@ interface AddEditProductCatalogFormProps {
 
 }
 
-
-const TEXT_SIZE = "text-base";
-
-
 const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ filters, paginationData, setPaginationData, editData, onEditSuccess }) => {
 
   const dispatch = useAppDispatch();
-  const loggedInUser = useAppSelector((state)=>state.user.user)
-  const [formData, setFormData] = useState<FormState>({ name: "", bulletPoint1: "", bulletPoint2: "", bulletPoint3: "", elevatorPitch: "", status: "", stateId: "",preferredSalesPersonId:"" });
+  const [formData, setFormData] = useState<FormState>({ name: "", bulletPoint1: "", bulletPoint2: "", bulletPoint3: "", elevatorPitch: "", status: "", stateId: "", preferredSalesPersonId: "" });
   const [states, setStates] = useState<any[]>([]);
-  const[stateName,setStateName] = useState<string>("");
-  const[selectedState,setSelectedState]=useState<any>(null);
+  const [stateName, setStateName] = useState<string>("");
+  const [selectedState, setSelectedState] = useState<any>(null);
   const [isStateCityDropdownOpen, setIsStateCityDropdownOpen] = useState(false);
   const stateDropdownRef = useRef<HTMLDivElement | null>(null);
 
-  const [selectedPreferredSalesPerson, setSelectedPreferredSalesPerson] = useState<any | null>(null);
-  const[preferredSalesPersonName,setPreferredSalesPersonName] = useState<string>("");
-  const [preferredSalesPersonList, setPreferredSalesPersonList] = useState<any[]>([]);
-  const [isPersonDropdownOpen, setIsPersonDropdownOpen] = useState(false);
-  const personDropdownRef = useRef<HTMLDivElement | null>(null);
+  const [images, setImages] = React.useState([]);
+  const maxNumber = 3;
+
   const [loading, setLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState({
-    name: "", bulletPoint1: "", bulletPoint2: "", bulletPoint3: "", elevatorPitch: "", status: "", stateId: "",preferredSalesPersonId:""
+    name: "", bulletPoint1: "", bulletPoint2: "", bulletPoint3: "", elevatorPitch: "", status: "", stateId: ""
   })
 
-
-
-
+  const onChange = (imageList: any, addUpdateIndex: any) => {
+    // data for submit
+    console.log(imageList, "Images List in Array", addUpdateIndex, "index of Images");
+    setImages(imageList);
+  };
 
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-
-  useEffect(() => {
-
-    const timeoutId = setTimeout(() => {
-      fetchStates();
-    }, 300); // debounce
-
-    return () => clearTimeout(timeoutId);
-  }, [stateName]);
-
-    useEffect(() => {
-
-    const timeoutId = setTimeout(() => {
-      fetchPreferredSalesPerson();
-    }, 300); // debounce
-
-    return () => clearTimeout(timeoutId);
-  }, [preferredSalesPersonName]);
-
-
-
   useEffect(() => {
     if (editData) {
-      setFormData({ ...formData, 
-        name:editData?.name, 
-        bulletPoint1:editData?.bulletPoint1||"", 
-        bulletPoint2:editData?.bulletPoint1||"", 
-        bulletPoint3:editData?.bulletPoint1||"", 
-        elevatorPitch:editData?.elevatorPitch|| "", 
-        status:`${editData.status}`, 
-        stateId:editData?.states?.length > 0 ? `${editData?.states[0]?.stateId}` : "",
-        preferredSalesPersonId:editData?.preferredSalesPersonId||"",
-       });
+      setImages(editData.media)
+      setFormData({
+        ...formData,
+        name: editData?.name,
+        bulletPoint1: editData?.bulletPoint1 || "",
+        bulletPoint2: editData?.bulletPoint1 || "",
+        bulletPoint3: editData?.bulletPoint1 || "",
+        elevatorPitch: editData?.elevatorPitch || "",
+        status: `${editData.status}`,
+        stateId: editData?.states?.length > 0 ? `${editData?.states[0]?.stateId}` : "",
+      });
     }
   }, [editData]);
 
-    const handleClickOutside = (e: MouseEvent) => {
+  const handleClickOutside = (e: MouseEvent) => {
     if (stateDropdownRef.current && !stateDropdownRef.current.contains(e.target as Node)) {
       setIsStateCityDropdownOpen(false);
       setStateName("");
       setStates([]);
     }
-
-    if (personDropdownRef.current && !personDropdownRef.current.contains(e.target as Node)) {
-      setIsPersonDropdownOpen(false);
-      setPreferredSalesPersonName("");
-      setPreferredSalesPersonList([]); 
-    }
-
   };
 
   const handleOpenStateCityDropdown = () => {
     setIsStateCityDropdownOpen(true);
-  };
-  const handleOpenPersonDropdown = () => {
-    setIsPersonDropdownOpen(true);
   };
 
 
   const validateFormData = () => {
     let isValidData = true;
     const tempErrors = { ...errors };
-
 
     //validate name 
     if (formData.name.trim() === "") {
@@ -150,7 +112,6 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
     } else {
       tempErrors.name = "";
     }
-
 
     //validate  bullet points
 
@@ -175,7 +136,6 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
       tempErrors.bulletPoint3 = "";
     }
 
-
     //validate elevatorPitch
     if (formData.elevatorPitch.trim() === "") {
       tempErrors.elevatorPitch = "Elevator Pitch is required";
@@ -184,21 +144,6 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
       tempErrors.elevatorPitch = "";
     }
 
-    //validate team
-    // if (formData.team.trim() === "") {
-    //   tempErrors.team= "Team is required";
-    //   isValidData = false;
-    // } else {
-    //   tempErrors.team = "";
-    // }
-
-    //validate members 
-    // if (formData.members.trim() === "") {
-    //   tempErrors.members= "Members is required";
-    //   isValidData = false;
-    // } else {
-    //   tempErrors.members = "";
-    // }
 
     //validate status
     if (formData.status.trim() === "") {
@@ -216,33 +161,22 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
       tempErrors.stateId = "";
     }
 
-        //validate state
-    if (formData.preferredSalesPersonId.trim() === "") {
-      tempErrors.preferredSalesPersonId = "Preferred sales person is required";
-      isValidData = false;
-    } else {
-      tempErrors.preferredSalesPersonId = "";
-    }
-
-
     setErrors(tempErrors);
     return isValidData;
 
   };
-
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-
-    const handleSelectState = (value: any) => {
+  const handleSelectState = (value: any) => {
 
     if (value) {
       setSelectedState(value);
       setIsStateCityDropdownOpen(false);
-      setFormData((prev:FormState) => ({
+      setFormData((prev: FormState) => ({
         ...prev,
         stateId: `${value?.id}`,
       }));
@@ -252,64 +186,49 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
     }
 
     setSelectedState(null);
-    setFormData((prev:FormState) => ({
+    setFormData((prev: FormState) => ({
       ...prev,
       stateId: "",
     }));
-
-
   };
-    const handleSelectPreferredSalesPerson = (value: any) => {
-
-    if (value) {
-      setSelectedPreferredSalesPerson(value);
-      setIsPersonDropdownOpen(false);
-      setFormData((prev:FormState) => ({
-        ...prev,
-        preferredSalesPersonId: `${value?.id}`,
-      }));
-      setPreferredSalesPersonList([]);
-      setPreferredSalesPersonName("");
-      return;
-    }
-
-    setSelectedPreferredSalesPerson(null);
-    setFormData((prev:FormState) => ({
-      ...prev,
-      preferredSalesPersonId: "",
-    }));
-
-
-  };
-
 
   const handleClearFormData = () => {
-    setFormData({ name: "", bulletPoint1: "", bulletPoint2: "", bulletPoint3: "", elevatorPitch: "", status: "", stateId: "" ,preferredSalesPersonId:""});
+    setFormData({ name: "", bulletPoint1: "", bulletPoint2: "", bulletPoint3: "", elevatorPitch: "", status: "", stateId: "", preferredSalesPersonId: "" });
     setErrors({
-    name: "", bulletPoint1: "", bulletPoint2: "", bulletPoint3: "", elevatorPitch: "", status: "", stateId: "",preferredSalesPersonId:""
-  })
-  setSelectedState(null);
-  setSelectedPreferredSalesPerson(null);
+      name: "", bulletPoint1: "", bulletPoint2: "", bulletPoint3: "", elevatorPitch: "", status: "", stateId: ""
+    })
+    setSelectedState(null);
   };
-
 
   const handleSubmit = async () => {
 
     try {
-
-
       if (!validateFormData()) return;
-
       setLoading(true);
-
       const payload = {
         name: formData.name,
         bulletPoints: `${formData.bulletPoint1},${formData.bulletPoint2},${formData.bulletPoint3}`,
         elevatorPitch: formData.elevatorPitch,
-        status: formData.status === "true" ? true : false,
+        status: formData.status,
         stateId: formData.stateId,
-        preferredSalesPersonId:formData.preferredSalesPersonId,
       }
+      const data = new FormData();
+
+      // Append other fields
+      data.append("name", formData.name);
+      data.append("bulletPoints", `${formData.bulletPoint1},${formData.bulletPoint2},${formData.bulletPoint3}`);
+      data.append("elevatorPitch", formData.elevatorPitch);
+      data.append("status", formData.status);
+      data.append("stateId", formData.stateId);
+
+      // Append each file using 'files' as the field name
+      images.forEach((imgObj: any) => {
+        if (imgObj?.file) {
+          data.append("files", imgObj.file);
+        }
+      });
+
+      console.log(data, "data")
 
       const params = {
         searchQuery: filters.searchQuery,
@@ -325,11 +244,9 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
         onEditSuccess();
 
       } else {
-        await dispatch(createProductCatalog(payload)).unwrap();
-
+        await dispatch(createProductCatalog(data)).unwrap();
         toast.success("Created product catalog successfully");
         onEditSuccess();
-        
       }
 
       handleClearFormData();
@@ -338,25 +255,19 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
       setPaginationData((prev: PaginationState) => ({ ...prev, totalPages: res?.lastPage || 0 }))
 
     } catch (error: any) {
-       console.error("Error while creating product:", error);
+      console.error("Error while creating product:", error);
       const errorMessage =
         typeof error === "string"
           ? error
           : error?.message || "Failed to create Product.";
-
       toast.error(errorMessage);
     }
     finally {
       setLoading(false);
-
-
     }
   };
 
-
-
   // const handleDelete = async (id: string) => {
-
   //   try {
   //     await dispatch(deleteProductCatalog(id)).unwrap();
   //     toast.success("Deleted successfully");
@@ -372,9 +283,8 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
       setStates([]);
       return;
     }
-
     try {
- 
+
       const response = await axios.get(
         `${BACKEND_API}state?name=${stateName}`,
         {
@@ -386,48 +296,27 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
     }
     catch (error) {
       console.log("error while fetching state", error);
-
     }
-
-
-
   }
 
-  const fetchPreferredSalesPerson = async () => {
-  if (!preferredSalesPersonName.trim()) {
-      setPreferredSalesPersonList([]);
-      return;
-  }
+  useEffect(() => {
 
-  const token = loggedInUser?.token;
+    const timeoutId = setTimeout(() => {
+      fetchStates();
+    }, 300); // debounce
 
-       
-
-  try {
-        const response = await axios.get(`${BACKEND_API}admin/users?name=${preferredSalesPersonName.trim()}&limit=10`,
-        {
-          headers: { Authorization: `Bearer ${token}`, 
-                     'ngrok-skip-browser-warning': 'true', },
-        }
-        );
-        setPreferredSalesPersonList(response?.data?.data||[]);
-
-        } catch (error: any) {
-         console.log("error while fetching users", error)
-        } finally {
-
-        }
-      };
+    return () => clearTimeout(timeoutId);
+  }, [stateName]);
 
 
-  console.log("form data",formData);
-  console.log("edit data",editData);
+  console.log("form data", formData);
+  console.log("edit data", editData);
   return (
     <div className="w-full max-w-[1500px] bg-white px-6 md:px-8 py-8 rounded-xl ">
 
       <div className="w-full ">
         <div className="w-full space-y-8  md:space-10 lg:space-y-12 mb-8 md:mb-10">
-          <div className="w-full grid grid-cols-1  ">
+          <div className="w-full grid grid-cols-1 ">
             <div className="w-full">
               <input
                 type="text"
@@ -439,7 +328,6 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
               />
               <span className={`${REQUIRED_ERROR}`}>{errors.name || ""}</span>
             </div>
-
           </div>
 
           <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-10 lg:gap-12 ">
@@ -498,7 +386,7 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
                 type="text"
                 readOnly
                 value={
-                  selectedState ? `${selectedState?.name}`: ""
+                  selectedState ? `${selectedState?.name}` : ""
                 }
                 onClick={handleOpenStateCityDropdown}
                 placeholder="City or state"
@@ -547,60 +435,7 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
                 </div>
               )}
             </div>
-              <div className="relative w-full" ref={personDropdownRef}>
-              <input
-                type="text"
-                readOnly
-                value={
-                  selectedPreferredSalesPerson ? `${selectedPreferredSalesPerson?.firstName} ${selectedPreferredSalesPerson?.lastName}`: ""
-                }
-                onClick={handleOpenPersonDropdown}
-                placeholder="Preferred sales person"
-                className={`${FORM_INPUT_CLASS} cursor-pointer`}
-              />
-              <span className={`${REQUIRED_ERROR}`}>{errors.preferredSalesPersonId || ""}</span>
 
-              {isPersonDropdownOpen && (
-                <div className="absolute z-50 top-full left-0 w-full bg-white border border-gray-200 rounded-md shadow-lg mt-1 px-2 py-2">
-                  {selectedPreferredSalesPerson && (
-                    <div className="mb-2 flex items-center justify-between gap-2 px-3 py-1 bg-gray-100 rounded">
-                      <span className="text-sm text-gray-800">
-                        {`${selectedPreferredSalesPerson?.firstName} ${selectedPreferredSalesPerson?.lastName}`}
-                      </span>
-                      <button
-                        onClick={() => handleSelectPreferredSalesPerson(null)}
-                        className="ml-2 text-gray-500 hover:text-red-500 transition-all duration-300 "
-                      >
-                        ✕
-                      </button>
-                    </div>
-                  )}
-                  <input
-                    type="text"
-                    placeholder="Search"
-                    value={preferredSalesPersonName}
-                    onChange={(e) => setPreferredSalesPersonName(e.target.value)}
-                    className="w-full px-3 py-2 rounded-md outline-none border border-gray-200 mb-1 "
-                    autoFocus
-                  />
-                  <ul className="max-h-48 overflow-y-auto">
-                    {preferredSalesPersonList.length > 0 ? (
-                      preferredSalesPersonList.map((item, index) => (
-                        <li
-                          key={index}
-                          onClick={() => handleSelectPreferredSalesPerson(item)}
-                          className="px-3 py-2 hover:bg-gray-100 rounded cursor-pointer"
-                        >
-                          {`${item?.firstName} ${item?.lastName} `}
-                        </li>
-                      ))
-                    ) : (
-                      <li className=" px-3 py-1 text-gray-400">{preferredSalesPersonName.trim().length > 0 && preferredSalesPersonList.length === 0 ? "No result found" : ""}</li>
-                    )}
-                  </ul>
-                </div>
-              )}
-            </div>
             <div className="w-full ">
               <div className="flex items-center  gap-6 ">
                 <label className="block text-base font-medium text-gray-700  ">Status</label>
@@ -623,23 +458,96 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
                     onChange={(value) => { setFormData((prev: FormState) => ({ ...prev, status: value })) }}
 
                   />
-
                 </div>
               </div>
 
               <span className={`${REQUIRED_ERROR}`}>{errors.status || ""}</span>
             </div>
-
           </div>
 
+          <div className="w-full grid grid-cols-1">
+            <div className="w-full">
+              <ImageUploading
+                multiple
+                value={images}
+                onChange={onChange}
+                maxNumber={maxNumber}
+                dataURLKey="data_url"
+              >
+                {({
+                  imageList,
+                  onImageUpload,
+                  onImageRemoveAll,
+                  onImageUpdate,
+                  onImageRemove,
+                  isDragging,
+                  dragProps,
+                }) => (
+                  <div className="space-y-4 p-4 border border-gray-300 rounded-lg bg-white">
+                    {/* Upload/Drop Button */}
+                    <div className="flex items-center gap-4">
+                      <button
+                        type="button"
+                        onClick={onImageUpload}
+                        {...dragProps}
+                        className={`px-4 py-2 flex items-center gap-2 rounded-md border bg-gray-100 ${isDragging ? 'border-red-500 text-red-500' : 'border-gray-500 text-gray-500'
+                          } hover:bg-blue-100 transition-all`}
+                      >
+                        <RiImageAddFill />
+                        Upload Product Images
+                      </button>
+                      <button
+                        type="button"
+                        onClick={onImageRemoveAll}
+                        className="px-4 py-2 rounded-md border border-red-500 text-red-500 hover:bg-red-100 transition-all"
+                      >
+                        Remove All
+                      </button>
+                    </div>
+                    <span className="text-orange-400">note: upload only 3 images</span>
 
-
+                    {/* Uploaded Images Grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                      {images.map((image, index) => (
+                        <div
+                          key={index}
+                          className="relative rounded-lg border border-gray-200 overflow-hidden shadow-sm"
+                        >
+                          <img
+                            src={image['data_url']}
+                            alt={`uploaded-${index}`}
+                            className="w-full h-48 object-cover"
+                          />
+                          <div className="absolute top-0 right-0 flex flex-col gap-1 m-2">
+                            <button
+                              onClick={() => onImageUpdate(index)}
+                              className="bg-yellow-400 hover:bg-yellow-500 text-white px-2 py-1 text-xs rounded shadow"
+                            >
+                              Update
+                            </button>
+                            <button
+                              onClick={() => onImageRemove(index)}
+                              className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 text-xs rounded shadow"
+                            >
+                              Remove
+                            </button>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+              </ImageUploading>
+            </div>
+          </div>
         </div>
-        <div className="w-full flex justify-center md:justify-start items-center gap-4  ">
+
+        <div className="w-full flex justify-center md:justify-start items-center gap-4 ">
 
           <Button size="md" onClick={handleSubmit}>
             {loading ? (<Loader />) : (editData ? "Update Product" : "Save Product")}
           </Button>
+
           <Button size="md" variant="outline" onClick={() => {
             handleClearFormData();
             onEditSuccess();

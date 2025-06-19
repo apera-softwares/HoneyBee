@@ -53,6 +53,8 @@ export const fetchProductCatalogs = createAsyncThunk(
           
         }
       );
+console.log(response.data,"products")
+
 
       return response.data;
     } catch (error: any) {
