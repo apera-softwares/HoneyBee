@@ -32,7 +32,7 @@ const TeamTable: React.FC<TeamTableProps> = ({ searchText, role, order,isCreateT
     const dispatch = useDispatch<AppDispatch>();
     const [teamData, setTeamData] = useState<any[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
     const { loading } = useSelector((state: RootState) => state.TeamManagement);
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [editTeamData, setEditTeamData] = useState<any>({});
@@ -53,7 +53,7 @@ const TeamTable: React.FC<TeamTableProps> = ({ searchText, role, order,isCreateT
                         setTotalPages(lastPage);
                     } else {
                         setTeamData([]);
-                        setTotalPages(1);
+                        setTotalPages(0);
                     }
                 } else {
                     console.log("Failed to fetch Teams:", res.payload || "Unknown error");
@@ -68,7 +68,7 @@ const TeamTable: React.FC<TeamTableProps> = ({ searchText, role, order,isCreateT
                         setTotalPages(lastPage);
                     } else {
                         setTeamData([]);
-                        setTotalPages(1);
+                        setTotalPages(0);
                     }
                 } else {
                     console.log("Failed to fetch Teams:", res.payload || "Unknown error");
@@ -158,7 +158,7 @@ const TeamTable: React.FC<TeamTableProps> = ({ searchText, role, order,isCreateT
                 </div>
             </div>
             {
-               userProfile?.role !== UserRole.B_TEAM && (            
+               userProfile?.role !== UserRole.B_TEAM && totalPages > 0 && (            
                <div className=" w-full flex justify-end  px-4 py-6 ">
                 <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
             </div>)

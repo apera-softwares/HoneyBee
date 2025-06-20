@@ -28,7 +28,7 @@ const UserTable: React.FC<UserTableProps> = ({ searchText, role, order, from }) 
     const dispatch = useDispatch<AppDispatch>();
     const [usersData, setUsersData] = useState<any[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
     const { loading } = useSelector((state: RootState) => state.UserManagement);
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [editUserData, setEditUserData] = useState<any>({});
@@ -44,7 +44,7 @@ const UserTable: React.FC<UserTableProps> = ({ searchText, role, order, from }) 
                     setTotalPages(lastPage);
                 } else {
                     setUsersData([]);
-                    setTotalPages(1);
+                    setTotalPages(0);
                 }
             } else {
                 console.log("Failed to fetch users:", res.payload || "Unknown error");
@@ -134,9 +134,12 @@ const UserTable: React.FC<UserTableProps> = ({ searchText, role, order, from }) 
                     )}
                 </div>
             </div>
-            <div className=" w-full flex justify-end px-4 py-6">
+            {
+                totalPages > 0 && ( <div className=" w-full flex justify-end px-4 py-6">
                 <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
-            </div>
+            </div>)
+            }
+
             <UserAddEditModal isOpen={isModalOpen} closeModal={() => setIsModalOpen(false)} userData={editUserData} type="update" />
 
         </div>
