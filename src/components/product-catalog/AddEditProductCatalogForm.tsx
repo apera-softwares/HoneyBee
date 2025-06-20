@@ -20,7 +20,6 @@ interface FormState {
   elevatorPitch: string;
   stateId: string;
   status: string;
-  preferredSalesPersonId: string;
 }
 
 interface PaginationState {
@@ -46,7 +45,7 @@ interface AddEditProductCatalogFormProps {
 const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ filters, paginationData, setPaginationData, editData, onEditSuccess }) => {
 
   const dispatch = useAppDispatch();
-  const [formData, setFormData] = useState<FormState>({ name: "", bulletPoint1: "", bulletPoint2: "", bulletPoint3: "", elevatorPitch: "", status: "", stateId: "", preferredSalesPersonId: "" });
+  const [formData, setFormData] = useState<FormState>({ name: "", bulletPoint1: "", bulletPoint2: "", bulletPoint3: "", elevatorPitch: "", status: "", stateId: "" });
   const [states, setStates] = useState<any[]>([]);
   const [stateName, setStateName] = useState<string>("");
   const [selectedState, setSelectedState] = useState<any>(null);
@@ -87,6 +86,9 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
       });
     }
   }, [editData]);
+
+
+  console.log(images, "images")
 
   const handleClickOutside = (e: MouseEvent) => {
     if (stateDropdownRef.current && !stateDropdownRef.current.contains(e.target as Node)) {
@@ -193,7 +195,7 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
   };
 
   const handleClearFormData = () => {
-    setFormData({ name: "", bulletPoint1: "", bulletPoint2: "", bulletPoint3: "", elevatorPitch: "", status: "", stateId: "", preferredSalesPersonId: "" });
+    setFormData({ name: "", bulletPoint1: "", bulletPoint2: "", bulletPoint3: "", elevatorPitch: "", status: "", stateId: "" });
     setErrors({
       name: "", bulletPoint1: "", bulletPoint2: "", bulletPoint3: "", elevatorPitch: "", status: "", stateId: ""
     })
@@ -211,6 +213,7 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
         elevatorPitch: formData.elevatorPitch,
         status: formData.status,
         stateId: formData.stateId,
+
       }
       const data = new FormData();
 
@@ -220,15 +223,20 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
       data.append("elevatorPitch", formData.elevatorPitch);
       data.append("status", formData.status);
       data.append("stateId", formData.stateId);
-
+      const imgIds = [] as any
       // Append each file using 'files' as the field name
       images.forEach((imgObj: any) => {
-        if (imgObj?.file) {
+
+        if (imgObj?.file?.data_url) {
           data.append("files", imgObj.file);
+        } else {
+          imgIds.push(imgObj?.id)
         }
       });
 
-      console.log(data, "data")
+      console.log(imgIds,"imgIds")
+
+      data.append("mediaIds", imgIds);
 
       const params = {
         searchQuery: filters.searchQuery,
@@ -238,7 +246,7 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
       }
 
       if (editData) {
-        await dispatch(updateProductCatalog({ id: editData?.id, ...payload })).unwrap();
+        await dispatch(updateProductCatalog({ id: editData?.id, ...data })).unwrap();
 
         toast.success("Updated product catalog successfully");
         onEditSuccess();

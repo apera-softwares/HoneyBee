@@ -101,7 +101,7 @@ export const updateProductCatalog = createAsyncThunk(
       const response = await axios.put(`${BACKEND_API}product/${id}`, data, {
         headers: { Authorization: `Bearer ${token}`,  'ngrok-skip-browser-warning': 'true', },
       });
-
+console.log(response.data,"response.data")
       return response.data;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(
