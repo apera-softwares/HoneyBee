@@ -29,7 +29,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
   };
 
   return (
-    <div className="w-full shrink-0 min-w-[340px] max-w-sm h-[200px]  flex     gap-4 p-4 lg:p-2  bg-white rounded-3xl border border-gray-100 ">
+    <div className="w-full shrink-0 min-w-[340px] max-w-sm h-[200px]  flex     gap-4 p-4 lg:p-2  bg-white rounded-3xl ">
       {/* Left: Image Carousel */}
       <div className="w-[50%] aspect-square relative rounded-xl overflow-hidden  shrink-0 ">
         <Image
