@@ -3,8 +3,9 @@ import React, { useState, useEffect } from "react";
 import CommonHeading from "@/components/common/CommonHeading";
 import { CiSearch } from "react-icons/ci";
 import ProductSelectTable from "@/components/product-catalog/ProductSelectTable";
-import ServiceCard from "@/components/ServiceCard";
-import {  useAppSelector } from "@/lib/redux/hooks";
+import ProductCard from "@/components/product-catalog/ProductCard";
+import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
+import { fetchSelectedProducts } from "@/lib/redux/slices/productCatalogSlice";
 import toast, { Toaster } from "react-hot-toast";
 import axios from "axios";
 import { BACKEND_API } from "@/api";
@@ -20,6 +21,7 @@ interface PaginationState {
 }
 
 export default function SelectForSelect() {
+  const dispatch = useAppDispatch();
   const MAX_ALLOWED_PRODUCTS = 3;
   const [filters, setFilters] = useState<FiltersState>({
     searchQuery: "",
@@ -30,9 +32,9 @@ export default function SelectForSelect() {
     totalPages: 0,
   });
   const [selectedProductId, setSelectedProductId] = useState<any>(null);
-  const [assignedProducts, setAssignProducts] = useState<any[]>([]);
   const { userProfile } = useAppSelector((state) => state.userProfile);
   const { user: loggedInUser } = useAppSelector((state) => state.user);
+  const {selectedProducts} = useAppSelector((state)=>state.productCatalog)
   const memberId =
     userProfile?.teamMember?.find((member: any) => member.isMemberOnly === true)
       ?.id || null;
@@ -46,33 +48,17 @@ export default function SelectForSelect() {
 
   useEffect(() => {
     if (!memberId) return;
-      getAssignedProducts();
+      getSelectedProducts();
   }, [memberId]);
 
-  const getAssignedProducts = async () => {
-    if (!memberId) return;
 
+  const getSelectedProducts = async () => {
+    if (!memberId) return ;
     try {
-      const token = loggedInUser?.token;
-      const response = await axios.get(`${BACKEND_API}product/${memberId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "ngrok-skip-browser-warning": "true",
-        },
-      });
-
-      const products = response.data?.data || [];
-      console.log("assigned produdcts response data", response.data);
-      setAssignProducts(products);
+      const response = await dispatch(fetchSelectedProducts(memberId)).unwrap();
+      console.log("response of selected products", response);
     } catch (error: any) {
-      if (axios.isAxiosError(error)) {
-        console.error(
-          "Error getting assigned product:",
-          error.response?.data || error.message
-        );
-      } else {
-        console.error("Error getting assigned product:", error);
-      }
+     console.error("Error getting selected products:", error?.message || error);
     }
   };
 
@@ -82,7 +68,7 @@ export default function SelectForSelect() {
       toast.error("You are not a member of any team.");
       return;
     }
-    if (assignedProducts.length >= MAX_ALLOWED_PRODUCTS) {
+    if (selectedProducts.length >= MAX_ALLOWED_PRODUCTS) {
       toast.error("You can select up to 3 products");
       return;
     }
@@ -105,20 +91,20 @@ export default function SelectForSelect() {
         }
       );
 
-      console.log("assign product response data", response.data);
-      toast.success("Assigned product  successfully");
-      getAssignedProducts();
+      console.log("selected product response data", response.data);
+      toast.success("Selected product  successfully");
+      getSelectedProducts();
     } catch (error: any) {
       if (axios.isAxiosError(error)) {
         console.error(
-          "Error assiging product ",
+          "Error selecting product ",
           error.response?.data || error.message
         );
         toast.error(
-          error.response?.data?.message || "Failed to assigned product"
+          error.response?.data?.message || "Failed to select product"
         );
       } else {
-        toast.error("Failed to assigned product");
+        toast.error("Failed to select product");
       }
     } finally {
       setSelectedProductId(null);
@@ -175,11 +161,11 @@ export default function SelectForSelect() {
         </div>
       </div>
 
-      {assignedProducts && assignedProducts.length > 0 && (
+      {selectedProducts && selectedProducts.length > 0 && (
         <div className="w-full overflow-x-auto  no-scrollbar mb-6 lg:mb-8  ">
           <div className="w-full max-w-[900px] flex space-x-5 ">
-            {assignedProducts?.map((product: any) => (
-              <ServiceCard
+            {selectedProducts?.map((product: any) => (
+              <ProductCard
                 key={product?.id}
                 title={product?.name}
                 points={product?.bulletPoints?.split(",")}
@@ -195,7 +181,7 @@ export default function SelectForSelect() {
       )}
 
       {/* Table */}
-      <div className="w-full mb-8 ">
+      <div className="w-full ">
         <div className="w-full mb-5">
           <h2 className="text-lg lg:text-xl font-semibold">Products</h2>
         </div>
@@ -204,7 +190,7 @@ export default function SelectForSelect() {
           paginationData={paginationData}
           setPaginationData={setPaginationData}
           selectedProductId={selectedProductId}
-          selectedProducts={assignedProducts}
+          selectedProducts={selectedProducts}
           onProductSelect={handleAssignProductToSelf}
         />
       </div>
