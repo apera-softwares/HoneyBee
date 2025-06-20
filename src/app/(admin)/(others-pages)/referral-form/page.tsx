@@ -6,18 +6,20 @@ import ProductCard from "@/components/product-catalog/ProductCard";
 //import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { fetchSelectedProducts } from "@/lib/redux/slices/productCatalogSlice";
+import { UserRole } from "@/constant/userRoles";
 
-export default function Referral() {
+export default function ReferralForm() {
   const dispatch = useAppDispatch();
   //const router = useRouter();
   const { selectedProducts } = useAppSelector((state) => state.productCatalog);
+  const {user:loggedInUser} = useAppSelector((state)=>state.user)
   const { userProfile } = useAppSelector((state) => state.userProfile);
   const memberId =
     userProfile?.teamMember?.find((member: any) => member.isMemberOnly === true)
       ?.id || null;
 
   useEffect(() => {
-    if (!memberId) return;
+    if (!memberId || loggedInUser?.role !== UserRole.B_TEAM ) return;
     getSelectedProducts();
   }, [memberId]);
 
@@ -54,7 +56,7 @@ export default function Referral() {
              >Landing Page</button> */}
         </div>
       </div>
-      {selectedProducts && selectedProducts.length > 0 && (
+      { loggedInUser?.role === UserRole.B_TEAM && selectedProducts && selectedProducts.length > 0 && (
         <div className="w-full overflow-x-auto  no-scrollbar mb-6 lg:mb-8 ">
           <div className="w-full max-w-[900px] flex space-x-5 ">
             {selectedProducts?.map((product: any) => (
