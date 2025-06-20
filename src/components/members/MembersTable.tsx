@@ -25,7 +25,7 @@ const AssignedMembersTable: React.FC<TeamTableProps> = ({ searchText, role, orde
     const ITEM_PER_PAGE = 5;
     const dispatch = useDispatch<AppDispatch>();
     const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
     const { loading, members } = useSelector((state: RootState) => state.memberManagement);
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [products, setProducts] = useState<any[]>([]);
@@ -39,7 +39,7 @@ const AssignedMembersTable: React.FC<TeamTableProps> = ({ searchText, role, orde
                     const lastPage = res.payload.lastPage;
                     setTotalPages(lastPage);
                 } else {
-                    setTotalPages(1);
+                    setTotalPages(0);
                 }
             } else {
                 console.log("Failed to fetch Assigend Members:", res.payload || "Unknown error");
@@ -55,7 +55,7 @@ const AssignedMembersTable: React.FC<TeamTableProps> = ({ searchText, role, orde
                     const lastPage = res.payload.lastPage;
                     setTotalPages(lastPage);
                 } else {
-                    setTotalPages(1);
+                    setTotalPages(0);
                 }
             } else {
                 console.log("Failed to fetch Assigend Members:", res.payload || "Unknown error");
@@ -162,7 +162,7 @@ const AssignedMembersTable: React.FC<TeamTableProps> = ({ searchText, role, orde
                                 ) : (
                                     <TableRow>
                                         <TableCell className="text-center py-6 text-gray-500">
-                                            No users found.
+                                            No members found.
                                         </TableCell>
                                     </TableRow>
                                 )}
@@ -171,10 +171,13 @@ const AssignedMembersTable: React.FC<TeamTableProps> = ({ searchText, role, orde
                     )}
                 </div>
             </div>
-            <div className=" w-full flex justify-end px-4 py-6">
-                <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
 
-            </div>
+            {
+                totalPages > 0 && ( <div className=" w-full flex justify-end px-4 py-6">
+                <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+            </div>)
+            }
+
             <ProductListModal isOpen={isModalOpen} closeModal={() => setIsModalOpen(false)} products={products} title="Products List"
                 onRemove={handleRemoveMemberProduct} />
 

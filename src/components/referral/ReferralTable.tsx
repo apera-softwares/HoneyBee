@@ -31,7 +31,7 @@ const ReferralTable: React.FC<ReferralTableProps> = ({ searchText }) => {
     const dispatch = useAppDispatch();
     const {referralList,loading} = useAppSelector((state)=>state.referral)
     const [currentPage, setCurrentPage] = useState(1);
-    const [totalPages, setTotalPages] = useState(1);
+    const [totalPages, setTotalPages] = useState(0);
 
     useEffect(()=>{
        getReferrals(currentPage);
@@ -152,9 +152,12 @@ const ReferralTable: React.FC<ReferralTableProps> = ({ searchText }) => {
                     )}
                 </div>
             </div>
-            <div className=" w-full flex justify-end px-4 py-6 ">
+            {
+                totalPages > 0 && (  <div className=" w-full flex justify-end px-4 py-6 ">
                 <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
-            </div>
+            </div>)
+            }
+
 
         </div>
     );
