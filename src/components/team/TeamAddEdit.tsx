@@ -11,6 +11,7 @@ import { CreateTeam, fetchTeams, UpdateTeam } from "@/lib/redux/slices/teamManag
 import { fetchUsers } from "@/lib/redux/slices/userManagementSlice";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { RxCross2 } from "react-icons/rx";
+import { UserRole } from "@/constant/userRoles";
 
 interface TeamAddEditProps {
     isOpen: boolean;
@@ -90,7 +91,7 @@ const TeamAddEdit: React.FC<TeamAddEditProps> = ({ isOpen, closeModal, teamData,
         }
 
         // Validate selectedMember
-        if (!selectedMember && userProfile.role == "ADMIN") {
+        if (type ==="add" && !selectedMember && userProfile.role == UserRole.ADMIN ) {
             tempErrors.member = "Team Member is required";
             isValidData = false;
         } else {
@@ -194,7 +195,7 @@ const TeamAddEdit: React.FC<TeamAddEditProps> = ({ isOpen, closeModal, teamData,
                             <span className={REQUIRED_ERROR}>{errors.name}</span>
                         </div>
 
-                        {userProfile?.role == "ADMIN" && type == "add" && <div className="mb-4 relative">
+                        {userProfile?.role == UserRole.ADMIN && type == "add" && <div className="mb-4 relative">
                             <label className="block font-medium mb-1">
                                 Add Team Manager
                             </label>
