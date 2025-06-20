@@ -4,12 +4,13 @@ import React, { useState, useEffect } from "react";
 //import MonthlyTarget from "@/components/ecommerce/MonthlyTarget";
 // import MonthlySalesChart from "@/components/ecommerce/MonthlySalesChart";
 import StatisticsChart from "@/components/ecommerce/StatisticsChart";
-import RecentOrders from "@/components/ecommerce/RecentOrders";
+//import RecentOrders from "@/components/ecommerce/RecentOrders";
 import TeamCard from "@/components/team/TeamCard";
 // import DemographicCard from "@/components/ecommerce/DemographicCard";
 import axios from "axios";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { BACKEND_API } from "@/api";
+import DashboardProductsTable from "../product-catalog/DashboardProductsTable";
 
 const BTeamDashboard = () => {
   const [team, setTeam] = useState<any>(null);
@@ -118,8 +119,8 @@ const BTeamDashboard = () => {
         <DemographicCard />
       </div> */}
 
-      <div className="col-span-12 xl:col-span-7">
-        <RecentOrders />
+      <div className="w-full">
+        <DashboardProductsTable/>
       </div>
     </div>
   );

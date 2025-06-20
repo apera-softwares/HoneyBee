@@ -65,6 +65,31 @@ console.log(response.data,"products")
   }
 );
 
+//fetch B_TEAM user selected products
+export const fetchSelectedProducts = createAsyncThunk(
+  "productCatalog/fetchSelectedProducts",
+  async (memberId: any, thunkAPI) => {
+    try {
+      const state: any = thunkAPI.getState();
+      const token = state.user?.user?.token;
+
+      const response = await axios.get(
+        `${BACKEND_API}product/${memberId}`,
+        {
+          headers: { Authorization: `Bearer ${token}`,  
+          'ngrok-skip-browser-warning': 'true', },  
+        }
+      );
+
+      return response.data;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to fetch selected products"
+      );
+    }
+  }
+);
+
 // Update Product
 export const updateProductCatalog = createAsyncThunk(
   "productCatalog/updateProductCatalog",
@@ -111,12 +136,14 @@ export const deleteProductCatalog = createAsyncThunk(
 
 interface ProductCatalogState {
   productCatalogs: any[];
+  selectedProducts:any[];
   loading: boolean;
   error: string | null;
 }
 
 const initialState: ProductCatalogState = {
   productCatalogs: [],
+  selectedProducts:[],
   loading: false,
   error: null,
 };
@@ -141,7 +168,7 @@ const productCatalogSlice = createSlice({
         state.error = action.payload as string;
       });
 
-    // Fetch
+    // Fetch products catalog
     builder
       .addCase(fetchProductCatalogs.pending, (state) => {
         state.loading = true;
@@ -149,13 +176,24 @@ const productCatalogSlice = createSlice({
       })
       .addCase(fetchProductCatalogs.fulfilled, (state, action) => {
         state.loading = false;
-        state.productCatalogs = action.payload.data || [];
+        state.productCatalogs = action.payload.data;
       })
       .addCase(fetchProductCatalogs.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });
 
+    // Fetch B_TEAM user selected products
+    builder
+      .addCase(fetchSelectedProducts.pending, (state) => {
+        state.error = null;
+      })
+      .addCase(fetchSelectedProducts.fulfilled, (state, action) => {
+        state.selectedProducts = action.payload.data;
+      })
+      .addCase(fetchSelectedProducts.rejected, (state, action) => {
+        state.error = action.payload as string;
+      });
     // Update
     builder
       .addCase(updateProductCatalog.pending, (state) => {

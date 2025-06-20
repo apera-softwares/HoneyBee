@@ -45,7 +45,7 @@ const navItems: NavItem[] = [
   {
     icon: <Send />,
     name: "Landing page and submit referral",
-    path: "/referral",
+    path: "/referral-form",
   },
   {
     icon: <Users />,
@@ -138,7 +138,7 @@ const team_B: NavItem[] = [
   {
     icon: <Send />,
     name: "Landing page and submit referral",
-    path: "/referral",
+    path: "/referral-form",
   },
 
   {
@@ -153,9 +153,9 @@ const team_B: NavItem[] = [
     path: "/team",
   },
   {
-    icon: <BoxCubeIcon />,
+    icon: <GridIcon />,
     name: "Select Product",
-    path: "/product-catalog/select-for-self",
+    path: "/product-catalog/select-products",
   },
 
 

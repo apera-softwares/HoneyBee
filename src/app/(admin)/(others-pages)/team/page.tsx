@@ -82,7 +82,7 @@ export default function TeamManagement() {
 
       {/* Table */}
       <div className="w-full ">
-        <TeamTable searchText={SearchInput} role="" order={order} />
+        <TeamTable searchText={SearchInput} role="" order={order} isCreateTeamModalOpen={isModalOpen} />
         <TeamAddEdit
           isOpen={isModalOpen}
           closeModal={() => setIsModalOpen(false)}

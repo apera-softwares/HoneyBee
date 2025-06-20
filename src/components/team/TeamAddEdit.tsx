@@ -151,14 +151,18 @@ const TeamAddEdit: React.FC<TeamAddEditProps> = ({ isOpen, closeModal, teamData,
             name: "",
             member: "",
         });
+        setSearchText("");
+        setSelectedMember(null);
+        setUsersData([]);
     }
 
     return (
         <Modal
             isOpen={isOpen}
             onClose={() => {
-                closeModal()
-                clear()
+                clear();
+                closeModal();
+                
             }}
             className="max-w-[800px] p-6 lg:p-10 pt-10 ">
             {/* <Toaster /> */}
@@ -245,8 +249,9 @@ const TeamAddEdit: React.FC<TeamAddEditProps> = ({ isOpen, closeModal, teamData,
                         Save
                     </Button>
                     <Button size="sm" variant="outline" onClick={() => {
-                        closeModal()
-                        clear()
+                        clear();
+                        closeModal(); 
+                        
                     }}>
                         Cancel
                     </Button>
