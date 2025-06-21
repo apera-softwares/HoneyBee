@@ -63,7 +63,7 @@ export default function ReferralForm() {
           <div className="w-full max-w-[900px] flex space-x-5 ">
             {selectedProducts?.map((product: any) =>{
 
-              const images = product?.media?.map((mediaItem:any)=>`${BACKEND_API}${mediaItem?.imageName?.slice(2,mediaItem?.imageName?.length)}`)||[]
+              const images = product?.media?.length > 0 ?  product?.media?.map((mediaItem:any)=>`${BACKEND_API}${mediaItem?.imageName?.slice(2,mediaItem?.imageName?.length)}`):["/assets/images/image-not-available.png"];
               return (
               <ProductCard
                 key={product?.id}
