@@ -7,7 +7,7 @@ import axios from "axios";
 import { BACKEND_API } from "@/api";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { createReferral } from "@/lib/redux/slices/referralSlice";
-import SearchAndSelectMemberModal from "./referral/SearchAndSelectMemberModal";
+//import SearchAndSelectMemberModal from "./referral/SearchAndSelectMemberModal";
 // import SearchAndSelectMemberProductModal from "./referral/SearchAndSelectMemberProductModal";
 //import SearchAndSelectPreferredSalesModal from "./referral/SearchAndSelectPreferredSalesPersonModal";
 import toast, { Toaster } from "react-hot-toast";
@@ -45,7 +45,7 @@ type LocationData = {
   [key: string]: [number, "city", string, number] | [number, "state"];
 };
 
-const statusList = [{ label: "Pitched", value: "Pitched" }, { label: "Pending", value: "Pending" }, { label: "Payout", value: "Payout" }, { label: "Sold", value: "Sold" }];
+
 const ReferralFromSection = () => {
 
 
@@ -77,8 +77,8 @@ const ReferralFromSection = () => {
     stateId: "",
   })
   const [loading, setLoading] = useState<boolean>(false);
-  const [selectedMember, setSelectedMember] = useState<any | null>(null);
-  const [selectedMemberProduct, setSelectedMemberProduct] = useState<any | null>(null);
+  //const [selectedMember, setSelectedMember] = useState<any | null>(null);
+  //const [selectedMemberProduct, setSelectedMemberProduct] = useState<any | null>(null);
   // const [selectedPreferredSalesPerson, setSelectedPreferredSalesPerson] = useState<any | null>(null);
   const [isMemberSelectModalOpen, setIsMemberSelectedModalOpen] = useState<boolean>(false);
   // const [isMemberProductSelectModalOpen,setIsMemberProductSelectModalOpen]= useState<boolean>(false);
@@ -88,16 +88,16 @@ const ReferralFromSection = () => {
   const [stateCityName, setStateCityName] = useState('');
   const [selectedStateCity, setSelectedStateCity] = useState<ParsedLocation | null>(null);
   const stateCityDropdownRef = useRef<HTMLDivElement | null>(null);
-  const memberProductDropdownRef = useRef<HTMLDivElement | null>(null);
-  const [isMemberProductDropdownOpen, setIsMemberProductDropdownOpen] = useState(false);
-  const [memberProductName, setMemberProductName] = useState<string>("");
-  const [memberProductsList, setMemberProductsList] = useState<any[]>([]);
+  //const memberProductDropdownRef = useRef<HTMLDivElement | null>(null);
+  //const [isMemberProductDropdownOpen, setIsMemberProductDropdownOpen] = useState(false);
+  //const [memberProductName, setMemberProductName] = useState<string>("");
+  //const [memberProductsList, setMemberProductsList] = useState<any[]>([]);
    const { selectedProducts } = useAppSelector((state) => state.productCatalog);
   const {user:loggedInUser} = useAppSelector((state)=>state.user)
-  const { userProfile } = useAppSelector((state) => state.userProfile);
-  const memberId =
-    userProfile?.teamMember?.find((member: any) => member.isMemberOnly === true)
-      ?.id || null;
+  //const { userProfile } = useAppSelector((state) => state.userProfile);
+  // const memberId =
+  //   userProfile?.teamMember?.find((member: any) => member.isMemberOnly === true)
+  //     ?.id || null;
 
 
 
@@ -116,14 +116,14 @@ const ReferralFromSection = () => {
     return () => clearTimeout(timeoutId);
   }, [stateCityName]);
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    const timeoutId = setTimeout(() => {
-      fetchMemberProducts();
-    }, 300); // debounce
+  //   const timeoutId = setTimeout(() => {
+  //     fetchMemberProducts();
+  //   }, 300); // debounce
 
-    return () => clearTimeout(timeoutId);
-  }, [memberProductName]);
+  //   return () => clearTimeout(timeoutId);
+  // }, [memberProductName]);
 
 
   const fetchStateCity = async () => {
@@ -175,34 +175,34 @@ const ReferralFromSection = () => {
   };
 
 
-  const fetchMemberProducts = async () => {
-    if (!memberProductName.trim()) {
-      setMemberProductsList([]);
-      return;
-    }
+  // const fetchMemberProducts = async () => {
+  //   if (!memberProductName.trim()) {
+  //     setMemberProductsList([]);
+  //     return;
+  //   }
 
-    const token = loggedInUser?.token;
+  //   const token = loggedInUser?.token;
 
 
 
-    try {
-      const response = await axios.get(`${BACKEND_API}product/${selectedMember?.id}?name=${memberProductName.trim()}&limit=10`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'ngrok-skip-browser-warning': 'true',
-          },
-        }
-      );
-      setMemberProductsList(response?.data?.data || []);
+  //   try {
+  //     const response = await axios.get(`${BACKEND_API}product/${selectedMember?.id}?name=${memberProductName.trim()}&limit=10`,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //           'ngrok-skip-browser-warning': 'true',
+  //         },
+  //       }
+  //     );
+  //     setMemberProductsList(response?.data?.data || []);
 
-    } catch (error: any) {
-      console.log("error while fetching member products", error)
+  //   } catch (error: any) {
+  //     console.log("error while fetching member products", error)
 
-    } finally {
+  //   } finally {
 
-    }
-  };
+  //   }
+  // };
 
 
 
@@ -213,7 +213,6 @@ const ReferralFromSection = () => {
 
       if (!validateFormData()) return;
       const payload = {...formData,teamMemberId:loggedInUser?.userId};
-      console.log("payload while lead create",payload);
       setLoading(true);
       
       await dispatch(createReferral(payload)).unwrap();
@@ -373,11 +372,11 @@ const ReferralFromSection = () => {
       setStateCityName("");
       setStateCityList([]);
     }
-    if (memberProductDropdownRef.current && !memberProductDropdownRef.current.contains(e.target as Node)) {
-      setIsMemberProductDropdownOpen(false);
-      setMemberProductName("");
-      setMemberProductsList([]);
-    }
+    // if (memberProductDropdownRef.current && !memberProductDropdownRef.current.contains(e.target as Node)) {
+    //   setIsMemberProductDropdownOpen(false);
+    //   setMemberProductName("");
+    //   setMemberProductsList([]);
+    // }
   };
 
 
@@ -386,10 +385,10 @@ const ReferralFromSection = () => {
     setIsStateCityDropdownOpen(true);
   };
 
-  const handleOpenMemberProductDropdown = () => {
-    if (!selectedMember) return;
-    setIsMemberProductDropdownOpen(true);
-  };
+  // const handleOpenMemberProductDropdown = () => {
+  //   if (!selectedMember) return;
+  //   setIsMemberProductDropdownOpen(true);
+  // };
 
   const handleSelectStateCity = (value: any) => {
 
@@ -423,35 +422,35 @@ const ReferralFromSection = () => {
     setFormData((prev: FormDataState) => ({ ...prev, [name]: value }));
 
   }
-  const handleSelectMember = (member: any) => {
+  // const handleSelectMember = (member: any) => {
 
 
-    if (member) {
+  //   if (member) {
 
-      setSelectedMember(member);
-      setFormData((prev: FormDataState) => ({ ...prev, MemberFirstName: member?.user?.firstName, MemberLastName: member?.user?.lastName, teamMemberId: member?.id }));
-      return;
+  //     setSelectedMember(member);
+  //     setFormData((prev: FormDataState) => ({ ...prev, MemberFirstName: member?.user?.firstName, MemberLastName: member?.user?.lastName, teamMemberId: member?.id }));
+  //     return;
 
-    }
-    setSelectedMember(null);
-    setFormData((prev: FormDataState) => ({ ...prev, MemberFirstName: "", MemberLastName: "", teamMemberId: "" }));
+  //   }
+  //   setSelectedMember(null);
+  //   setFormData((prev: FormDataState) => ({ ...prev, MemberFirstName: "", MemberLastName: "", teamMemberId: "" }));
 
-  }
+  // }
 
-  const handleMemberProductSelect = (product: any) => {
+  // const handleMemberProductSelect = (product: any) => {
 
-    if (product) {
+  //   if (product) {
 
-      setSelectedMemberProduct(product);
-      setFormData((prev: FormDataState) => ({ ...prev, productId: product?.id }));
-      setIsMemberProductDropdownOpen(false);
-      setMemberProductName("");
-      setMemberProductsList([]);
-      return;
-    }
-    setSelectedMemberProduct(null);
-    setFormData((prev: FormDataState) => ({ ...prev, productId: "" }));
-  }
+  //     setSelectedMemberProduct(product);
+  //     setFormData((prev: FormDataState) => ({ ...prev, productId: product?.id }));
+  //     setIsMemberProductDropdownOpen(false);
+  //     setMemberProductName("");
+  //     setMemberProductsList([]);
+  //     return;
+  //   }
+  //   setSelectedMemberProduct(null);
+  //   setFormData((prev: FormDataState) => ({ ...prev, productId: "" }));
+  // }
 
   // const handlePreferredSalesPersonSelect = (person: any) => {
 
@@ -467,12 +466,12 @@ const ReferralFromSection = () => {
 
   // }
 
-  const handleOpenSelectMemberModal = () => {
-    setIsMemberSelectedModalOpen(true);
-  }
-  const handlecloseSelectMemberModal = () => {
-    setIsMemberSelectedModalOpen(false);
-  }
+  // const handleOpenSelectMemberModal = () => {
+  //   setIsMemberSelectedModalOpen(true);
+  // }
+  // const handlecloseSelectMemberModal = () => {
+  //   setIsMemberSelectedModalOpen(false);
+  // }
   // const handleOpenSelectMemberProductModal=()=>{
   //   if(!selectedMember) return ;
   //    setIsMemberProductSelectModalOpen(true);
@@ -516,8 +515,8 @@ const ReferralFromSection = () => {
       cityId: "",
       stateId: "",
     });
-    setSelectedMember(null);
-    setSelectedMemberProduct(null);
+   // setSelectedMember(null);
+    //setSelectedMemberProduct(null);
     //setSelectedPreferredSalesPerson(null);
     setSelectedStateCity(null);
   }
@@ -807,7 +806,7 @@ const ReferralFromSection = () => {
 
       </div>
 
-      <SearchAndSelectMemberModal isOpen={isMemberSelectModalOpen} closeModal={handlecloseSelectMemberModal} selectedMember={selectedMember} onMemberSelect={handleSelectMember} />
+      {/* <SearchAndSelectMemberModal isOpen={isMemberSelectModalOpen} closeModal={handlecloseSelectMemberModal} selectedMember={selectedMember} onMemberSelect={handleSelectMember} /> */}
       {/* <SearchAndSelectMemberProductModal isOpen={isMemberProductSelectModalOpen} closeModal={handlecloseSelectMemberProductModal} memberId={selectedMember?.id} selectedProduct={selectedMemberProduct} onProductSelect={handleMemberProductSelect} /> */}
       {/* <SearchAndSelectPreferredSalesModal isOpen={isPreferredSalesPersonSelectModalOpen} closeModal={handlecloseSelectPreferredSalesPersonModal} selectedPreferredSalesPerson={selectedPreferredSalesPerson} onPreferredSalesPersonSelect={handlePreferredSalesPersonSelect} /> */}
 
