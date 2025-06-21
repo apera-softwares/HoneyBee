@@ -11,7 +11,7 @@ import { AppDispatch, RootState } from "@/lib/redux/store";
 import Spinner from "../common/Spinner";
 import Pagination from "../tables/Pagination";
 import toast, { Toaster } from "react-hot-toast";
-import { MdRemoveRedEye } from "react-icons/md";
+//import { MdRemoveRedEye } from "react-icons/md";
 import { deleteAssignedMemberProduct, fetchAssignedMembers } from "@/lib/redux/slices/membersSlice";
 import ProductListModal from "./ProductsModal";
 
@@ -28,7 +28,7 @@ const AssignedMembersTable: React.FC<TeamTableProps> = ({ searchText, role, orde
     const [totalPages, setTotalPages] = useState(0);
     const { loading, members } = useSelector((state: RootState) => state.memberManagement);
     const [isModalOpen, setIsModalOpen] = useState(false)
-    const [products, setProducts] = useState<any[]>([]);
+    const [products] = useState<any[]>([]);
 
     useEffect(() => {
         setCurrentPage(1);
