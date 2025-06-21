@@ -14,7 +14,7 @@ export default function UserManagement() {
         <div className="w-full">
             <Toaster />
             {/* Top Bar: Left (Heading), Right (Search + Actions) */}
-            <div className="w-full flex flex-col lg:flex-row items-start justify-between  gap-6  mb-6 ">
+            <div className="w-full flex flex-col lg:flex-row items-start justify-between  gap-6 lg:gap-8  mb-6 ">
                 {/* Left: Heading */}
                 <div className="w-full lg:w-1/2 ">
                     <CommonHeading
@@ -24,7 +24,7 @@ export default function UserManagement() {
                 </div>
 
                 {/* Right: Actions */}
-                <div className=" w-full lg:w-1/2 flex flex-wrap justify-start lg:justify-end items-center gap-3  ">
+                <div className=" w-full  flex flex-wrap justify-start lg:justify-end items-center gap-3 ">
                     {/* Search Input */}
                     <div className="relative h-11">
                         <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">

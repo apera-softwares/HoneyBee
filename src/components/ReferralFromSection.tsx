@@ -529,7 +529,7 @@ const ReferralFromSection = () => {
   }
 
   return (
-    <div className="w-full max-w-[1500px] bg-white p-8 rounded-xl">
+    <div className="w-full max-w-[1500px] bg-white p-6 lg:p-8 rounded-xl">
       <Toaster />
       <div className="w-full ">
         <div className="w-full space-y-10 lg:space-y-14 mb-8">
