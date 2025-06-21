@@ -33,6 +33,9 @@ const ReferralTable: React.FC<ReferralTableProps> = ({ searchText }) => {
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
 
+
+    console.log(referralList,"referralList")
+
     useEffect(()=>{
        getReferrals(currentPage);
     },[dispatch,currentPage])
@@ -117,7 +120,7 @@ const ReferralTable: React.FC<ReferralTableProps> = ({ searchText }) => {
                                             </TableCell>
                                             <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                                                   {
-                                                `${item?.MemberFirstName||""} ${item?.MemberLastName||""}`
+                                                `${item?.referredBy?.user?.firstName||""} ${item?.referredBy?.user?.lastName||""}`
                                              }
                                             </TableCell>
                                             <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">

@@ -162,18 +162,19 @@ export default function SelectForSelect() {
       {selectedProducts && selectedProducts.length > 0 && (
         <div className="w-full overflow-x-auto  no-scrollbar mb-6 lg:mb-8  ">
           <div className="w-full max-w-[900px] flex space-x-5 ">
-            {selectedProducts?.map((product: any) => (
+            {selectedProducts?.map((product: any) => {
+              
+              const images = product?.media?.map((mediaItem:any)=>`${BACKEND_API}${mediaItem?.imageName?.slice(2,mediaItem?.imageName?.length)}`)||[]
+
+              return (
               <ProductCard
                 key={product?.id}
                 title={product?.name}
                 points={product?.bulletPoints?.split(",")}
-                images={[
-                  "/assets/images/service-image-1.png",
-                  "/assets/images/service-image-2.png",
-                  "/assets/images/service-image-3.png",
-                ]}
+                images={images}
               />
-            ))}
+            )
+            })}
           </div>
         </div>
       )}

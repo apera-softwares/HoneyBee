@@ -8,6 +8,10 @@ interface TeamCard {
   teamMembers: any[];
 }
 const TeamCard: React.FC<TeamCard> = ({ team, teamMembers }) => {
+
+
+
+
   const [showChangeTeamModal, setShowChangeTeamModal] =
     useState<boolean>(false);
   return (
@@ -16,7 +20,7 @@ const TeamCard: React.FC<TeamCard> = ({ team, teamMembers }) => {
         <h3 className="text-lg font-medium">Team</h3>
         <button
           onClick={() => setShowChangeTeamModal(true)}
-          className=" bg-primary/40 hover:bg-primary/50 text-white rounded-lg  p-2  text-center outline-none flex items-center justify-center transition-all duration-300"
+          className=" bg-primary hover:bg-primary/50 text-white rounded-lg  p-2  text-center outline-none flex items-center justify-center transition-all duration-300"
         >
           <FiEdit className="text-white" />
         </button>
@@ -31,14 +35,17 @@ const TeamCard: React.FC<TeamCard> = ({ team, teamMembers }) => {
           <div className="w-full max-h-36 overflow-y-auto no-scrollbar  border border-gray-200 rounded-md">
             <ul className="space-y-1.5">
               {teamMembers && teamMembers?.length > 0 ? (
-                teamMembers.map((member: any) => (
-                  <li
-                    key={member?.id}
-                    className="text-sm px-2 py-1.5 bg-gray-100 "
-                  >{`${member?.user?.firstName || ""} ${
-                    member?.user?.lastName || ""
-                  }`}</li>
-                ))
+
+                teamMembers.map((member: any) => {
+                  console.log(member,"member")
+                  return (
+                    <li
+                      key={member?.id}
+                      className="text-sm px-2 py-1.5 bg-gray-100 "
+                    >{`${member?.user?.firstName || ""} ${member?.user?.lastName || ""
+                      }`}</li>
+                  )
+                })
               ) : (
                 <li className="text-sm px-2 py-1 bg-gray-100 ">
                   No member found

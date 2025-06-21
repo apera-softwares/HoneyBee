@@ -109,12 +109,12 @@ export default function UserManagement() {
                     </div> */}
                     {/* Create User Button */}
 
-                    <button
+                    {/* <button
                         onClick={() => setIsAddModalOpen(true)}
                         className="h-11 bg-primary text-white rounded-md text-md px-4 justify-center text-center outline-none flex items-center gap-1 hover:bg-primary-hover ">
                         <HiOutlinePlus className="text-white" />
                         Add Member
-                    </button>
+                    </button> */}
 
                     {/* <div className="w-32 h-11 relative rounded-md">
                         <div className="w-32 h-11 left-0 top-0 absolute bg-amber-500 rounded-md" />
