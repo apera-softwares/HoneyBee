@@ -227,16 +227,23 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
       // Append each file using 'files' as the field name
       images.forEach((imgObj: any) => {
 
-        if (imgObj?.file?.data_url) {
+        if (imgObj?.file) {
+          console.log(imgObj?.file, "data_url")
           data.append("files", imgObj.file);
-        } else {
+        } else if (imgObj?.id) {
           imgIds.push(imgObj?.id)
         }
       });
 
-      console.log(imgIds,"imgIds")
+      console.log(imgIds, "imgIds")
 
-      data.append("mediaIds", imgIds);
+      if (imgIds.length < 0 || !imgIds) {
+        data.append("mediaIds", imgIds);
+      }
+
+      imgIds.forEach((id: string) => {
+        data.append("mediaIds", id);
+      });
 
       const params = {
         searchQuery: filters.searchQuery,
@@ -246,18 +253,20 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
       }
 
       if (editData) {
-        await dispatch(updateProductCatalog({ id: editData?.id, ...data })).unwrap();
+        await dispatch(updateProductCatalog({ id: editData?.id, data })).unwrap();
 
         toast.success("Updated product catalog successfully");
         onEditSuccess();
+        handleClearFormData();
 
       } else {
         await dispatch(createProductCatalog(data)).unwrap();
         toast.success("Created product catalog successfully");
         onEditSuccess();
+        handleClearFormData();
       }
 
-      handleClearFormData();
+
 
       const res = await dispatch(fetchProductCatalogs(params)).unwrap();
       setPaginationData((prev: PaginationState) => ({ ...prev, totalPages: res?.lastPage || 0 }))

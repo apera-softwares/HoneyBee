@@ -42,7 +42,7 @@ export const fetchProductCatalogs = createAsyncThunk(
       queryParams.append("name", searchQuery);
       }
 
-      if (status === "true" || status === "false") {
+      if (status === "true" || status === "false") { 
       queryParams.append("status", status);
       }
 
@@ -53,6 +53,7 @@ export const fetchProductCatalogs = createAsyncThunk(
           
         }
       );
+
 console.log(response.data,"products")
 
 
@@ -81,6 +82,7 @@ export const fetchSelectedProducts = createAsyncThunk(
         }
       );
 
+
       return response.data;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(
@@ -93,7 +95,7 @@ export const fetchSelectedProducts = createAsyncThunk(
 // Update Product
 export const updateProductCatalog = createAsyncThunk(
   "productCatalog/updateProductCatalog",
-  async ({ id, ...data }: any, thunkAPI) => {
+  async ({ id, data }: any, thunkAPI) => {
     try {
       const state: any = thunkAPI.getState();
       const token = state.user?.user?.token;
@@ -104,6 +106,7 @@ export const updateProductCatalog = createAsyncThunk(
 console.log(response.data,"response.data")
       return response.data;
     } catch (error: any) {
+      console.log(error,"product error")
       return thunkAPI.rejectWithValue(
         error.response?.data?.message || "Failed to update product catalog"
       );
