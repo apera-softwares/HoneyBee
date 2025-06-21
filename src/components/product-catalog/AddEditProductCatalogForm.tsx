@@ -208,14 +208,14 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
     try {
       if (!validateFormData()) return;
       setLoading(true);
-      const payload = {
-        name: formData.name,
-        bulletPoints: `${formData.bulletPoint1},${formData.bulletPoint2},${formData.bulletPoint3}`,
-        elevatorPitch: formData.elevatorPitch,
-        status: formData.status,
-        stateId: formData.stateId,
+      // const payload = {
+      //   name: formData.name,
+      //   bulletPoints: `${formData.bulletPoint1},${formData.bulletPoint2},${formData.bulletPoint3}`,
+      //   elevatorPitch: formData.elevatorPitch,
+      //   status: formData.status,
+      //   stateId: formData.stateId,
 
-      }
+      // }
       const data = new FormData();
 
       // Append other fields

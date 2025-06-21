@@ -80,7 +80,7 @@ const ReferralFromSection = () => {
   //const [selectedMember, setSelectedMember] = useState<any | null>(null);
   //const [selectedMemberProduct, setSelectedMemberProduct] = useState<any | null>(null);
   // const [selectedPreferredSalesPerson, setSelectedPreferredSalesPerson] = useState<any | null>(null);
-  const [isMemberSelectModalOpen, setIsMemberSelectedModalOpen] = useState<boolean>(false);
+  //const [isMemberSelectModalOpen, setIsMemberSelectedModalOpen] = useState<boolean>(false);
   // const [isMemberProductSelectModalOpen,setIsMemberProductSelectModalOpen]= useState<boolean>(false);
   //const [isPreferredSalesPersonSelectModalOpen, setIsPreferredSalesPersonSelectModalOpen] = useState<boolean>(false);
   const [stateCityList, setStateCityList] = useState<any[]>([])
@@ -333,25 +333,6 @@ const ReferralFromSection = () => {
       tempErrors.productId = "";
 
     }
-
-    //validate preferred sales person
-    // if (!selectedPreferredSalesPerson) {
-    //   tempErrors.preferredSalesPersonId = "Preferred salesperson is required";
-    //   isValidData = false;
-    // } else {
-
-    //   tempErrors.preferredSalesPersonId = "";
-
-    // }
-
-
-    // Validate status
-    // if (formData.status.trim() === "") {
-    //   tempErrors.status = "Status is required";
-    //   isValidData = false;
-    // } else {
-    //   tempErrors.status = "";
-    // }
 
     // Validate notes
     if (formData.notes.trim() === "") {

@@ -11,7 +11,7 @@ import { RootState } from "@/lib/redux/store";
 
 export default function UserMetaCard() {
 
-  const { isOpen, openModal, closeModal } = useModal();
+  const { isOpen, closeModal } = useModal();
 
   const handleSave = () => {
     // Handle save logic here
