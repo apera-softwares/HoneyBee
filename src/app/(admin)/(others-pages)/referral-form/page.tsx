@@ -19,14 +19,14 @@ export default function ReferralForm() {
       ?.id || null;
 
   useEffect(() => {
-    if (!memberId || loggedInUser?.role !== UserRole.B_TEAM ) return;
+    if ( loggedInUser?.role !== UserRole.B_TEAM ) return;
     getSelectedProducts();
   }, [memberId]);
 
   const getSelectedProducts = async () => {
-    if (!memberId) return;
+ 
     try {
-      const response = await dispatch(fetchSelectedProducts(memberId)).unwrap();
+      const response = await dispatch(fetchSelectedProducts(loggedInUser?.userId)).unwrap();
       console.log("response of selected products", response);
     } catch (error: any) {
       console.error(

@@ -12,6 +12,8 @@ import SearchAndSelectMemberModal from "./referral/SearchAndSelectMemberModal";
 //import SearchAndSelectPreferredSalesModal from "./referral/SearchAndSelectPreferredSalesPersonModal";
 import toast, { Toaster } from "react-hot-toast";
 
+  // MemberFirstName: string;
+  // MemberLastName: string;
 interface FormDataState {
   firstName: string;
   lastName: string;
@@ -19,10 +21,7 @@ interface FormDataState {
   email: string;
   address: string;
   postalCode: string;
-  MemberFirstName: string;
-  MemberLastName: string;
   notes: string;
-  status: string;
   productId: string;
   teamMemberId: string;
   cityId?: string;
@@ -51,7 +50,6 @@ const ReferralFromSection = () => {
 
 
   const dispatch = useAppDispatch();
-  const loggedInUser = useAppSelector((state) => state.user.user);
   const [formData, setFormData] = useState<FormDataState>({
     firstName: "",
     lastName: "",
@@ -59,10 +57,7 @@ const ReferralFromSection = () => {
     email: "",
     address: "",
     postalCode: "",
-    MemberFirstName: "",
-    MemberLastName: "",
     notes: "",
-    status: "",
     productId: "",
     teamMemberId: "",
     cityId: "",
@@ -75,10 +70,7 @@ const ReferralFromSection = () => {
     email: "",
     address: "",
     postalCode: "",
-    MemberFirstName: "",
-    MemberLastName: "",
     notes: "",
-    status: "",
     productId: "",
     teamMemberId: "",
     cityId: "",
@@ -100,6 +92,12 @@ const ReferralFromSection = () => {
   const [isMemberProductDropdownOpen, setIsMemberProductDropdownOpen] = useState(false);
   const [memberProductName, setMemberProductName] = useState<string>("");
   const [memberProductsList, setMemberProductsList] = useState<any[]>([]);
+   const { selectedProducts } = useAppSelector((state) => state.productCatalog);
+  const {user:loggedInUser} = useAppSelector((state)=>state.user)
+  const { userProfile } = useAppSelector((state) => state.userProfile);
+  const memberId =
+    userProfile?.teamMember?.find((member: any) => member.isMemberOnly === true)
+      ?.id || null;
 
 
 
@@ -210,13 +208,15 @@ const ReferralFromSection = () => {
 
 
   const handleSubmitReferrals = async () => {
-
+    
     try {
 
       if (!validateFormData()) return;
-
+      const payload = {...formData,teamMemberId:loggedInUser?.userId};
+      console.log("payload while lead create",payload);
       setLoading(true);
-      await dispatch(createReferral(formData)).unwrap();
+      
+      await dispatch(createReferral(payload)).unwrap();
       toast.success("Created referral successfully");
       handleClearFormData();
 
@@ -317,16 +317,16 @@ const ReferralFromSection = () => {
 
 
     // Validate members firstName
-    if (!selectedMember) {
-      tempErrors.MemberFirstName = "Member is required";
-      isValidData = false;
-    } else {
-      tempErrors.MemberFirstName = "";
-    }
+    // if (!selectedMember) {
+    //   tempErrors.MemberFirstName = "Member is required";
+    //   isValidData = false;
+    // } else {
+    //   tempErrors.MemberFirstName = "";
+    // }
 
 
 
-    if (!selectedMemberProduct) {
+    if (formData.productId.trim()==="") {
       tempErrors.productId = "Product is required";
       isValidData = false;
     } else {
@@ -347,12 +347,12 @@ const ReferralFromSection = () => {
 
 
     // Validate status
-    if (formData.status.trim() === "") {
-      tempErrors.status = "Status is required";
-      isValidData = false;
-    } else {
-      tempErrors.status = "";
-    }
+    // if (formData.status.trim() === "") {
+    //   tempErrors.status = "Status is required";
+    //   isValidData = false;
+    // } else {
+    //   tempErrors.status = "";
+    // }
 
     // Validate notes
     if (formData.notes.trim() === "") {
@@ -497,10 +497,7 @@ const ReferralFromSection = () => {
       email: "",
       address: "",
       postalCode: "",
-      MemberFirstName: "",
-      MemberLastName: "",
       notes: "",
-      status: "",
       productId: "",
       teamMemberId: "",
       cityId: "",
@@ -513,10 +510,7 @@ const ReferralFromSection = () => {
       email: "",
       address: "",
       postalCode: "",
-      MemberFirstName: "",
-      MemberLastName: "",
       notes: "",
-      status: "",
       productId: "",
       teamMemberId: "",
       cityId: "",
@@ -527,7 +521,8 @@ const ReferralFromSection = () => {
     //setSelectedPreferredSalesPerson(null);
     setSelectedStateCity(null);
   }
-
+  
+  console.log("formdata",formData);
   return (
     <div className="w-full max-w-[1500px] bg-white p-6 lg:p-8 rounded-xl">
       <Toaster />
@@ -679,7 +674,7 @@ const ReferralFromSection = () => {
               />
               <span className={`${REQUIRED_ERROR}`}>{errors.postalCode || ""}</span>
             </div>
-            <div className="w-full">
+            {/* <div className="w-full">
               <input
                 type="text"
                 placeholder={`Member's first and last name`}
@@ -744,6 +739,21 @@ const ReferralFromSection = () => {
                   </ul>
                 </div>
               )}
+            </div> */}
+            <div className="w-full">
+              <select
+                name="productId"
+                className={`${FORM_INPUT_CLASS}`}
+                value={`${formData.productId}`}
+                onChange={handleChange}
+              >
+                <option className="" value="">Select Product</option>
+                {
+                  selectedProducts && selectedProducts?.length > 0 ? (selectedProducts.map((prod:any)=>(<option key={prod?.id} value={prod?.id}>{prod?.name}</option>))):(<option value="">No product found</option>) 
+                
+                }
+              </select>
+              <span className={`${REQUIRED_ERROR}`}>{errors.productId || ""}</span>
             </div>
           </div>
           <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-16 ">
@@ -759,22 +769,6 @@ const ReferralFromSection = () => {
               />
               <span className={`${REQUIRED_ERROR}`}>{errors.preferredSalesPersonId || ""}</span>
             </div> */}
-            <div className="w-full">
-              <select
-                name="status"
-                className={`${FORM_INPUT_CLASS}`}
-                value={`${formData.status}`}
-                onChange={handleChange}
-              >
-                <option className="" value="">Select Status</option>
-                {
-                  statusList.map((item: { label: string, value: string }) => (<option key={item.value} value={item.value}>{item.label}</option>))
-                }
-
-
-              </select>
-              <span className={`${REQUIRED_ERROR}`}>{errors.status || ""}</span>
-            </div>
 
           </div>
 
