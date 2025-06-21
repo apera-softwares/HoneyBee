@@ -74,6 +74,7 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
   useEffect(() => {
     if (editData) {
       setImages(editData.media)
+      setSelectedState(editData.states[0].state)
       setFormData({
         ...formData,
         name: editData?.name,
@@ -237,13 +238,7 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
 
       console.log(imgIds, "imgIds")
 
-      if (imgIds.length < 0 || !imgIds) {
-        data.append("mediaIds", imgIds);
-      }
-
-      imgIds.forEach((id: string) => {
-        data.append("mediaIds", id);
-      });
+      data.append("mediaIds", imgIds);
 
       const params = {
         searchQuery: filters.searchQuery,
@@ -525,13 +520,15 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
 
                     {/* Uploaded Images Grid */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                      {images.map((image, index) => (
+                      {images.map((image:any, index) => (
                         <div
                           key={index}
                           className="relative rounded-lg border border-gray-200 overflow-hidden shadow-sm"
                         >
                           <img
-                            src={image['data_url']}
+                            // src={image['data_url']}
+                            src={image.id ? `${BACKEND_API}${image.imageName.slice(2,image.imageName.length)}`: image['data_url']}
+
                             alt={`uploaded-${index}`}
                             className="w-full h-48 object-cover"
                           />
