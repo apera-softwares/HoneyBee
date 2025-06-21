@@ -47,15 +47,13 @@ export default function SelectForSelect() {
   }, [filters]);
 
   useEffect(() => {
-    if (!memberId) return;
       getSelectedProducts();
   }, [memberId]);
 
 
   const getSelectedProducts = async () => {
-    if (!memberId) return ;
     try {
-      const response = await dispatch(fetchSelectedProducts(memberId)).unwrap();
+      const response = await dispatch(fetchSelectedProducts(loggedInUser?.userId)).unwrap();
       console.log("response of selected products", response);
     } catch (error: any) {
      console.error("Error getting selected products:", error?.message || error);

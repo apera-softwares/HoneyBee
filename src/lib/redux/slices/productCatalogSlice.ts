@@ -69,13 +69,13 @@ console.log(response.data,"products")
 //fetch B_TEAM user selected products
 export const fetchSelectedProducts = createAsyncThunk(
   "productCatalog/fetchSelectedProducts",
-  async (memberId: any, thunkAPI) => {
+  async (userId: any, thunkAPI) => {
     try {
       const state: any = thunkAPI.getState();
       const token = state.user?.user?.token;
 
       const response = await axios.get(
-        `${BACKEND_API}product/${memberId}`,
+        `${BACKEND_API}product/getProductByUserId/${userId}`,
         {
           headers: { Authorization: `Bearer ${token}`,  
           'ngrok-skip-browser-warning': 'true', },  

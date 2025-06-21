@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/lib/redux/store";
 
 export default function UserInfoCard() {
-  const { isOpen, openModal, closeModal } = useModal();
+  const { isOpen, closeModal } = useModal();
       const { userProfile } = useSelector((state: RootState) => state.userProfile);
 
   const handleSave = () => {

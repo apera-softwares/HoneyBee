@@ -7,11 +7,13 @@ import axios from "axios";
 import { BACKEND_API } from "@/api";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { createReferral } from "@/lib/redux/slices/referralSlice";
-import SearchAndSelectMemberModal from "./referral/SearchAndSelectMemberModal";
+//import SearchAndSelectMemberModal from "./referral/SearchAndSelectMemberModal";
 // import SearchAndSelectMemberProductModal from "./referral/SearchAndSelectMemberProductModal";
 //import SearchAndSelectPreferredSalesModal from "./referral/SearchAndSelectPreferredSalesPersonModal";
 import toast, { Toaster } from "react-hot-toast";
 
+  // MemberFirstName: string;
+  // MemberLastName: string;
 interface FormDataState {
   firstName: string;
   lastName: string;
@@ -19,10 +21,7 @@ interface FormDataState {
   email: string;
   address: string;
   postalCode: string;
-  MemberFirstName: string;
-  MemberLastName: string;
   notes: string;
-  status: string;
   productId: string;
   teamMemberId: string;
   cityId?: string;
@@ -46,12 +45,11 @@ type LocationData = {
   [key: string]: [number, "city", string, number] | [number, "state"];
 };
 
-const statusList = [{ label: "Pitched", value: "Pitched" }, { label: "Pending", value: "Pending" }, { label: "Payout", value: "Payout" }, { label: "Sold", value: "Sold" }];
+
 const ReferralFromSection = () => {
 
 
   const dispatch = useAppDispatch();
-  const loggedInUser = useAppSelector((state) => state.user.user);
   const [formData, setFormData] = useState<FormDataState>({
     firstName: "",
     lastName: "",
@@ -59,10 +57,7 @@ const ReferralFromSection = () => {
     email: "",
     address: "",
     postalCode: "",
-    MemberFirstName: "",
-    MemberLastName: "",
     notes: "",
-    status: "",
     productId: "",
     teamMemberId: "",
     cityId: "",
@@ -75,20 +70,17 @@ const ReferralFromSection = () => {
     email: "",
     address: "",
     postalCode: "",
-    MemberFirstName: "",
-    MemberLastName: "",
     notes: "",
-    status: "",
     productId: "",
     teamMemberId: "",
     cityId: "",
     stateId: "",
   })
   const [loading, setLoading] = useState<boolean>(false);
-  const [selectedMember, setSelectedMember] = useState<any | null>(null);
-  const [selectedMemberProduct, setSelectedMemberProduct] = useState<any | null>(null);
+  //const [selectedMember, setSelectedMember] = useState<any | null>(null);
+  //const [selectedMemberProduct, setSelectedMemberProduct] = useState<any | null>(null);
   // const [selectedPreferredSalesPerson, setSelectedPreferredSalesPerson] = useState<any | null>(null);
-  const [isMemberSelectModalOpen, setIsMemberSelectedModalOpen] = useState<boolean>(false);
+  //const [isMemberSelectModalOpen, setIsMemberSelectedModalOpen] = useState<boolean>(false);
   // const [isMemberProductSelectModalOpen,setIsMemberProductSelectModalOpen]= useState<boolean>(false);
   //const [isPreferredSalesPersonSelectModalOpen, setIsPreferredSalesPersonSelectModalOpen] = useState<boolean>(false);
   const [stateCityList, setStateCityList] = useState<any[]>([])
@@ -96,10 +88,16 @@ const ReferralFromSection = () => {
   const [stateCityName, setStateCityName] = useState('');
   const [selectedStateCity, setSelectedStateCity] = useState<ParsedLocation | null>(null);
   const stateCityDropdownRef = useRef<HTMLDivElement | null>(null);
-  const memberProductDropdownRef = useRef<HTMLDivElement | null>(null);
-  const [isMemberProductDropdownOpen, setIsMemberProductDropdownOpen] = useState(false);
-  const [memberProductName, setMemberProductName] = useState<string>("");
-  const [memberProductsList, setMemberProductsList] = useState<any[]>([]);
+  //const memberProductDropdownRef = useRef<HTMLDivElement | null>(null);
+  //const [isMemberProductDropdownOpen, setIsMemberProductDropdownOpen] = useState(false);
+  //const [memberProductName, setMemberProductName] = useState<string>("");
+  //const [memberProductsList, setMemberProductsList] = useState<any[]>([]);
+   const { selectedProducts } = useAppSelector((state) => state.productCatalog);
+  const {user:loggedInUser} = useAppSelector((state)=>state.user)
+  //const { userProfile } = useAppSelector((state) => state.userProfile);
+  // const memberId =
+  //   userProfile?.teamMember?.find((member: any) => member.isMemberOnly === true)
+  //     ?.id || null;
 
 
 
@@ -118,14 +116,14 @@ const ReferralFromSection = () => {
     return () => clearTimeout(timeoutId);
   }, [stateCityName]);
 
-  useEffect(() => {
+  // useEffect(() => {
 
-    const timeoutId = setTimeout(() => {
-      fetchMemberProducts();
-    }, 300); // debounce
+  //   const timeoutId = setTimeout(() => {
+  //     fetchMemberProducts();
+  //   }, 300); // debounce
 
-    return () => clearTimeout(timeoutId);
-  }, [memberProductName]);
+  //   return () => clearTimeout(timeoutId);
+  // }, [memberProductName]);
 
 
   const fetchStateCity = async () => {
@@ -177,46 +175,47 @@ const ReferralFromSection = () => {
   };
 
 
-  const fetchMemberProducts = async () => {
-    if (!memberProductName.trim()) {
-      setMemberProductsList([]);
-      return;
-    }
+  // const fetchMemberProducts = async () => {
+  //   if (!memberProductName.trim()) {
+  //     setMemberProductsList([]);
+  //     return;
+  //   }
 
-    const token = loggedInUser?.token;
+  //   const token = loggedInUser?.token;
 
 
 
-    try {
-      const response = await axios.get(`${BACKEND_API}product/${selectedMember?.id}?name=${memberProductName.trim()}&limit=10`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'ngrok-skip-browser-warning': 'true',
-          },
-        }
-      );
-      setMemberProductsList(response?.data?.data || []);
+  //   try {
+  //     const response = await axios.get(`${BACKEND_API}product/${selectedMember?.id}?name=${memberProductName.trim()}&limit=10`,
+  //       {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //           'ngrok-skip-browser-warning': 'true',
+  //         },
+  //       }
+  //     );
+  //     setMemberProductsList(response?.data?.data || []);
 
-    } catch (error: any) {
-      console.log("error while fetching member products", error)
+  //   } catch (error: any) {
+  //     console.log("error while fetching member products", error)
 
-    } finally {
+  //   } finally {
 
-    }
-  };
+  //   }
+  // };
 
 
 
 
   const handleSubmitReferrals = async () => {
-
+    
     try {
 
       if (!validateFormData()) return;
-
+      const payload = {...formData,teamMemberId:loggedInUser?.userId};
       setLoading(true);
-      await dispatch(createReferral(formData)).unwrap();
+      
+      await dispatch(createReferral(payload)).unwrap();
       toast.success("Created referral successfully");
       handleClearFormData();
 
@@ -317,41 +316,22 @@ const ReferralFromSection = () => {
 
 
     // Validate members firstName
-    if (!selectedMember) {
-      tempErrors.MemberFirstName = "Member is required";
-      isValidData = false;
-    } else {
-      tempErrors.MemberFirstName = "";
-    }
+    // if (!selectedMember) {
+    //   tempErrors.MemberFirstName = "Member is required";
+    //   isValidData = false;
+    // } else {
+    //   tempErrors.MemberFirstName = "";
+    // }
 
 
 
-    if (!selectedMemberProduct) {
+    if (formData.productId.trim()==="") {
       tempErrors.productId = "Product is required";
       isValidData = false;
     } else {
 
       tempErrors.productId = "";
 
-    }
-
-    //validate preferred sales person
-    // if (!selectedPreferredSalesPerson) {
-    //   tempErrors.preferredSalesPersonId = "Preferred salesperson is required";
-    //   isValidData = false;
-    // } else {
-
-    //   tempErrors.preferredSalesPersonId = "";
-
-    // }
-
-
-    // Validate status
-    if (formData.status.trim() === "") {
-      tempErrors.status = "Status is required";
-      isValidData = false;
-    } else {
-      tempErrors.status = "";
     }
 
     // Validate notes
@@ -373,11 +353,11 @@ const ReferralFromSection = () => {
       setStateCityName("");
       setStateCityList([]);
     }
-    if (memberProductDropdownRef.current && !memberProductDropdownRef.current.contains(e.target as Node)) {
-      setIsMemberProductDropdownOpen(false);
-      setMemberProductName("");
-      setMemberProductsList([]);
-    }
+    // if (memberProductDropdownRef.current && !memberProductDropdownRef.current.contains(e.target as Node)) {
+    //   setIsMemberProductDropdownOpen(false);
+    //   setMemberProductName("");
+    //   setMemberProductsList([]);
+    // }
   };
 
 
@@ -386,10 +366,10 @@ const ReferralFromSection = () => {
     setIsStateCityDropdownOpen(true);
   };
 
-  const handleOpenMemberProductDropdown = () => {
-    if (!selectedMember) return;
-    setIsMemberProductDropdownOpen(true);
-  };
+  // const handleOpenMemberProductDropdown = () => {
+  //   if (!selectedMember) return;
+  //   setIsMemberProductDropdownOpen(true);
+  // };
 
   const handleSelectStateCity = (value: any) => {
 
@@ -423,35 +403,35 @@ const ReferralFromSection = () => {
     setFormData((prev: FormDataState) => ({ ...prev, [name]: value }));
 
   }
-  const handleSelectMember = (member: any) => {
+  // const handleSelectMember = (member: any) => {
 
 
-    if (member) {
+  //   if (member) {
 
-      setSelectedMember(member);
-      setFormData((prev: FormDataState) => ({ ...prev, MemberFirstName: member?.user?.firstName, MemberLastName: member?.user?.lastName, teamMemberId: member?.id }));
-      return;
+  //     setSelectedMember(member);
+  //     setFormData((prev: FormDataState) => ({ ...prev, MemberFirstName: member?.user?.firstName, MemberLastName: member?.user?.lastName, teamMemberId: member?.id }));
+  //     return;
 
-    }
-    setSelectedMember(null);
-    setFormData((prev: FormDataState) => ({ ...prev, MemberFirstName: "", MemberLastName: "", teamMemberId: "" }));
+  //   }
+  //   setSelectedMember(null);
+  //   setFormData((prev: FormDataState) => ({ ...prev, MemberFirstName: "", MemberLastName: "", teamMemberId: "" }));
 
-  }
+  // }
 
-  const handleMemberProductSelect = (product: any) => {
+  // const handleMemberProductSelect = (product: any) => {
 
-    if (product) {
+  //   if (product) {
 
-      setSelectedMemberProduct(product);
-      setFormData((prev: FormDataState) => ({ ...prev, productId: product?.id }));
-      setIsMemberProductDropdownOpen(false);
-      setMemberProductName("");
-      setMemberProductsList([]);
-      return;
-    }
-    setSelectedMemberProduct(null);
-    setFormData((prev: FormDataState) => ({ ...prev, productId: "" }));
-  }
+  //     setSelectedMemberProduct(product);
+  //     setFormData((prev: FormDataState) => ({ ...prev, productId: product?.id }));
+  //     setIsMemberProductDropdownOpen(false);
+  //     setMemberProductName("");
+  //     setMemberProductsList([]);
+  //     return;
+  //   }
+  //   setSelectedMemberProduct(null);
+  //   setFormData((prev: FormDataState) => ({ ...prev, productId: "" }));
+  // }
 
   // const handlePreferredSalesPersonSelect = (person: any) => {
 
@@ -467,12 +447,12 @@ const ReferralFromSection = () => {
 
   // }
 
-  const handleOpenSelectMemberModal = () => {
-    setIsMemberSelectedModalOpen(true);
-  }
-  const handlecloseSelectMemberModal = () => {
-    setIsMemberSelectedModalOpen(false);
-  }
+  // const handleOpenSelectMemberModal = () => {
+  //   setIsMemberSelectedModalOpen(true);
+  // }
+  // const handlecloseSelectMemberModal = () => {
+  //   setIsMemberSelectedModalOpen(false);
+  // }
   // const handleOpenSelectMemberProductModal=()=>{
   //   if(!selectedMember) return ;
   //    setIsMemberProductSelectModalOpen(true);
@@ -497,10 +477,7 @@ const ReferralFromSection = () => {
       email: "",
       address: "",
       postalCode: "",
-      MemberFirstName: "",
-      MemberLastName: "",
       notes: "",
-      status: "",
       productId: "",
       teamMemberId: "",
       cityId: "",
@@ -513,21 +490,19 @@ const ReferralFromSection = () => {
       email: "",
       address: "",
       postalCode: "",
-      MemberFirstName: "",
-      MemberLastName: "",
       notes: "",
-      status: "",
       productId: "",
       teamMemberId: "",
       cityId: "",
       stateId: "",
     });
-    setSelectedMember(null);
-    setSelectedMemberProduct(null);
+   // setSelectedMember(null);
+    //setSelectedMemberProduct(null);
     //setSelectedPreferredSalesPerson(null);
     setSelectedStateCity(null);
   }
-
+  
+  console.log("formdata",formData);
   return (
     <div className="w-full max-w-[1500px] bg-white p-6 lg:p-8 rounded-xl">
       <Toaster />
@@ -679,7 +654,7 @@ const ReferralFromSection = () => {
               />
               <span className={`${REQUIRED_ERROR}`}>{errors.postalCode || ""}</span>
             </div>
-            <div className="w-full">
+            {/* <div className="w-full">
               <input
                 type="text"
                 placeholder={`Member's first and last name`}
@@ -744,6 +719,21 @@ const ReferralFromSection = () => {
                   </ul>
                 </div>
               )}
+            </div> */}
+            <div className="w-full">
+              <select
+                name="productId"
+                className={`${FORM_INPUT_CLASS}`}
+                value={`${formData.productId}`}
+                onChange={handleChange}
+              >
+                <option className="" value="">Select Product</option>
+                {
+                  selectedProducts && selectedProducts?.length > 0 ? (selectedProducts.map((prod:any)=>(<option key={prod?.id} value={prod?.id}>{prod?.name}</option>))):(<option value="">No product found</option>) 
+                
+                }
+              </select>
+              <span className={`${REQUIRED_ERROR}`}>{errors.productId || ""}</span>
             </div>
           </div>
           <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-16 ">
@@ -759,22 +749,6 @@ const ReferralFromSection = () => {
               />
               <span className={`${REQUIRED_ERROR}`}>{errors.preferredSalesPersonId || ""}</span>
             </div> */}
-            <div className="w-full">
-              <select
-                name="status"
-                className={`${FORM_INPUT_CLASS}`}
-                value={`${formData.status}`}
-                onChange={handleChange}
-              >
-                <option className="" value="">Select Status</option>
-                {
-                  statusList.map((item: { label: string, value: string }) => (<option key={item.value} value={item.value}>{item.label}</option>))
-                }
-
-
-              </select>
-              <span className={`${REQUIRED_ERROR}`}>{errors.status || ""}</span>
-            </div>
 
           </div>
 
@@ -813,7 +787,7 @@ const ReferralFromSection = () => {
 
       </div>
 
-      <SearchAndSelectMemberModal isOpen={isMemberSelectModalOpen} closeModal={handlecloseSelectMemberModal} selectedMember={selectedMember} onMemberSelect={handleSelectMember} />
+      {/* <SearchAndSelectMemberModal isOpen={isMemberSelectModalOpen} closeModal={handlecloseSelectMemberModal} selectedMember={selectedMember} onMemberSelect={handleSelectMember} /> */}
       {/* <SearchAndSelectMemberProductModal isOpen={isMemberProductSelectModalOpen} closeModal={handlecloseSelectMemberProductModal} memberId={selectedMember?.id} selectedProduct={selectedMemberProduct} onProductSelect={handleMemberProductSelect} /> */}
       {/* <SearchAndSelectPreferredSalesModal isOpen={isPreferredSalesPersonSelectModalOpen} closeModal={handlecloseSelectPreferredSalesPersonModal} selectedPreferredSalesPerson={selectedPreferredSalesPerson} onPreferredSalesPersonSelect={handlePreferredSalesPersonSelect} /> */}
 

@@ -7,6 +7,7 @@ import ProductCard from "@/components/product-catalog/ProductCard";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { fetchSelectedProducts } from "@/lib/redux/slices/productCatalogSlice";
 import { UserRole } from "@/constant/userRoles";
+import { BACKEND_API } from "@/api";
 
 export default function ReferralForm() {
   const dispatch = useAppDispatch();
@@ -19,14 +20,14 @@ export default function ReferralForm() {
       ?.id || null;
 
   useEffect(() => {
-    if (!memberId || loggedInUser?.role !== UserRole.B_TEAM ) return;
+    if ( loggedInUser?.role !== UserRole.B_TEAM ) return;
     getSelectedProducts();
   }, [memberId]);
 
   const getSelectedProducts = async () => {
-    if (!memberId) return;
+ 
     try {
-      const response = await dispatch(fetchSelectedProducts(memberId)).unwrap();
+      const response = await dispatch(fetchSelectedProducts(loggedInUser?.userId)).unwrap();
       console.log("response of selected products", response);
     } catch (error: any) {
       console.error(
@@ -39,6 +40,7 @@ export default function ReferralForm() {
   // const handleRedirectToLandingPage = ()=>{
   //     //router.push("");
   // }
+
 
   return (
     <div>
@@ -59,18 +61,18 @@ export default function ReferralForm() {
       { loggedInUser?.role === UserRole.B_TEAM && selectedProducts && selectedProducts.length > 0 && (
         <div className="w-full overflow-x-auto  no-scrollbar mb-6 lg:mb-8 ">
           <div className="w-full max-w-[900px] flex space-x-5 ">
-            {selectedProducts?.map((product: any) => (
+            {selectedProducts?.map((product: any) =>{
+
+              const images = product?.media?.map((mediaItem:any)=>`${BACKEND_API}${mediaItem?.imageName?.slice(2,mediaItem?.imageName?.length)}`)||[]
+              return (
               <ProductCard
                 key={product?.id}
                 title={product?.name}
                 points={product?.bulletPoints?.split(",")}
-                images={[
-                  "/assets/images/service-image-1.png",
-                  "/assets/images/service-image-2.png",
-                  "/assets/images/service-image-3.png",
-                ]}
+                images={images}
               />
-            ))}
+            )
+            })}
           </div>
         </div>
       )}
