@@ -487,7 +487,6 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
                 dataURLKey="data_url"
               >
                 {({
-                  imageList,
                   onImageUpload,
                   onImageRemoveAll,
                   onImageUpdate,
