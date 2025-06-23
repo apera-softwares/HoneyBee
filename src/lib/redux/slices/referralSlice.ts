@@ -61,12 +61,12 @@ export const fetchReferrals = createAsyncThunk(
 // Update referral
 export const updateReferral = createAsyncThunk(
   "referral/updateReferral",
-  async ({ id, ...data }: any, thunkAPI) => {
+  async ({ id, status }: any, thunkAPI) => {
     try {
       const state: any = thunkAPI.getState();
       const token = state.user?.user?.token;
 
-      const response = await axios.put(`${BACKEND_API}lead/${id}`, data, {
+      const response = await axios.put(`${BACKEND_API}lead/${id}`, {status: status}, {
         headers: { Authorization: `Bearer ${token}`,  'ngrok-skip-browser-warning': 'true', },
       });
 
