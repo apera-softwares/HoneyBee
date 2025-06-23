@@ -7,50 +7,53 @@ import {
     TableRow,
 } from "../ui/table";
 import Badge from "../ui/badge/Badge";
-// import { FiEdit } from "react-icons/fi";
-import { useAppDispatch,useAppSelector } from "@/lib/redux/hooks";
-import { fetchReferrals } from "@/lib/redux/slices/referralSlice";
+import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
+import { fetchReferrals, updateReferral } from "@/lib/redux/slices/referralSlice";
 import Spinner from "../common/Spinner";
 import Pagination from "../tables/Pagination";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
+import { FiEdit } from "react-icons/fi";
+import ReferralStatusModal from "./ReferralStatusModal";
 
 interface ReferralTableProps {
     searchText: string;
 }
 type BadgeColor =
-  | "primary"
-  | "success"
-  | "error"
-  | "warning"
-  | "info"
-  | "light"
-  | "dark";
+    | "primary"
+    | "success"
+    | "error"
+    | "warning"
+    | "info"
+    | "light"
+    | "dark";
 
 const ReferralTable: React.FC<ReferralTableProps> = ({ searchText }) => {
     const ITEM_PER_PAGE = 5;
     const dispatch = useAppDispatch();
-    const {referralList,loading} = useAppSelector((state)=>state.referral)
+    const { referralList, loading } = useAppSelector((state) => state.referral)
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
+    const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
+    const [selectedReferral, setSelectedReferral] = useState<any>(null);
+    const { user: loggedInUser } = useAppSelector((state) => state.user)
 
+    console.log(referralList, "referralList")
 
-    console.log(referralList,"referralList")
+    useEffect(() => {
+        getReferrals(currentPage);
+    }, [dispatch, currentPage])
 
-    useEffect(()=>{
-       getReferrals(currentPage);
-    },[dispatch,currentPage])
-    
-      useEffect(()=>{
-       setCurrentPage(1);
-       getReferrals(1);
-    },[dispatch,searchText])
+    useEffect(() => {
+        setCurrentPage(1);
+        getReferrals(1);
+    }, [dispatch, searchText])
 
-   const getReferrals = async(page:number)=>{
-       try {
-            const params={
-                page:page,
-                limit:ITEM_PER_PAGE,
-                searchQuery:searchText
+    const getReferrals = async (page: number) => {
+        try {
+            const params = {
+                page: page,
+                limit: ITEM_PER_PAGE,
+                searchQuery: searchText
             }
             const res = await dispatch(fetchReferrals(params)).unwrap();
             setTotalPages(res?.lastPage);
@@ -59,13 +62,13 @@ const ReferralTable: React.FC<ReferralTableProps> = ({ searchText }) => {
             console.log(error?.message || "Failed to fetch products");
         }
 
-   }
+    }
 
     const handlePageChange = (page: any) => {
         setCurrentPage(page);
     };
 
-    const getBadgeColor = (status: string):BadgeColor => {
+    const getBadgeColor = (status: string): BadgeColor => {
         switch (status.toLowerCase()) {
             case 'pitched':
                 return 'primary';
@@ -76,14 +79,40 @@ const ReferralTable: React.FC<ReferralTableProps> = ({ searchText }) => {
             case 'payout':
                 return 'success';
             default:
-                return 'light'; 
+                return 'light';
         }
     };
+
+
+    const handleStatusUpdate = async (id: string, status: string) => {
+        console.log(status, "status")
+        try {
+            await dispatch(updateReferral({ id, status }));
+            toast.success("Status updated successfully!");
+            getReferrals(currentPage);
+        } catch (error) {
+            console.log(error,"error")
+            toast.error("Failed to update status.");
+        }
+    };
+
+
+
+
+
 
     return (
         <div className="w-full overflow-hidden rounded-xl bg-white dark:bg-white/[0.03] shadow-md">
             <div className="w-full overflow-x-auto">
                 <Toaster />
+                {selectedReferral && (
+                    <ReferralStatusModal
+                        isOpen={isStatusModalOpen}
+                        closeModal={() => setIsStatusModalOpen(false)}
+                        referral={selectedReferral}
+                        onUpdateStatus={handleStatusUpdate}
+                    />
+                )}
 
                 <div className="w-full">
                     {loading ? (
@@ -97,9 +126,9 @@ const ReferralTable: React.FC<ReferralTableProps> = ({ searchText }) => {
                                     <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Product</TableCell>
                                     <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Referred By</TableCell>
                                     <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Status</TableCell>
-                                     <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Submitted On</TableCell>
-                                     {/* <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Actions</TableCell> */}
-                                </TableRow>
+                                    <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Submitted On</TableCell>
+                                    {loggedInUser.role == "A_TEAM" && <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Actions</TableCell>
+                                    }                                </TableRow>
                             </TableHeader>
                             <TableBody>
                                 {referralList.length > 0 ? (
@@ -107,21 +136,21 @@ const ReferralTable: React.FC<ReferralTableProps> = ({ searchText }) => {
                                         <TableRow key={item?.id}>
                                             <TableCell className="px-5 py-4 text-start">
                                                 <span className="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
-                                                  {(currentPage - 1) * ITEM_PER_PAGE + index + 1}
+                                                    {(currentPage - 1) * ITEM_PER_PAGE + index + 1}
                                                 </span>
                                             </TableCell>
                                             <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                             {
-                                                `${item?.firstName||""} ${item?.lastName||""}`
-                                             }
+                                                {
+                                                    `${item?.firstName || ""} ${item?.lastName || ""}`
+                                                }
                                             </TableCell>
                                             <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                                {item?.product?.name||""}
+                                                {item?.product?.name || ""}
                                             </TableCell>
                                             <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                                                  {
-                                                `${item?.referredBy?.user?.firstName||""} ${item?.referredBy?.user?.lastName||""}`
-                                             }
+                                                {
+                                                    `${item?.referredBy?.user?.firstName || ""} ${item?.referredBy?.user?.lastName || ""}`
+                                                }
                                             </TableCell>
                                             <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                                                 <Badge
@@ -129,17 +158,26 @@ const ReferralTable: React.FC<ReferralTableProps> = ({ searchText }) => {
                                                     color={getBadgeColor(item?.status)
                                                     }
                                                 >
-                                                    {item?.status||""}
+                                                    {item?.status || ""}
                                                 </Badge>
                                             </TableCell>
-                                             <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                                                  {
-                                                   item?.submittedOn?.slice(0,10)||""
-                                                  }
+                                            <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                                                {
+                                                    item?.submittedOn?.slice(0, 10) || ""
+                                                }
                                             </TableCell>
-                                             {/* <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                                                  Update Status
-                                            </TableCell> */}
+                                            {loggedInUser.role == "A_TEAM" && <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                                                <button
+                                                    className="flex items-center text-primary gap-2 cursor-pointer"
+                                                    onClick={() => {
+                                                        setSelectedReferral(item);
+                                                        setIsStatusModalOpen(true);
+                                                    }}
+                                                >
+                                                    Status <FiEdit className="mr-1.5" />
+                                                </button>
+
+                                            </TableCell>}
                                         </TableRow>
 
                                     ))
@@ -156,9 +194,9 @@ const ReferralTable: React.FC<ReferralTableProps> = ({ searchText }) => {
                 </div>
             </div>
             {
-                totalPages > 0 && (  <div className=" w-full flex justify-end px-4 py-6 ">
-                <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
-            </div>)
+                totalPages > 0 && (<div className=" w-full flex justify-end px-4 py-6 ">
+                    <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+                </div>)
             }
 
 
