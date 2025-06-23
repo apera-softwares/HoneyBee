@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect } from "react";
 import CommonHeading from "@/components/common/CommonHeading";
-import ReferralFromSection from "@/components/ReferralFromSection";
+import ReferralForm from "@/components/referral/ReferralForm";
 import ProductCard from "@/components/product-catalog/ProductCard";
 //import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
@@ -9,7 +9,7 @@ import { fetchSelectedProducts } from "@/lib/redux/slices/productCatalogSlice";
 import { UserRole } from "@/constant/userRoles";
 import { BACKEND_API } from "@/api";
 
-export default function ReferralForm() {
+export default function ReferralFormPage() {
   const dispatch = useAppDispatch();
   //const router = useRouter();
   const { selectedProducts } = useAppSelector((state) => state.productCatalog);
@@ -86,7 +86,7 @@ export default function ReferralForm() {
             Referral Submission Form
           </h1>
         </div>
-        <ReferralFromSection />
+        <ReferralForm />
       </div>
     </div>
   );
