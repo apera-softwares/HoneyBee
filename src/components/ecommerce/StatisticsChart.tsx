@@ -27,8 +27,8 @@ export default function StatisticsChart() {
       },
     },
     stroke: {
-      curve: "straight", // Define the line style (straight, smooth, or step)
-      width: [2, 2], // Line width for each dataset
+      curve: "smooth", // Define the line style (straight, smooth, or step)
+      width: [1, 1], // Line width for each dataset
     },
 
     fill: {
@@ -39,9 +39,9 @@ export default function StatisticsChart() {
       },
     },
     markers: {
-      size: 0, // Size of the marker points
+      size: 4, // Size of the marker points
       strokeColors: "#fff", // Marker border color
-      strokeWidth: 2,
+      strokeWidth: 0,
       hover: {
         size: 6, // Marker size on hover
       },
