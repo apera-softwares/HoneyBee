@@ -125,16 +125,16 @@ const AppHeader: React.FC = () => {
             </svg>
           </button>
 
-          <div className="w-1/3 hidden lg:block">
+          {/* <div className="w-1/3 hidden lg:block">
             <span className="block mr-1 text-theme-xs">Hello {userProfile?.firstName} {userProfile?.lastName}</span>
-            <span className="block mr-1 font-medium text-theme-md">Welcome to dashboard</span>
+            <span className="block mr-1 font-medium text-theme-md">Welcome to HoneyBee</span>
 
-          </div>
-          <div className="h-10 w-[1.5px] bg-gray-300 hidden lg:block"></div>
+          </div> */}
+          {/* <div className="h-10 w-[1.5px] bg-gray-300 hidden lg:block"></div>
           <div className="hidden lg:flex items-center w-full">
             <span>Current Rank</span>
             <div className="h-10 w-10 rounded-full bg-orange-400 flex justify-center items-center text-white ml-3">L3</div>
-          </div>
+          </div> */}
 
         </div>
         <div

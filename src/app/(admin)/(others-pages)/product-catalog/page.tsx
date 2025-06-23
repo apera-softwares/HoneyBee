@@ -10,7 +10,6 @@ import AddEditProductCatalogForm from "@/components/product-catalog/AddEditProdu
 interface FiltersState {
     searchQuery: string,
     status: string,
-
 }
 
 interface PaginationState {
@@ -31,8 +30,8 @@ export default function ProductCatalog() {
     })
 
     const [editProductCatalogData, setEditProductCatalogData] = useState<any | null>(null);
-    const formRef = useRef<HTMLDivElement|null>(null);
-    const headingRef = useRef<HTMLDivElement|null>(null);
+    const formRef = useRef<HTMLDivElement | null>(null);
+    const headingRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
 
@@ -70,7 +69,7 @@ export default function ProductCatalog() {
         }
     }
 
-       const handleScrollHeadingToTop = () => {
+    const handleScrollHeadingToTop = () => {
 
         if (headingRef && headingRef.current) {
             headingRef.current.scrollIntoView({
@@ -112,11 +111,9 @@ export default function ProductCatalog() {
 
                 {/* Filter By Asc Des */}
                 <select
-
                     className="border border-[#151D48] w-32 h-11 text-[#151D48] rounded-md text-sm justify-center text-center outline-none"
                     value={`${filters.status}`}
-                    onChange={(e) => setFilters((prevFilters: FiltersState) => ({ ...prevFilters, status: e.target.value }))}
-                >
+                    onChange={(e) => setFilters((prevFilters: FiltersState) => ({ ...prevFilters, status: e.target.value }))}>
                     <option value="">Filter : Status</option>
                     <option value="true">Active</option>
                     <option value="false">Inactive</option>
