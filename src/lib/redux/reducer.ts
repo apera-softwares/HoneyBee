@@ -2,10 +2,11 @@ import { combineReducers } from '@reduxjs/toolkit'
 import userReducer from './slices/userSlice'
 import userManagementReducer from './slices/userManagementSlice'
 import productCatalogReducer from "./slices/productCatalogSlice";
-import teamManagementReducer from './slices/teamManagementSlice'
-import userProfileReducer from './slices/loginPersonProfile'
-import memberManagementReducer from './slices/membersSlice'
-import referralReducer from "./slices/referralSlice"
+import teamManagementReducer from './slices/teamManagementSlice';
+import userProfileReducer from './slices/loginPersonProfile';
+import memberManagementReducer from './slices/membersSlice';
+import referralReducer from "./slices/referralSlice";
+import statisticsReducer from "./slices/statisticsSlice"
 
 
 const rootReducer = combineReducers({
@@ -15,7 +16,8 @@ const rootReducer = combineReducers({
   teamManagement: teamManagementReducer,
   userProfile: userProfileReducer,
   memberManagement:memberManagementReducer,
-  referral:referralReducer
+  referral:referralReducer,
+  statistic:statisticsReducer,
 })
 
 export type RootReducer = ReturnType<typeof rootReducer> ;

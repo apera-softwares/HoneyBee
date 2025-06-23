@@ -3,6 +3,8 @@ import React, { useState, useEffect, useRef } from "react";
 // import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
 import { IoChevronDownSharp } from "react-icons/io5";
+import { useAppSelector, useAppDispatch } from "@/lib/redux/hooks";
+import { fetchStatisticsNumbers } from "@/lib/redux/slices/statisticsSlice";
 
 import dynamic from "next/dynamic";
 // Dynamically import the ReactApexChart component
@@ -16,25 +18,18 @@ const RANGES = [
     value: "this-month",
   },
   {
-    label: "Monthly",
-    value: "monthly",
-  },
-  {
-    label: "Yearly",
-    value: "yearly",
-  },
-  {
     label: "Life Time",
     value: "life-time",
   },
 ];
 
 export default function StatisticsChartPie() {
+  const dispatch = useAppDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(RANGES[0]);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const { pieChartData } = useAppSelector((state) => state.statistic);
 
-  // Close dropdown on outside click
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -49,12 +44,27 @@ export default function StatisticsChartPie() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  useEffect(() => {
+    getStatNumbers();
+  }, []);
+
   const handleSelect = (option: (typeof RANGES)[0]) => {
     setSelected(option);
     setIsOpen(false);
     console.log("Selected range:", option.value); // Call chart update here
   };
-  const series = [250, 230, 100, 150];
+
+  const getStatNumbers = async () => {
+    try {
+      const payload = {};
+      const response = await dispatch(fetchStatisticsNumbers(payload)).unwrap();
+      console.log("state numbers response in compoennt", response);
+    } catch (error: any) {
+      console.log("error while getting stat numbers", error);
+    }
+  };
+
+  const series = pieChartData.series;
   const options: ApexOptions = {
     colors: ["#fb6514", "#feb273", "#ffead5", "#fffaf5"],
     chart: {
@@ -104,14 +114,14 @@ export default function StatisticsChartPie() {
         return `${seriesName}: ${value}`;
       },
     },
-    labels: ["Pending", "Pitch", "Sold", "Paidout"],
+    labels: pieChartData.labels,
   };
 
   return (
     <div className="w-full h-full rounded-2xl border border-gray-200 bg-gray-100 dark:border-gray-800 dark:bg-white/[0.03]">
       <div className="h-full px-5 pt-5 bg-white shadow-default rounded-2xl pb-11 dark:bg-gray-900 sm:px-6 sm:pt-6">
-        <div className="flex  items-start justify-between  mb-6 sm:mb-8">
-          <div>
+        <div className="flex  items-center justify-between  mb-6 sm:mb-8">
+          <div className="">
             <p className="text-lg text-gray-700 dark:text-white/90">
               Referral pipeline
             </p>
@@ -145,14 +155,20 @@ export default function StatisticsChartPie() {
           </div>
         </div>
         <div className="relative  ">
-          <div className="max-h-[330px]">
+          {
+            series.length === 0 || series.every((item)=>item===0) ? (<div className="flex items-center justify-center mt-10 lg:mt-20 ">
+              <p className=" bg-gray-200 font-medium text-gray-500  px-6 py-3 rounded-lg">No data available</p>
+
+            </div>):(    <div className="max-h-[330px]">
             <ReactApexChart
               options={options}
               series={series}
               type="donut"
               height={330}
             />
-          </div>
+          </div>)
+          }
+      
         </div>
       </div>
     </div>

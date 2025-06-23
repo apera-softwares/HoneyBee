@@ -6,14 +6,6 @@ const RANGES = [
     value: "this-month",
   },
   {
-    label: "Monthly",
-    value: "monthly",
-  },
-  {
-    label: "Yearly",
-    value: "yearly",
-  },
-  {
     label: "Life Time",
     value: "life-time",
   },

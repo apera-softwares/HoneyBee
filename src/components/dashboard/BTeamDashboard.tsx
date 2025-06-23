@@ -1,8 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import StatisticsChart from "@/components/ecommerce/StatisticsChart"
+import StatisticsLineChart from "../statistic-charts/StatisticsLineChart";
 import TeamCard from "@/components/team/TeamCard";
-import StatisticsPieChart from "../ecommerce/StatisticsPieChart";
+import StatisticsPieChart from "../statistic-charts/StatisticsPieChart";
 import axios from "axios";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { BACKEND_API } from "@/api";
@@ -106,7 +106,7 @@ const BTeamDashboard = () => {
           <StatisticsPieChart />
         </div>
         <div className="w-full col-span-12 lg:col-span-7 ">
-          <StatisticsChart />
+          <StatisticsLineChart />
         </div>
       </div>
 
