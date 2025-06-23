@@ -6,7 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
 import Logo from '../assets/logo/logo.png'
-import { useAppSelector } from "@/lib/redux/hooks";
+// import { useAppSelector } from "@/lib/redux/hooks";
 
 const AppHeader: React.FC = () => {
 
@@ -14,7 +14,7 @@ const AppHeader: React.FC = () => {
 
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
 
-  const { userProfile } = useAppSelector((state) => state.userProfile);
+  // const { userProfile } = useAppSelector((state) => state.userProfile);
 
   const handleToggle = () => {
     if (window.innerWidth >= 1024) {
