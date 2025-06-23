@@ -23,7 +23,7 @@ const RANGES = [
   },
 ];
 
-export default function StatisticsChartPie() {
+export default function StatisticsPieChart() {
   const dispatch = useAppDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(RANGES[0]);
