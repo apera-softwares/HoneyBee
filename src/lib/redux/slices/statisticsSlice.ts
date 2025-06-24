@@ -17,16 +17,15 @@ export const fetchStatisticsNumbers = createAsyncThunk(
         },
       });
       
-       console.log("response of lead statistics numbers",response.data);
-      // return response.data;
+      return response.data;
 
 
-      return {
-        leadStatusNumberMonthly:[{status:"pending",count:10},{status:"pitched",count:15},{status:"sold",count:30},{status:"payout",count:40}],
-        leadStatusNumberLifetime:[{status:"pending",count:100},{status:"pitched",count:150},{status:"sold",count:80},{status:"payout",count:200}],
-        leadsByMonth:[{month:"Jan",count:5},{month:"Feb",count:10},{month:"Mar",count:20},{month:"Apr",count:10},{month:"May",count:15},{month:"Jun",count:25},{month:"Jul",count:10}],
-        leadsByLifetime:[{year:"2021",count:100},{year:"2022",count:150},{year:"2023",count:200},{year:"2024",count:100},{year:"2025",count:80}],
-      }
+      // return {
+      //   leadStatusNumberMonthly:[{status:"pending",count:10},{status:"pitched",count:15},{status:"sold",count:30},{status:"payout",count:40}],
+      //   leadStatusNumberLifetime:[{status:"pending",count:100},{status:"pitched",count:150},{status:"sold",count:80},{status:"payout",count:200}],
+      //   leadsByMonth:[{month:"Jan",count:5},{month:"Feb",count:10},{month:"Mar",count:20},{month:"Apr",count:10},{month:"May",count:15},{month:"Jun",count:25},{month:"Jul",count:10}],
+      //   leadsByLifetime:[{year:"2021",count:100},{year:"2022",count:150},{year:"2023",count:200},{year:"2024",count:100},{year:"2025",count:80}],
+      // }
       // return {
       //   leadStatusNumberMonthly:[],
       //   leadStatusNumberLifetime:[],
@@ -91,10 +90,10 @@ const statisticsSlice = createSlice({
       .addCase(fetchStatisticsNumbers.fulfilled, (state, action) => {
         const data = action.payload;
         state.loading = false;
-        state.lineChart.monthly = data?.leadsByMonth?.map((item:any)=>({label:item?.month,count:item?.count}));
-        state.lineChart.lifetime = data?.leadsByLifetime?.map((item:any)=>({label:item?.year,count:item?.count}));
-        state.pieChart.monthly = data?.leadStatusNumberMonthly?.map((item:any)=>({label:item?.status,count:item?.count}));
-        state.pieChart.lifetime = data?.leadStatusNumberLifetime?.map((item:any)=>({label:item?.status,count:item?.count}));
+        state.lineChart.monthly = data?.leadsByMonth?.map((item:any)=>({label:item?.month?.slice(0,3),count:item?.count}))||[];
+        state.lineChart.lifetime = data?.leadsByLifeTime?.map((item:any)=>({label:item?.year_number,count:item?.count}))||[];
+        state.pieChart.monthly = data?.leadStatusNumbers?.map((item:any)=>({label:item?.status,count:item?._count?.status}))||[];
+        state.pieChart.lifetime = data?.leadsByMonthWithStatus?.map((item:any)=>({label:item?.status,count:item?.count}))||[];
       })
       .addCase(fetchStatisticsNumbers.rejected, (state, action) => {
         state.loading = false;
