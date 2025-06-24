@@ -1,38 +1,24 @@
 "use client";
 import React from "react";
-// import { EcommerceMetrics } from "@/components/ecommerce/EcommerceMetrics";
-//import MonthlyTarget from "@/components/ecommerce/MonthlyTarget";
-// import MonthlySalesChart from "@/components/ecommerce/MonthlySalesChart";
-import StatisticsChart from "@/components/ecommerce/StatisticsChart";
-//import RecentOrders from "@/components/ecommerce/RecentOrders";
-// import DemographicCard from "@/components/ecommerce/DemographicCard";
+import StatisticsLineChart from "../statistic-charts/StatisticsLineChart";
+import StatisticsPieChart from "../statistic-charts/StatisticsPieChart";
+import DashboardProductsTable from "../product-catalog/DashboardProductsTable";
 
 const AdminDashboard = () => {
   return (
     <div className="w-full">
-      {/* <div className="col-span-12 space-y-6 xl:col-span-7">
-        <EcommerceMetrics />
-
-        <MonthlySalesChart />
-      </div> */}
-
       <div className="w-full grid grid-cols-12 gap-5 mb-5">
-        <div className=" col-span-12  mb-5 lg:mb-0">
-          <StatisticsChart />
+        <div className="w-full col-span-12 lg:col-span-5 h-full ">
+          <StatisticsPieChart />
+        </div>
+        <div className="w-full col-span-12 lg:col-span-7 ">
+          <StatisticsLineChart />
         </div>
       </div>
-      {/* 
-      <div className="col-span-12">
-        <StatisticsChart />
+
+      <div className="w-full mt-5">
+        <DashboardProductsTable />
       </div>
-
-      <div className="col-span-12 xl:col-span-5">
-        <DemographicCard />
-      </div> */}
-
-      {/* <div className="col-span-12 xl:col-span-7">
-        <RecentOrders />
-      </div> */}
     </div>
   );
 };
