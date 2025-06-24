@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import CommonHeading from "@/components/common/CommonHeading";
-import { CiSearch } from "react-icons/ci";
+// import { CiSearch } from "react-icons/ci";
 import { HiOutlinePlus } from "react-icons/hi";
 import { Toaster } from "react-hot-toast";
 import TeamAddEdit from "@/components/team/TeamAddEdit";
@@ -11,8 +11,8 @@ import { UserRole } from "@/constant/userRoles";
 
 export default function TeamManagement() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [SearchInput, setSearchInput] = useState("");
-  const [order, setOrder] = useState("");
+  const [searchInput] = useState("");
+  const [order ] = useState("");
   const { user: loggedUser } = useAppSelector((state) => state.user);
   const { teams, loading } = useAppSelector((state) => state.TeamManagement);
 
@@ -44,8 +44,8 @@ export default function TeamManagement() {
             <input
               type="text"
               placeholder="Search team by name"
-              name="SearchInput"
-              value={SearchInput}
+              name="searchInput"
+              value={searchInput}
               onChange={(e) => setSearchInput(e.target.value)}
               className="pl-10 h-11 pr-4 py-2 border border-gray-300 rounded-md focus:outline-primary "
             />
@@ -74,7 +74,7 @@ export default function TeamManagement() {
 
       {/* Table */}
       <div className="w-full ">
-        <TeamTable searchText={SearchInput} role="" order={order} isCreateTeamModalOpen={isModalOpen} />
+        <TeamTable searchText={searchInput} role="" order={order} isCreateTeamModalOpen={isModalOpen} />
         <TeamAddEdit
           isOpen={isModalOpen}
           closeModal={() => setIsModalOpen(false)}
