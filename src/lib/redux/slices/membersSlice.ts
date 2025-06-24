@@ -30,9 +30,9 @@ export const fetchAssignedMembers = createAsyncThunk(
     try {
       const state: any = thunkAPI.getState();
       const token = state.user?.user?.token;
-      const {page,limit, name}= obj;
+      const {page,limit, name, order}= obj;
       const response = await axios.get(
-        `${BACKEND_API}product/getMemberProductMemberCreatedByUser?name=${name}&&limit=${limit}&&page=${page}`,
+        `${BACKEND_API}product/getMemberProductMemberCreatedByUser?name=${name}&&limit=${limit}&&page=${page}&&order=${order}`,
         {
           headers: { Authorization: `Bearer ${token}`,   'ngrok-skip-browser-warning': 'true', },
         }

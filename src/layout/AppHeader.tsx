@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
 import Logo from '../assets/logo/logo.png'
+
 // import { useAppSelector } from "@/lib/redux/hooks";
 
 const AppHeader: React.FC = () => {
@@ -179,7 +180,7 @@ const AppHeader: React.FC = () => {
                 </div>
               </form>
             </div>
-            <NotificationDropdown />
+            {/* <NotificationDropdown /> */}
             {/* <!-- Notification Menu Area --> */}
           </div>
           {/* <!-- User Area --> */}

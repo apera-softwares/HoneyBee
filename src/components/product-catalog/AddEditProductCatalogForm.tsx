@@ -57,7 +57,7 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
 
   const [loading, setLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState({
-    name: "", bulletPoint1: "", bulletPoint2: "", bulletPoint3: "", elevatorPitch: "", status: "", stateId: ""
+    name: "", bulletPoint1: "", bulletPoint2: "", bulletPoint3: "", elevatorPitch: "", status: "", stateId: "", image:""
   })
 
   const onChange = (imageList: any, addUpdateIndex: any) => {
@@ -79,8 +79,8 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
         ...formData,
         name: editData?.name,
         bulletPoint1: editData?.bulletPoint1 || "",
-        bulletPoint2: editData?.bulletPoint1 || "",
-        bulletPoint3: editData?.bulletPoint1 || "",
+        bulletPoint2: editData?.bulletPoint2 || "",
+        bulletPoint3: editData?.bulletPoint3 || "",
         elevatorPitch: editData?.elevatorPitch || "",
         status: `${editData.status}`,
         stateId: editData?.states?.length > 0 ? `${editData?.states[0]?.stateId}` : "",
@@ -115,6 +115,15 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
     } else {
       tempErrors.name = "";
     }
+
+
+    if(images.length<1){
+       tempErrors.image = "Min 1 image required";
+      isValidData = false;
+    } else {
+      tempErrors.image = "";
+    }
+    
 
     //validate  bullet points
 
@@ -198,7 +207,7 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
   const handleClearFormData = () => {
     setFormData({ name: "", bulletPoint1: "", bulletPoint2: "", bulletPoint3: "", elevatorPitch: "", status: "", stateId: "" });
     setErrors({
-      name: "", bulletPoint1: "", bulletPoint2: "", bulletPoint3: "", elevatorPitch: "", status: "", stateId: ""
+      name: "", bulletPoint1: "", bulletPoint2: "", bulletPoint3: "", elevatorPitch: "", status: "", stateId: "", image:""
     })
     setSelectedState(null);
   };
@@ -552,6 +561,8 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
                 )}
               </ImageUploading>
             </div>
+                          <span className={`${REQUIRED_ERROR}`}>{errors.image || ""}</span>
+
           </div>
         </div>
 
