@@ -31,6 +31,7 @@ interface ProductSelectTableProps {
   selectedProductId: string | null;
   selectedProducts: any[];
   onProductSelect: (productId: string) => void;
+  onProductUnselect:(productId:string)=>void;
 }
 
 const ProductSelectTable: React.FC<ProductSelectTableProps> = ({
@@ -40,6 +41,7 @@ const ProductSelectTable: React.FC<ProductSelectTableProps> = ({
   selectedProductId,
   selectedProducts,
   onProductSelect,
+  onProductUnselect,
 }) => {
   const dispatch = useAppDispatch();
   const LIMIT = 5;
@@ -143,16 +145,20 @@ const ProductSelectTable: React.FC<ProductSelectTableProps> = ({
                         </TableCell>
                         <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                           {isSelected ? (
-                            <Badge size="md" color={"success"}>
-                              Selected
-                            </Badge>
+                            <button
+                              className="w-24 flex justify-center items-center font-medium text-red-500 bg-red-500/10 px-4 py-1 rounded-full gap-2 disabled:cursor-not-allowed cursor-pointer"
+                              disabled={Boolean(selectedProductId)}
+                              onClick={() => onProductUnselect(product.id)}
+                            >
+                               Unselect
+                            </button>
                           ) : selectedProductId === product.id ? (
                             <span className="flex items-center  text-primary">
                               <TbLoader2 className="text-xl animate-spin ml-5" />
                             </span>
                           ) : (
                             <button
-                              className="flex justify-center items-center font-medium text-primary bg-primary/10 px-4 py-1 rounded-full gap-2 disabled:cursor-not-allowed cursor-pointer"
+                              className="w-24 flex justify-center items-center font-medium text-primary bg-primary/10 px-4 py-1 rounded-full gap-2 disabled:cursor-not-allowed cursor-pointer"
                               disabled={Boolean(selectedProductId)}
                               onClick={() => onProductSelect(product.id)}
                             >

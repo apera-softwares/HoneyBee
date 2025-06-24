@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { Modal } from "../ui/modal";
 import Button from "../ui/button/Button";
 import { BiSolidEditAlt } from "react-icons/bi";
-import Image from "next/image";
+//import Image from "next/image";
 import { TbArrowNarrowLeft, TbArrowNarrowRight } from "react-icons/tb";
 import { BACKEND_API } from "@/api";
 

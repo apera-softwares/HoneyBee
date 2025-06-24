@@ -10,10 +10,10 @@ import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/lib/redux/store";
 import Spinner from "../common/Spinner";
 import Pagination from "../tables/Pagination";
-import toast, { Toaster } from "react-hot-toast";
+import  { Toaster } from "react-hot-toast";
 //import { MdRemoveRedEye } from "react-icons/md";
-import { deleteAssignedMemberProduct, fetchAssignedMembers } from "@/lib/redux/slices/membersSlice";
-import { EyeIcon } from "@/icons";
+import {  fetchAssignedMembers } from "@/lib/redux/slices/membersSlice";
+// import { EyeIcon } from "@/icons";
 import ViewMemeberModal from "./ViewMemberModal";
 import { FiEdit } from "react-icons/fi";
 
@@ -68,22 +68,22 @@ const AssignedMembersTable: React.FC<TeamTableProps> = ({ searchText, role, orde
         setCurrentPage(page);
     };
 
-    const handleRemoveMemberProduct = (id: any) => {
-        dispatch(deleteAssignedMemberProduct(id)).then((res: any) => {
-            if (res.meta.requestStatus === "fulfilled") {
-                if (res.payload) {
-                    // setTeamDataMembers(res.payload.data || []);
-                    fetchAssignedMembers({ page: currentPage, limit: ITEM_PER_PAGE, name: searchText })
-                    setIsModalOpen(false)
-                    toast.success("Product Removed successful!");
-                    console.log(res.payload, "Member Deleted")
-                }
-            } else {
-                console.log("Failed to Removed Product:", res.payload || "Unknown error");
-                toast.error("Error in Removed Product!");
-            }
-        });
-    }
+    // const handleRemoveMemberProduct = (id: any) => {
+    //     dispatch(deleteAssignedMemberProduct(id)).then((res: any) => {
+    //         if (res.meta.requestStatus === "fulfilled") {
+    //             if (res.payload) {
+    //                 // setTeamDataMembers(res.payload.data || []);
+    //                 fetchAssignedMembers({ page: currentPage, limit: ITEM_PER_PAGE, name: searchText })
+    //                 setIsModalOpen(false)
+    //                 toast.success("Product Removed successful!");
+    //                 console.log(res.payload, "Member Deleted")
+    //             }
+    //         } else {
+    //             console.log("Failed to Removed Product:", res.payload || "Unknown error");
+    //             toast.error("Error in Removed Product!");
+    //         }
+    //     });
+    // }
 
     return (
         <div className="overflow-hidden rounded-xl bg-white dark:bg-white/[0.03] shadow-md">

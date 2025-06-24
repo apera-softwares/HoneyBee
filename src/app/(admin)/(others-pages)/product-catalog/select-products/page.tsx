@@ -5,9 +5,8 @@ import { CiSearch } from "react-icons/ci";
 import ProductSelectTable from "@/components/product-catalog/ProductSelectTable";
 import ProductCard from "@/components/product-catalog/ProductCard";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
-import { fetchSelectedProducts } from "@/lib/redux/slices/productCatalogSlice";
+import { fetchSelectedProducts,selectProductCatalog,unselectProductCatalog } from "@/lib/redux/slices/productCatalogSlice";
 import toast, { Toaster } from "react-hot-toast";
-import axios from "axios";
 import { BACKEND_API } from "@/api";
 
 interface FiltersState {
@@ -60,8 +59,7 @@ export default function SelectForSelect() {
     }
   };
 
-  const handleAssignProductToSelf = async (productId: string) => {
-
+  const handleSubmitSelectedProduct = async (productId: string) => {
     if (!memberId) {
       toast.error("You are not a member of any team.");
       return;
@@ -70,40 +68,51 @@ export default function SelectForSelect() {
       toast.error("You can select up to 3 products");
       return;
     }
+    setSelectedProductId(productId);
     try {
-      setSelectedProductId(productId);
+      
       const payload = {
         teamMemberId: memberId,
         productId: productId,
       };
 
-      const token = loggedInUser?.token;
-      const response = await axios.post(
-        `${BACKEND_API}product/assignMember`,
-        payload,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "ngrok-skip-browser-warning": "true",
-          },
-        }
-      );
-
-      console.log("selected product response data", response.data);
+      await dispatch(selectProductCatalog(payload)).unwrap();
       toast.success("Selected product  successfully");
       getSelectedProducts();
     } catch (error: any) {
-      if (axios.isAxiosError(error)) {
-        console.error(
-          "Error selecting product ",
-          error.response?.data || error.message
-        );
-        toast.error(
-          error.response?.data?.message || "Failed to select product"
-        );
-      } else {
-        toast.error("Failed to select product");
-      }
+      const errorMessage =
+        typeof error === "string"
+          ? error
+          : error?.message || "Failed to select product";
+      toast.error(errorMessage);
+
+    } finally {
+      setSelectedProductId(null);
+    }
+  };
+
+  const handleSubmitUnselectedProduct = async (productId: string) => {
+    if (!memberId) {
+      toast.error("You are not a member of any team.");
+      return;
+    }
+    setSelectedProductId(productId);
+    try {
+      
+      const payload = {
+        teamMemberId: memberId,
+        productId: productId,
+      };
+      await dispatch(unselectProductCatalog(payload)).unwrap();
+      toast.success("Unselected product  successfully");
+      getSelectedProducts();
+    } catch (error: any) {
+      const errorMessage =
+        typeof error === "string"
+          ? error
+          : error?.message || "Failed to unselect product";
+      toast.error(errorMessage);
+
     } finally {
       setSelectedProductId(null);
     }
@@ -190,7 +199,8 @@ export default function SelectForSelect() {
           setPaginationData={setPaginationData}
           selectedProductId={selectedProductId}
           selectedProducts={selectedProducts}
-          onProductSelect={handleAssignProductToSelf}
+          onProductSelect={handleSubmitSelectedProduct}
+          onProductUnselect={handleSubmitUnselectedProduct}
         />
       </div>
     </div>
