@@ -1,16 +1,54 @@
 "use client";
-import React from "react";
+import React, { useState, useEffect } from "react";
 // import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
 import ChartTab from "../common/ChartTab";
 import dynamic from "next/dynamic";
-
+import { useAppSelector } from "@/lib/redux/hooks";
+import { CHART_RANGES } from "@/data/chartRanges";
+import NoChartData from "../common/NoChartData";
 // Dynamically import the ReactApexChart component
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
 
-export default function StatisticsChart() {
+interface OptionItem {
+  label: string;
+  value: string;
+}
+export default function StatisticsLineChart() {
+
+  const [chartData, setChartData] = useState<any>({});
+  const [selected, setSelected] = useState<OptionItem>(CHART_RANGES[0]);
+  const {
+    lineChart: { monthly, lifetime },
+  } = useAppSelector((state) => state.statistic);
+
+
+  useEffect(() => {
+    const selectedData = selected.value === "monthly" ? monthly : lifetime;
+
+    if (!selectedData || selectedData.length === 0) {
+      setChartData(null);
+      return;
+    }
+
+    const data = {
+      categories: selectedData.map((item) => item.label),
+      series: {
+        name: "Lead",
+        data: selectedData.map((item) => item.count),
+      },
+    };
+
+    setChartData(data);
+  }, [selected, monthly, lifetime]);
+
+  const handleChange = (option: OptionItem) => {
+    setSelected(option);
+  };
+
+
   const options: ApexOptions = {
     legend: {
       show: false, // Hide legend
@@ -27,8 +65,8 @@ export default function StatisticsChart() {
       },
     },
     stroke: {
-      curve: "straight", // Define the line style (straight, smooth, or step)
-      width: [2, 2], // Line width for each dataset
+      curve: "smooth", // Define the line style (straight, smooth, or step)
+      width: [1, 1], // Line width for each dataset
     },
 
     fill: {
@@ -39,9 +77,9 @@ export default function StatisticsChart() {
       },
     },
     markers: {
-      size: 0, // Size of the marker points
+      size: 4, // Size of the marker points
       strokeColors: "#fff", // Marker border color
-      strokeWidth: 2,
+      strokeWidth: 0,
       hover: {
         size: 6, // Marker size on hover
       },
@@ -69,20 +107,7 @@ export default function StatisticsChart() {
     },
     xaxis: {
       type: "category", // Category-based x-axis
-      categories: [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec",
-      ],
+      categories: chartData?.categories,
       axisBorder: {
         show: false, // Hide x-axis border
       },
@@ -95,6 +120,7 @@ export default function StatisticsChart() {
     },
     yaxis: {
       labels: {
+        formatter: (val) => (Number.isInteger(val) ? `${val}` : ""),
         style: {
           fontSize: "12px", // Adjust font size for y-axis labels
           colors: ["#6B7280"], // Color of the labels
@@ -111,42 +137,40 @@ export default function StatisticsChart() {
 
   const series = [
     {
-      name: "Sales",
-      data: [180, 190, 170, 160, 175, 165, 170, 205, 230, 210, 240, 235],
-    },
-    {
-      name: "Revenue",
-      data: [40, 30, 50, 40, 55, 40, 70, 100, 110, 120, 150, 140],
+      ...chartData?.series,
     },
   ];
+
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white px-5 pb-5 pt-5 dark:border-gray-800 dark:bg-white/[0.03] sm:px-6 sm:pt-6">
-      <div className="flex flex-col gap-5 mb-6 sm:flex-row sm:justify-between">
+    <div className="w-full h-full rounded-2xl border border-gray-200 bg-white px-5 py-5 sm:px-6 dark:border-gray-800 dark:bg-white/[0.03]">
+      <div className="flex flex-col  gap-3 sm:gap-5 mb-6  sm:flex-row items-start sm:items-center sm:justify-between">
         <div className="w-full">
-          {/* <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">
-            Statistics
-          </h3>
-          <p className="mt-1 text-gray-500 text-theme-sm dark:text-gray-400">
-            Target you’ve set for each month
-          </p> */}
-          <span className="text-lg text-gray-700 dark:text-white/90">
+          <p className="text-lg text-gray-700 dark:text-white/90">
             Total leads submitted
-          </span>
+          </p>
         </div>
         <div className="flex items-start w-full gap-3 sm:justify-end">
-          <ChartTab />
+          <ChartTab
+            options={CHART_RANGES}
+            selected={selected}
+            onSelect={handleChange}
+          />
         </div>
       </div>
 
       <div className="max-w-full overflow-x-auto custom-scrollbar">
-        <div className="min-w-[1000px] xl:min-w-full">
-          <ReactApexChart
-            options={options}
-            series={series}
-            type="area"
-            height={310}
-          />
-        </div>
+        {!chartData ? (
+            <NoChartData message="No data available"/>
+        ) : (
+          <div className="min-w-[1000px] xl:min-w-full ">
+            <ReactApexChart
+              options={options}
+              series={series}
+              type="area"
+              height={310}
+            />
+          </div>
+        )}
       </div>
     </div>
   );

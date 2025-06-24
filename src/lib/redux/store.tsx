@@ -4,9 +4,9 @@ import userManagementReducer from "./slices/userManagementSlice";
 import productCatalogReducer from "./slices/productCatalogSlice";
 import teamManagementReducer from "./slices/teamManagementSlice";
 import userProfileReducer from "./slices/loginPersonProfile";
-import memberManagementReducer from './slices/membersSlice'
-
-import referralReducer from "./slices/referralSlice"
+import memberManagementReducer from './slices/membersSlice';
+import referralReducer from "./slices/referralSlice";
+import statisticsReducer from "./slices/statisticsSlice";
 
 export const makeStore = () => {
   return configureStore({
@@ -17,7 +17,8 @@ export const makeStore = () => {
       TeamManagement: teamManagementReducer,
       userProfile: userProfileReducer,
       memberManagement: memberManagementReducer,
-      referral:referralReducer
+      referral:referralReducer,
+      statistic:statisticsReducer,
     },
   });
 };
