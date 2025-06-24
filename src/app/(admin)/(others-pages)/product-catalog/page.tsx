@@ -88,7 +88,7 @@ export default function ProductCatalog() {
             <div className=" w-full lg:w-1/2 " ref={headingRef} >
                 <CommonHeading
                     pageTitle="Product Catalog"
-                    description="Manage products available for referral, assign them to teams, and keep content up to date."
+                    description="Manage products available for referral, member will select products."
                 />
             </div>
 
@@ -110,14 +110,14 @@ export default function ProductCatalog() {
                 </div>
 
                 {/* Filter By Asc Des */}
-                <select
+                {/* <select
                     className="border border-[#151D48] w-32 h-11 text-[#151D48] rounded-md text-sm justify-center text-center outline-none"
                     value={`${filters.status}`}
                     onChange={(e) => setFilters((prevFilters: FiltersState) => ({ ...prevFilters, status: e.target.value }))}>
                     <option value="">Filter : Status</option>
                     <option value="true">Active</option>
                     <option value="false">Inactive</option>
-                </select>
+                </select> */}
 
 
                 <button

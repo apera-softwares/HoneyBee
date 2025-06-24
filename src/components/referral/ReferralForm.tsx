@@ -523,7 +523,7 @@ const ReferralForm = () => {
             <div className="w-full">
               <textarea
                 name="notes"
-                placeholder="Additional pb-4 border-b  Info and Notes (LEAD GEN GUIDELINE ANSWERS, ETC)"
+                placeholder="Additional Info and Notes"
                 className={`h-24 md:h-32 ${FORM_INPUT_CLASS}`}
                 value={formData.notes}
                 onChange={handleChange}

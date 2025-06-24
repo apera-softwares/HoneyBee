@@ -30,14 +30,14 @@ export default function TeamManagement() {
         <div className="w-full lg:w-1/2">
           <CommonHeading
             pageTitle="Team Management"
-            description="Manage all Team's manager and members"
+            description="Manage Team members"
           />
         </div>
 
         {/* Right: Actions */}
         <div className="w-full lg:w-1/2 flex flex-wrap justify-start lg:justify-end items-center gap-3">
           {/* Search Input */}
-          <div className="relative h-11">
+          {/* <div className="relative h-11">
             <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
               <CiSearch className="text-lg" />
             </span>
@@ -49,7 +49,7 @@ export default function TeamManagement() {
               onChange={(e) => setSearchInput(e.target.value)}
               className="pl-10 h-11 pr-4 py-2 border border-gray-300 rounded-md focus:outline-primary "
             />
-          </div>
+          </div> */}
           {/* Create User Button */}
 
           {showCreateTeamButton && (
@@ -68,15 +68,7 @@ export default function TeamManagement() {
                     </div> */}
 
           {/* Filter By Asc Des */}
-          <select
-            value={order}
-            onChange={(e) => setOrder(e.target.value)}
-            className="border border-[#151D48] w-32 h-11 text-[#151D48] rounded-md text-sm justify-center text-center outline-none"
-          >
-            <option value="">Short By</option>
-            <option value="asc">asc to des</option>
-            <option value="desc">des to asc</option>
-          </select>
+        
         </div>
       </div>
 

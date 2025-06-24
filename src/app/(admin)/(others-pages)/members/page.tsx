@@ -11,7 +11,7 @@ export default function MemberManagement() {
 
     // const [isModalOpen, setIsModalOpen] = useState(false)
     const [SearchInput, setSearchInput] = useState("")
-    const [order, setOrder] = useState("")
+    const [order, setOrder] = useState("asc")
 
     return (
         <div className="w-full ">
@@ -21,8 +21,8 @@ export default function MemberManagement() {
                 {/* Left: Heading */}
                 <div className="w-full lg:w-1/2">
                     <CommonHeading
-                        pageTitle="Members Management"
-                        description="Manage all Team's members" />
+                        pageTitle="Members"
+                      description="Members who have been assigned your product for creating leads and generating sales"/>
                 </div>
 
                 {/* Right: Actions */}
@@ -50,7 +50,7 @@ export default function MemberManagement() {
                         value={order}
                         onChange={(e) => setOrder(e.target.value)}
                         className="border border-[#151D48] w-32 h-11 text-[#151D48] rounded-md text-sm justify-center text-center outline-none">
-                        <option value="">Short By</option>
+                        <option value="">Sort By</option>
                         <option value="asc">asc to des</option>
                         <option value="desc">des to asc</option>
                     </select>

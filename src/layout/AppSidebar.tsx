@@ -42,20 +42,11 @@ const navItems: NavItem[] = [
     path: "/",
 
   },
-  // {
-  //   icon: <Send />,
-  //   name: "Landing page and submit referral",
-  //   path: "/referral-form",
-  // },
-  {
-    icon: <Users />,
-    name: "Member",
-    path: "/members",
-  },
+ 
   {
     icon: <CoinHand />,
     name: "Referrals",
-    path: "/a-team",
+    path: "/referrals",
   },
 
   {
@@ -116,7 +107,7 @@ const team_A: NavItem[] = [
   {
     icon: <CoinHand />,
     name: "Referrals",
-    path: "/a-team",
+    path: "/referrals",
   },
 
   {
@@ -144,7 +135,7 @@ const team_B: NavItem[] = [
   {
     icon: <CoinHand />,
     name: "Referrals",
-    path: "/a-team",
+    path: "/referrals",
   },
 
   {

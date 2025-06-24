@@ -18,7 +18,7 @@ export default function UserManagement() {
                 {/* Left: Heading */}
                 <div className="w-full lg:w-1/2 ">
                     <CommonHeading
-                        pageTitle="A-Team member"
+                        pageTitle="Referral Leads"
                     // description="Manage all users across Bee-Team, A-Team, Managers, and Admins."
                     />
                 </div>
@@ -69,11 +69,11 @@ export default function UserManagement() {
                         <option value="desc">des to asc</option>
                     </select> */}
 
-                    <button
+                    {/* <button
                         //    onClick={() => setIsAddModalOpen(true)}
                         className="h-11 bg-primary text-white rounded-md text-md px-4 justify-center text-center outline-none flex items-center gap-1 hover:bg-primary-hover ">
                         Filter by referral source
-                    </button>
+                    </button> */}
 
                 </div>
             </div>

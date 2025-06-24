@@ -43,7 +43,7 @@ export const fetchReferrals = createAsyncThunk(
       }
 
       const response = await axios.get(
-        `${BACKEND_API}lead?${queryParams.toString()}`,
+        `${BACKEND_API}lead?${queryParams.toString()}&&order=desc`,
         {
           headers: { Authorization: `Bearer ${token}`,   'ngrok-skip-browser-warning': 'true', },
           

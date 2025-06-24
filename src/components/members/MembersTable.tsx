@@ -13,7 +13,9 @@ import Pagination from "../tables/Pagination";
 import toast, { Toaster } from "react-hot-toast";
 //import { MdRemoveRedEye } from "react-icons/md";
 import { deleteAssignedMemberProduct, fetchAssignedMembers } from "@/lib/redux/slices/membersSlice";
-import ProductListModal from "./ProductsModal";
+import { EyeIcon } from "@/icons";
+import ViewMemeberModal from "./ViewMemberModal";
+import { FiEdit } from "react-icons/fi";
 
 interface TeamTableProps {
     searchText: string;
@@ -28,11 +30,11 @@ const AssignedMembersTable: React.FC<TeamTableProps> = ({ searchText, role, orde
     const [totalPages, setTotalPages] = useState(0);
     const { loading, members } = useSelector((state: RootState) => state.memberManagement);
     const [isModalOpen, setIsModalOpen] = useState(false)
-    const [products] = useState<any[]>([]);
+    const [userData, setuserData] = useState("");
 
     useEffect(() => {
         setCurrentPage(1);
-        dispatch(fetchAssignedMembers({ page: 1, limit: ITEM_PER_PAGE, name: searchText })).then((res: any) => {
+        dispatch(fetchAssignedMembers({ page: 1, limit: ITEM_PER_PAGE, name: searchText, order: order })).then((res: any) => {
             if (res.meta.requestStatus === "fulfilled") {
                 if (res.payload) {
                     const lastPage = res.payload.lastPage;
@@ -47,7 +49,7 @@ const AssignedMembersTable: React.FC<TeamTableProps> = ({ searchText, role, orde
     }, [dispatch, searchText, role, order, isModalOpen]);
 
     useEffect(() => {
-        dispatch(fetchAssignedMembers({ page: currentPage, limit: ITEM_PER_PAGE, name: searchText })).then((res: any) => {
+        dispatch(fetchAssignedMembers({ page: currentPage, limit: ITEM_PER_PAGE, name: searchText, order: order })).then((res: any) => {
             if (res.meta.requestStatus === "fulfilled") {
                 if (res.payload) {
                     console.log(res.payload, "Assigend members")
@@ -98,35 +100,48 @@ const AssignedMembersTable: React.FC<TeamTableProps> = ({ searchText, role, orde
                                     <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Name</TableCell>
                                     <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Email</TableCell>
                                     <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Team</TableCell>
-                                    {/* <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Role</TableCell> */}
-                                    {/* <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Products</TableCell> */}
+                                    <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Product Name</TableCell>
+                                    <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Action</TableCell>
                                     {/* <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Actions</TableCell> */}
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
                                 {members.length > 0 ? (
                                     members.map((user: any, index) => {
-                                        console.log(user,"user")
-                                        return(
-                                        <TableRow key={user?.id}>
-                                            <TableCell className="px-5 py-4 text-start">
-                                                <span className="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
-                                                    {(currentPage - 1) * ITEM_PER_PAGE + index + 1}
-                                                </span>
-                                            </TableCell>
-                                            <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                                {user?.teamMember?.user?.firstName} {user?.user?.lastName}
-                                            </TableCell>
-                                            <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                                {user?.teamMember?.user?.email}
-                                            </TableCell>
-                                            <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                                {user?.teamMember?.team?.name}
-                                            </TableCell>
-                                            {/* <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                                {user?.teamMember?.role}
-                                            </TableCell> */}
-                                            {/*                                          
+                                        console.log(user, "user")
+                                        return (
+                                            <TableRow key={user?.id}>
+                                                <TableCell className="px-5 py-4 text-start">
+                                                    <span className="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
+                                                        {(currentPage - 1) * ITEM_PER_PAGE + index + 1}
+                                                    </span>
+                                                </TableCell>
+                                                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                                                    {user?.teamMember?.user?.firstName} {user?.user?.lastName}
+                                                </TableCell>
+                                                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                                                    {user?.teamMember?.user?.email}
+                                                </TableCell>
+                                                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                                                    {user?.teamMember?.team?.name}
+                                                </TableCell>
+                                                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                                                    {user?.product?.name}
+                                                </TableCell>
+                                                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                                                    <button
+                                                        className="flex items-center text-primary gap-2 cursor-pointer"
+                                                        onClick={() => {
+                                                            setIsModalOpen(true)
+                                                            setuserData(user)
+                                                        }}
+                                                    >
+                                                        View <FiEdit className="mr-1.5" />
+                                                    </button>
+
+
+                                                </TableCell>
+                                                {/*                                          
                                             <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                                                 <Badge
                                                     size="sm"
@@ -141,7 +156,7 @@ const AssignedMembersTable: React.FC<TeamTableProps> = ({ searchText, role, orde
                                                     {user?.verified ? "Verified" : "Not verified"}
                                                 </Badge>
                                             </TableCell> */}
-                                            {/* <TableCell className="px-4 py-3 flex text-orange-400 text-theme-sm dark:text-gray-400">
+                                                {/* <TableCell className="px-4 py-3 flex text-orange-400 text-theme-sm dark:text-gray-400">
                                                 <div className="flex items-center gap-1 bg-[#F8E4C8] p-2 px-4 rounded-full cursor-pointer" onClick={() => {
                                                     setIsModalOpen(true)
                                                     setProducts(user.memberProduct)
@@ -149,7 +164,7 @@ const AssignedMembersTable: React.FC<TeamTableProps> = ({ searchText, role, orde
                                                     <MdRemoveRedEye className="h-5 w-5 text-orange-400 cursor-pointer" /> View Products
                                                 </div>
                                             </TableCell> */}
-                                            {/* <TableCell className="px-4 py-3 text-red-500 text-theme-sm dark:text-gray-400">
+                                                {/* <TableCell className="px-4 py-3 text-red-500 text-theme-sm dark:text-gray-400">
                                                 <div className="flex items-center gap-1 cursor-pointer" onClick={() => {
                                                     setMembeId(user?.id)
                                                     setIsModalRemoveOpen(true)
@@ -158,8 +173,9 @@ const AssignedMembersTable: React.FC<TeamTableProps> = ({ searchText, role, orde
                                                 </div>
                                             </TableCell> */}
 
-                                        </TableRow>
-)})
+                                            </TableRow>
+                                        )
+                                    })
                                 ) : (
                                     <TableRow>
                                         <TableCell className="text-center py-6 text-gray-500">
@@ -174,13 +190,13 @@ const AssignedMembersTable: React.FC<TeamTableProps> = ({ searchText, role, orde
             </div>
 
             {
-                totalPages > 0 && ( <div className=" w-full flex justify-end px-4 py-6">
-                <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
-            </div>)
+                totalPages > 0 && (<div className=" w-full flex justify-end px-4 py-6">
+                    <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+                </div>)
             }
 
-            <ProductListModal isOpen={isModalOpen} closeModal={() => setIsModalOpen(false)} products={products} title="Products List"
-                onRemove={handleRemoveMemberProduct} />
+            <ViewMemeberModal isOpen={isModalOpen} closeModal={() => setIsModalOpen(false)} user={userData}
+            />
 
 
         </div>

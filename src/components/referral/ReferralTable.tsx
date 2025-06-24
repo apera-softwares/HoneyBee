@@ -91,7 +91,7 @@ const ReferralTable: React.FC<ReferralTableProps> = ({ searchText }) => {
             toast.success("Status updated successfully!");
             getReferrals(currentPage);
         } catch (error) {
-            console.log(error,"error")
+            console.log(error, "error")
             toast.error("Failed to update status.");
         }
     };

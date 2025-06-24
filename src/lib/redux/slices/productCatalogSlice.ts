@@ -47,7 +47,7 @@ export const fetchProductCatalogs = createAsyncThunk(
       }
 
       const response = await axios.get(
-        `${BACKEND_API}admin/products?${queryParams.toString()}`,
+        `${BACKEND_API}admin/products?${queryParams.toString()}&&order=desc`,
         {
           headers: { Authorization: `Bearer ${token}`,   'ngrok-skip-browser-warning': 'true', },
           
