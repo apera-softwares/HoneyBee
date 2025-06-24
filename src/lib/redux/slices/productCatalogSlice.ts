@@ -136,6 +136,49 @@ export const deleteProductCatalog = createAsyncThunk(
   }
 );
 
+//Select product
+export const selectProductCatalog = createAsyncThunk(
+  "productCatalog/selectProductCatalog",
+  async (payload: any, thunkAPI) => {
+    try {
+      const state: any = thunkAPI.getState();
+      const token = state.user?.user?.token;
+
+      const response = await axios.post(`${BACKEND_API}product/assignMember`,payload, {
+        headers: { Authorization: `Bearer ${token}`,  'ngrok-skip-browser-warning': 'true', },
+      });
+      return response.data;
+    } catch (error: any) {
+      console.log(error,"error while selecting product");
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to select product"
+      );
+    }
+  }
+);
+
+//Unselect product
+export const unselectProductCatalog = createAsyncThunk(
+  "productCatalog/unselectProductCatalog",
+  async (payload: any, thunkAPI) => {
+    try {
+      const state: any = thunkAPI.getState();
+      const token = state.user?.user?.token;
+
+      const response = await axios.delete(`${BACKEND_API}product/removeMember`, {
+        headers: { Authorization: `Bearer ${token}`,  'ngrok-skip-browser-warning': 'true', },
+        data:payload,
+      });
+      return response.data;
+    } catch (error: any) {
+      console.log(error,"error while unselecting product");
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to unselect product"
+      );
+    }
+  }
+);
+
 
 interface ProductCatalogState {
   productCatalogs: any[];
@@ -223,6 +266,34 @@ const productCatalogSlice = createSlice({
         //refetch data on UI side
       })
       .addCase(deleteProductCatalog.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      });
+
+      //select product for   B_TEAM
+    builder
+      .addCase(selectProductCatalog.pending, (state) => {
+        state.error = null;
+      })
+      .addCase(selectProductCatalog.fulfilled, (state) => {
+        state.loading = false;
+        //refetch data on UI side
+      })
+      .addCase(selectProductCatalog.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      });
+
+      //unselect product of B_TEAM
+    builder
+      .addCase(unselectProductCatalog.pending, (state) => {
+        state.error = null;
+      })
+      .addCase(unselectProductCatalog.fulfilled, (state) => {
+        state.loading = false;
+        //refetch data on UI side
+      })
+      .addCase(unselectProductCatalog.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });
