@@ -2,7 +2,6 @@
 import React from "react";
 // import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
-import ChartTab from "../common/ChartTab";
 import dynamic from "next/dynamic";
 
 // Dynamically import the ReactApexChart component
@@ -134,7 +133,7 @@ export default function StatisticsChart() {
           </span>
         </div>
         <div className="flex items-start w-full gap-3 sm:justify-end">
-          <ChartTab />
+
         </div>
       </div>
 

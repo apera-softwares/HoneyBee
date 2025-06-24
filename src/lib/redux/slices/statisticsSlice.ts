@@ -16,69 +16,62 @@ export const fetchStatisticsNumbers = createAsyncThunk(
           "ngrok-skip-browser-warning": "true",
         },
       });
+      
+       console.log("response of lead statistics numbers",response.data);
+      // return response.data;
 
-      const pieChartData = {
-        labels: [] as string[],
-        series: [] as number[],
-      };
-      const lineChartData = {
-        categories: [] as string[],
-        series: {
-          name: "Lead",
-          data: [] as number[],
-        },
-      };
-
-      response?.data?.leadStatusNumbers?.forEach((item: any) => {
-        pieChartData.labels.push(item?.status);
-        const countValue = item?._count?.status;
-        pieChartData.series.push(countValue);
-      });
-      response?.data?.leadsByMonth?.forEach((item: any) => {
-        lineChartData?.categories.push(item?.month);
-        const countValue = item?.count;
-        lineChartData.series.data.push(countValue);
-      });
 
       return {
-        pieChartData,
-        lineChartData,
+        leadStatusNumberMonthly:[{status:"pending",count:10},{status:"pitched",count:15},{status:"sold",count:30},{status:"payout",count:40}],
+        leadStatusNumberLifetime:[{status:"pending",count:100},{status:"pitched",count:150},{status:"sold",count:80},{status:"payout",count:200}],
+        leadsByMonth:[{month:"Jan",count:5},{month:"Feb",count:10},{month:"Mar",count:20},{month:"Apr",count:10},{month:"May",count:15},{month:"Jun",count:25},{month:"Jul",count:10}],
+        leadsByLifetime:[{year:"2021",count:100},{year:"2022",count:150},{year:"2023",count:200},{year:"2024",count:100},{year:"2025",count:80}],
       }
+      // return {
+      //   leadStatusNumberMonthly:[],
+      //   leadStatusNumberLifetime:[],
+      //   leadsByMonth:[],
+      //   leadsByLifetime:[],
+      // }
+    
     } catch (error: any) {
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || "Failed to fetch stat numbers"
+        error.response?.data?.message || "Failed to fetch statistics number"
       );
     }
   }
 );
 
+interface PieChartItem {
+  label: string;
+  count: number;
+}
+interface LineChartItem {
+  label: string;
+  count: number;
+}
+
 interface StatisticsState {
-  pieChartData: {
-    labels: string[];
-    series: number[];
+  pieChart: {
+    monthly:PieChartItem[];
+    lifetime:PieChartItem[];
   };
-  lineChartData:{
-    categories:string[],
-    series:{
-      name:string,
-      data:number[],
-    }
+  lineChart:{
+    monthly:LineChartItem[];
+    lifetime:LineChartItem[];
   }
   loading: boolean;
   error: string | null;
 }
 
 const initialState: StatisticsState = {
-  pieChartData: {
-    labels: [],
-    series: [],
+  pieChart: {
+    monthly:[],
+    lifetime:[],
   },
-  lineChartData:{
-    categories:[],
-    series:{
-      name:"Lead",
-      data:[],
-    }
+  lineChart:{
+    monthly:[],
+    lifetime:[],
   },
   loading: false,
   error: null,
@@ -96,9 +89,12 @@ const statisticsSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchStatisticsNumbers.fulfilled, (state, action) => {
+        const data = action.payload;
         state.loading = false;
-        state.pieChartData = action.payload.pieChartData;
-        state.lineChartData = action.payload.lineChartData;
+        state.lineChart.monthly = data?.leadsByMonth?.map((item:any)=>({label:item?.month,count:item?.count}));
+        state.lineChart.lifetime = data?.leadsByLifetime?.map((item:any)=>({label:item?.year,count:item?.count}));
+        state.pieChart.monthly = data?.leadStatusNumberMonthly?.map((item:any)=>({label:item?.status,count:item?.count}));
+        state.pieChart.lifetime = data?.leadStatusNumberLifetime?.map((item:any)=>({label:item?.status,count:item?.count}));
       })
       .addCase(fetchStatisticsNumbers.rejected, (state, action) => {
         state.loading = false;

@@ -3,8 +3,9 @@ import React, { useState, useEffect, useRef } from "react";
 // import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
 import { IoChevronDownSharp } from "react-icons/io5";
-import { useAppSelector, useAppDispatch } from "@/lib/redux/hooks";
-import { fetchStatisticsNumbers } from "@/lib/redux/slices/statisticsSlice";
+import { useAppSelector } from "@/lib/redux/hooks";
+import { CHART_RANGES } from "@/data/chartRanges";
+import NoChartData from "../common/NoChartData";
 
 import dynamic from "next/dynamic";
 // Dynamically import the ReactApexChart component
@@ -12,23 +13,19 @@ const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
 
-const RANGES = [
-  {
-    label: "This Month",
-    value: "this-month",
-  },
-  {
-    label: "Life Time",
-    value: "life-time",
-  },
-];
 
 export default function StatisticsPieChart() {
-  const dispatch = useAppDispatch();
+
   const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState(RANGES[0]);
+  const [selected, setSelected] = useState(CHART_RANGES[0]);
+  const [chartData, setChartData] = useState<{
+    labels: string[];
+    series: number[];
+  } | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
-  const { pieChartData } = useAppSelector((state) => state.statistic);
+  const {
+    pieChart: { monthly, lifetime },
+  } = useAppSelector((state) => state.statistic);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -44,27 +41,26 @@ export default function StatisticsPieChart() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  useEffect(() => {
-    getStatNumbers();
-  }, []);
 
-  const handleSelect = (option: (typeof RANGES)[0]) => {
+  useEffect(() => {
+    const selectedData = selected.value === "monthly" ? monthly : lifetime;
+
+    if (!selectedData || selectedData.length === 0) {
+      setChartData(null);
+      return;
+    }
+
+    const labels = selectedData.map((item) => item.label);
+    const series = selectedData.map((item) => item.count);
+    setChartData({ labels, series });
+  }, [selected, monthly, lifetime]);
+
+  const handleSelect = (option: (typeof CHART_RANGES)[0]) => {
     setSelected(option);
     setIsOpen(false);
-    console.log("Selected range:", option.value); // Call chart update here
   };
 
-  const getStatNumbers = async () => {
-    try {
-      const payload = {};
-      const response = await dispatch(fetchStatisticsNumbers(payload)).unwrap();
-      console.log("state numbers response in compoennt", response);
-    } catch (error: any) {
-      console.log("error while getting stat numbers", error);
-    }
-  };
-
-  const series = pieChartData.series;
+  const series = chartData?.series;
   const options: ApexOptions = {
     colors: ["#fb6514", "#feb273", "#ffead5", "#fffaf5"],
     chart: {
@@ -97,13 +93,14 @@ export default function StatisticsPieChart() {
     },
     fill: {
       type: "solid",
-      colors: ["#fb6514", "#feb273", "#ffead5", "#fffaf5"],
+      // colors: ["#fb6514", "#feb273", "#ffead5", "#fffaf5"],
+      colors: ["#FF9912", "#FF9912", "#FF9912", "#FF9912"],
     },
     stroke: {
       lineCap: "round",
     },
     legend: {
-      position: "right", 
+      position: "right",
       horizontalAlign: "center",
 
       itemMargin: {
@@ -114,12 +111,12 @@ export default function StatisticsPieChart() {
         return `${seriesName}: ${value}`;
       },
     },
-    labels: pieChartData.labels,
+    labels: chartData?.labels,
   };
 
   return (
-    <div className="w-full h-full rounded-2xl border border-gray-200 bg-gray-100 dark:border-gray-800 dark:bg-white/[0.03]">
-      <div className="h-full px-5 pt-5 bg-white shadow-default rounded-2xl pb-11 dark:bg-gray-900 sm:px-6 sm:pt-6">
+ 
+      <div className="w-full h-full px-5 py-5 sm:px-6 bg-white border border-gray-200 shadow-default rounded-2xl pb-11 dark:border-gray-800 dark:bg-white/[0.03] ">
         <div className="flex  items-center justify-between  mb-6 sm:mb-8">
           <div className="">
             <p className="text-lg text-gray-700 dark:text-white/90">
@@ -137,7 +134,7 @@ export default function StatisticsPieChart() {
 
             {isOpen && (
               <ul className="absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg">
-                {RANGES.map((option) => (
+                {CHART_RANGES.map((option) => (
                   <li
                     key={option.value}
                     onClick={() => handleSelect(option)}
@@ -154,23 +151,21 @@ export default function StatisticsPieChart() {
             )}
           </div>
         </div>
-        <div className="relative  ">
-          {
-            series.length === 0 || series.every((item)=>item===0) ? (<div className="flex items-center justify-center mt-10 lg:mt-20 ">
-              <p className=" bg-gray-200 font-medium text-gray-500  px-6 py-3 rounded-lg">No data available</p>
-
-            </div>):(    <div className="max-h-[330px]">
-            <ReactApexChart
-              options={options}
-              series={series}
-              type="donut"
-              height={330}
-            />
-          </div>)
-          }
-      
+        <div className="relative p-[1px]  ">
+          {!chartData ? (
+          <NoChartData message="No data available"/>
+          ) : (
+            <div className="max-h-[330px]">
+              <ReactApexChart
+                options={options}
+                series={series}
+                type="donut"
+                height={330}
+              />
+            </div>
+          )}
         </div>
       </div>
-    </div>
+
   );
 }
