@@ -746,3 +746,12 @@ span.flatpickr-weekday,
   opacity: 0.8;
   cursor: grabbing; /* Changes the cursor to indicate dragging */
 }
+
+.apexcharts-datalabels text {
+  fill: #ffffff !important; 
+  font-weight: bold;
+}
+.apexcharts-datalabel-label, 
+.apexcharts-datalabel-value {
+  font-size: 14px !important;
+}
