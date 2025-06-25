@@ -2,9 +2,9 @@
 import AuthRigthSidebar from "@/components/AuthRigthSidebar";
 import { INPUT_CLASS, INPUT_REQUIRED_ERROR_CLASS } from "@/constant/constantClassName";
 import Image from "next/image";
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import Logo from '../../../../assets/logo/logo.png'
-import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { userSignup } from "@/lib/redux/slices/userSlice";
@@ -12,7 +12,7 @@ import Loader from "@/components/ui/loader/Loader";
 // import Radio from "@/components/form/input/Radio";
 import LeadCard from "@/components/LeadCard";
 
-export default function CreateAccountPage() {
+function CreateAccountPage() {
     const searchParams = useSearchParams();
     const role = searchParams.get('role'); // "a"
     const [formData, setFormData] = useState({
@@ -268,5 +268,14 @@ export default function CreateAccountPage() {
                 <AuthRigthSidebar />
             </div>
         </div>
+    );
+}
+
+
+export default function Page() {
+    return (
+        <Suspense fallback={<div>Loading...</div>}>
+            <CreateAccountPage />
+        </Suspense>
     );
 }
