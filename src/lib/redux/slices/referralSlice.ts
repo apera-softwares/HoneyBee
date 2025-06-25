@@ -31,7 +31,8 @@ export const fetchReferrals = createAsyncThunk(
       const state: any = thunkAPI.getState();
       const token = state.user?.user?.token;
    
-      const {page,limit,searchQuery}= params;
+      const {page,limit,searchQuery, status}= params;
+      console.log(params,"params")
     
       const queryParams = new URLSearchParams({
           page: String(page),
@@ -43,7 +44,7 @@ export const fetchReferrals = createAsyncThunk(
       }
 
       const response = await axios.get(
-        `${BACKEND_API}lead?${queryParams.toString()}&&order=desc`,
+        `${BACKEND_API}lead?${queryParams.toString()}&&order=desc&&${status &&`status=${status}`}`,
         {
           headers: { Authorization: `Bearer ${token}`,   'ngrok-skip-browser-warning': 'true', },
           

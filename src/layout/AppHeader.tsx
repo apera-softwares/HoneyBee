@@ -1,13 +1,11 @@
 "use client";
-//import NotificationDropdown from "@/components/header/NotificationDropdown";
 import UserDropdown from "@/components/header/UserDropdown";
 import { useSidebar } from "@/context/SidebarContext";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
 import Logo from '../assets/logo/logo.png'
-
-// import { useAppSelector } from "@/lib/redux/hooks";
+import { usePathname } from "next/navigation";
 
 const AppHeader: React.FC = () => {
 
@@ -15,7 +13,66 @@ const AppHeader: React.FC = () => {
 
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
 
+  //SEARCH HIGHLIGHT START
+  const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    const highlightMatches = (term: string) => {
+      removeHighlights();
+
+      if (!term) return;
+
+      const body = document.body;
+      const regex = new RegExp(`(${term})`, "gi");
+
+      const treeWalker = document.createTreeWalker(
+        body,
+        NodeFilter.SHOW_TEXT,
+        {
+          acceptNode: (node) => {
+            if (
+              node.parentElement &&
+              !["SCRIPT", "STYLE", "NOSCRIPT", "TEXTAREA", "INPUT"].includes(node.parentElement.tagName) &&
+              node.nodeValue?.toLowerCase().includes(term.toLowerCase())
+            ) {
+              return NodeFilter.FILTER_ACCEPT;
+            }
+            return NodeFilter.FILTER_REJECT;
+          },
+        }
+      );
+
+      const matches: Text[] = [];
+      while (treeWalker.nextNode()) {
+        matches.push(treeWalker.currentNode as Text);
+      }
+
+      matches.forEach((textNode) => {
+        const span = document.createElement("span");
+        span.innerHTML = textNode.nodeValue!.replace(regex, `<mark class="bg-yellow-300">$1</mark>`);
+        textNode.parentNode?.replaceChild(span, textNode);
+      });
+    };
+
+    const removeHighlights = () => {
+      document.querySelectorAll("mark").forEach((mark) => {
+        const parent = mark.parentNode!;
+        parent.replaceChild(document.createTextNode(mark.textContent!), mark);
+        parent.normalize(); // merge adjacent text nodes
+      });
+    };
+
+    highlightMatches(searchTerm);
+
+    return () => {
+      removeHighlights();
+    };
+  }, [searchTerm]);
+  //SEARCH HIGHLIGHT END
+
   // const { userProfile } = useAppSelector((state) => state.userProfile);
+  const pathname = usePathname();
+
 
   const handleToggle = () => {
     if (window.innerWidth >= 1024) {
@@ -46,6 +103,19 @@ const AppHeader: React.FC = () => {
     };
   }, []);
 
+  const getPageTitle = (pathname: string) => {
+    const pathParts = pathname.split("/").filter(Boolean);
+
+    if (pathParts.length === 0) return "Home";
+
+    return pathParts
+      .filter((part) => !/^[a-zA-Z0-9]{12,}$/.test(part)) // filter out IDs
+      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+      .join(" / ");
+  };
+
+
+  const pageTitle = getPageTitle(pathname);
 
   return (
     <header className="sticky top-0 flex w-full bg-white z-9999 shadow-xs">
@@ -126,11 +196,12 @@ const AppHeader: React.FC = () => {
             </svg>
           </button>
 
-          {/* <div className="w-1/3 hidden lg:block">
-            <span className="block mr-1 text-theme-xs">Hello {userProfile?.firstName} {userProfile?.lastName}</span>
-            <span className="block mr-1 font-medium text-theme-md">Welcome to HoneyBee</span>
+          <div className="w-1/3 hidden lg:block">
+            {/* <span className="block mr-1 text-theme-xs">Hello</span> */}
+            <span className="block mr-1 font-medium text-theme-md">{pageTitle}</span>
 
-          </div> */}
+
+          </div>
           {/* <div className="h-10 w-[1.5px] bg-gray-300 hidden lg:block"></div>
           <div className="hidden lg:flex items-center w-full">
             <span>Current Rank</span>
@@ -143,9 +214,7 @@ const AppHeader: React.FC = () => {
             } items-center justify-between w-full gap-4 px-5 py-4 lg:flex shadow-theme-md lg:justify-end lg:px-0 lg:shadow-none`}
         >
           <div className="flex items-center gap-2 2xsm:gap-3">
-            {/* <!-- Dark Mode Toggler --> */}
-            {/* <ThemeToggleButton /> */}
-            {/* <!-- Dark Mode Toggler --> */}
+
             <div className="hidden lg:block">
               <form>
                 <div className="relative">
@@ -170,20 +239,17 @@ const AppHeader: React.FC = () => {
                     ref={inputRef}
                     type="text"
                     placeholder="Search here..."
+                    value={searchTerm}
+                    onChange={(e) => setSearchTerm(e.target.value)}
                     className="dark:bg-dark-900 h-11 w-full rounded-full bg-gray-100 py-2.5 pl-12 pr-14 text-sm text-gray-800 shadow-theme-xs placeholder:text-gray-400 focus:border-orange-300 focus:outline-hidden focus:ring-2 focus:ring-brand-500/10 dark:border-gray-800 dark:bg-gray-900  dark:text-white/90 dark:placeholder:text-white/30 dark:focus:border-gray-500 xl:w-[430px]"
                   />
 
-                  {/* <button className="absolute right-2.5 top-1/2 inline-flex -translate-y-1/2 items-center gap-0.5 rounded-lg border border-gray-200 bg-gray-50 px-[7px] py-[4.5px] text-xs -tracking-[0.2px] text-gray-500 dark:border-gray-800 dark:bg-white/[0.03] dark:text-gray-400">
-                  <span> ⌘ </span>
-                  <span> K </span>
-                </button> */}
+
                 </div>
               </form>
             </div>
-            {/* <NotificationDropdown /> */}
-            {/* <!-- Notification Menu Area --> */}
+
           </div>
-          {/* <!-- User Area --> */}
           <UserDropdown />
 
         </div>

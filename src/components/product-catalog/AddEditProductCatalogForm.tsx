@@ -20,6 +20,7 @@ interface FormState {
   elevatorPitch: string;
   stateId: string;
   status: string;
+  price: string
 }
 
 interface PaginationState {
@@ -45,7 +46,7 @@ interface AddEditProductCatalogFormProps {
 const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ filters, paginationData, setPaginationData, editData, onEditSuccess }) => {
 
   const dispatch = useAppDispatch();
-  const [formData, setFormData] = useState<FormState>({ name: "", bulletPoint1: "", bulletPoint2: "", bulletPoint3: "", elevatorPitch: "", status: "", stateId: "" });
+  const [formData, setFormData] = useState<FormState>({ name: "", bulletPoint1: "", bulletPoint2: "", bulletPoint3: "", elevatorPitch: "", status: "", stateId: "", price: "" });
   const [states, setStates] = useState<any[]>([]);
   const [stateName, setStateName] = useState<string>("");
   const [selectedState, setSelectedState] = useState<any>(null);
@@ -57,7 +58,7 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
 
   const [loading, setLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState({
-    name: "", bulletPoint1: "", bulletPoint2: "", bulletPoint3: "", elevatorPitch: "", status: "", stateId: "", image:""
+    name: "", bulletPoint1: "", bulletPoint2: "", bulletPoint3: "", elevatorPitch: "", status: "", stateId: "", image: "", price: ""
   })
 
   const onChange = (imageList: any, addUpdateIndex: any) => {
@@ -84,6 +85,7 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
         elevatorPitch: editData?.elevatorPitch || "",
         status: `${editData.status}`,
         stateId: editData?.states?.length > 0 ? `${editData?.states[0]?.stateId}` : "",
+        price: editData?.price || 0,
       });
     }
   }, [editData]);
@@ -116,14 +118,22 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
       tempErrors.name = "";
     }
 
+    //validate Price 
+    if (formData.price === "") {
+      tempErrors.price = "Price is required";
+      isValidData = false;
+    } else {
+      tempErrors.price = "";
+    }
 
-    if(images.length<1){
-       tempErrors.image = "Min 1 image required";
+
+    if (images.length < 1) {
+      tempErrors.image = "Min 1 image required";
       isValidData = false;
     } else {
       tempErrors.image = "";
     }
-    
+
 
     //validate  bullet points
 
@@ -205,9 +215,9 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
   };
 
   const handleClearFormData = () => {
-    setFormData({ name: "", bulletPoint1: "", bulletPoint2: "", bulletPoint3: "", elevatorPitch: "", status: "", stateId: "" });
+    setFormData({ name: "", bulletPoint1: "", bulletPoint2: "", bulletPoint3: "", elevatorPitch: "", status: "", stateId: "", price: "" });
     setErrors({
-      name: "", bulletPoint1: "", bulletPoint2: "", bulletPoint3: "", elevatorPitch: "", status: "", stateId: "", image:""
+      name: "", bulletPoint1: "", bulletPoint2: "", bulletPoint3: "", elevatorPitch: "", status: "", stateId: "", image: "", price: ""
     })
     setSelectedState(null);
   };
@@ -233,6 +243,8 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
       data.append("elevatorPitch", formData.elevatorPitch);
       data.append("status", formData.status);
       data.append("stateId", formData.stateId);
+      data.append("price", formData.price.toString());
+
       const imgIds = [] as any
       // Append each file using 'files' as the field name
       images.forEach((imgObj: any) => {
@@ -456,6 +468,24 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
                 </div>
               )}
             </div>
+            <div className="relative w-full">
+              <input
+                type="text"
+                placeholder="Price ($)"
+                name="price"
+                className={`${FORM_INPUT_CLASS} ${TEXT_SIZE}`}
+                value={formData.price}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  // Allow only digits and optional one dot (decimal)
+                  if (/^\d*\.?\d*$/.test(value)) {
+                    handleInputChange(e);
+                  }
+                }}
+              />
+              <span className={`${REQUIRED_ERROR}`}>{errors.price || ""}</span>
+            </div>
+
 
             <div className="w-full ">
               <div className="flex items-center  gap-6 ">
@@ -528,14 +558,14 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
 
                     {/* Uploaded Images Grid */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                      {images.map((image:any, index) => (
+                      {images.map((image: any, index) => (
                         <div
                           key={index}
                           className="relative rounded-lg border border-gray-200 overflow-hidden shadow-sm"
                         >
                           <img
                             // src={image['data_url']}
-                            src={image.id ? `${BACKEND_API}${image.imageName.slice(2,image.imageName.length)}`: image['data_url']}
+                            src={image.id ? `${BACKEND_API}${image.imageName.slice(2, image.imageName.length)}` : image['data_url']}
 
                             alt={`uploaded-${index}`}
                             className="w-full h-48 object-cover"
@@ -561,7 +591,7 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
                 )}
               </ImageUploading>
             </div>
-                          <span className={`${REQUIRED_ERROR}`}>{errors.image || ""}</span>
+            <span className={`${REQUIRED_ERROR}`}>{errors.image || ""}</span>
 
           </div>
         </div>

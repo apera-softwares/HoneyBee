@@ -6,6 +6,8 @@ import { HiOutlinePlus } from "react-icons/hi";
 import ProductCatalogTable from "@/components/product-catalog/ProductCatalogTable";
 // import { FiEdit } from "react-icons/fi";
 import AddEditProductCatalogForm from "@/components/product-catalog/AddEditProductCatalogForm";
+import { useAppSelector } from "@/lib/redux/hooks";
+import { UserRole } from "@/constant/userRoles";
 
 interface FiltersState {
     searchQuery: string,
@@ -28,6 +30,7 @@ export default function ProductCatalog() {
         currentPage: 1,
         totalPages: 0,
     })
+    const { user: loggedUser } = useAppSelector((state) => state.user)
 
     const [editProductCatalogData, setEditProductCatalogData] = useState<any | null>(null);
     const formRef = useRef<HTMLDivElement | null>(null);
@@ -80,8 +83,6 @@ export default function ProductCatalog() {
 
     return (<div className="w-full">
 
-
-
         {/* Top Bar: Left (Heading), Right (Search + Actions) */}
         <div className="w-full flex flex-col lg:flex-row items-start justify-start lg:justify-between  gap-6  mb-6 ">
             {/* Left: Heading */}
@@ -120,12 +121,12 @@ export default function ProductCatalog() {
                 </select> */}
 
 
-                <button
+                { loggedUser.role == UserRole.A_TEAM && <button
                     onClick={handleScrollFormToTop}
                     className="h-11 bg-primary hover:bg-primary-hover text-white rounded-md text-md px-4 justify-center text-center outline-none flex items-center gap-1  ">
                     <HiOutlinePlus className="text-white" />
                     Add New Product
-                </button>
+                </button>}
 
                 {/* <div className="w-32 h-11 relative rounded-md">
                         <div className="w-32 h-11 left-0 top-0 absolute bg-amber-500 rounded-md" />
