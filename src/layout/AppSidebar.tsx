@@ -27,6 +27,7 @@ import { logout } from "@/lib/redux/slices/userSlice";
 import { resetUserProfile } from "@/lib/redux/slices/loginPersonProfile";
 import LogoutConfirmationModal from "@/components/common/LogoutConfirmationModal";
 import { MdFeedback } from "react-icons/md";
+import { setPageTitle } from "@/lib/redux/slices/appSlice";
 
 type NavItem = {
   name: string;
@@ -185,13 +186,18 @@ const othersItems: NavItem[] = [
 ];
 
 const AppSidebar: React.FC = () => {
+
+  const dispatch = useAppDispatch();
   const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
   const [isLogoutConfirmModalOpen, setIsLogoutConfirmModalOpen] = useState<boolean>(false);
   const { userProfile } = useAppSelector((state) => state.userProfile);
 
   const router = useRouter();
   const pathname = usePathname();
-  const dispatch = useAppDispatch();
+
+  const handleSetPageTitle = (title:string)=>{
+    dispatch(setPageTitle(title));
+  }
 
   const renderMenuItems = (
     navItems: NavItem[],
@@ -238,6 +244,7 @@ const AppSidebar: React.FC = () => {
                 href={nav.path}
                 className={`menu-item group p-2 ${isActive(nav.path) ? "menu-item-active" : "menu-item-inactive"
                   }`}
+                  onClick={()=>handleSetPageTitle(nav.name)}
               >
                 <span
                   className={`${isActive(nav.path)
@@ -404,7 +411,7 @@ const AppSidebar: React.FC = () => {
         className={` h-auto py-6 flex  ${!isExpanded && !isHovered ? "lg:justify-center" : "justify-start"
           }`}
       >
-        <Link href="/">
+        <Link href="/" onClick={()=>handleSetPageTitle("Dashboard")} >
           {isExpanded || isHovered || isMobileOpen ? (
             <>
               <Image
@@ -465,7 +472,10 @@ const AppSidebar: React.FC = () => {
       </div>
 
       <div className="hidden lg:block h-auto mt-auto  w-full py-3 border-t ">
-        <button onClick={()=>router.push("/feedback")} className="flex items-center gap-2 text-gray-700 dark:text-white w-full px-5 py-3 rounded-lg cursor-pointer">
+        <button onClick={()=>{
+          handleSetPageTitle("Feedback");
+          router.push("/feedback");
+        }} className="flex items-center gap-2 text-gray-700 dark:text-white w-full px-5 py-3 rounded-lg cursor-pointer">
           <MdFeedback />
           {(isExpanded || isHovered || isMobileOpen) && <span>Feedback</span>}
         </button>
