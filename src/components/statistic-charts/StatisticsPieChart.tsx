@@ -111,6 +111,28 @@ export default function StatisticsPieChart() {
         return `${seriesName}: ${value}`;
       },
     },
+    dataLabels: {
+    enabled: true,
+    style: {
+      colors: ["#FFFFFF"], // ✅ This makes the slice label text white
+      fontSize: "12px",
+      fontWeight: "bold",
+    },
+    dropShadow: {
+      enabled: false,
+    },
+  },
+    tooltip: {
+    theme: "light",
+    style: {
+      fontSize: "12px",
+      fontFamily: "Outfit, sans-serif",
+    },
+    fillSeriesColor: false,
+    marker: {
+      show: false,
+    },
+  },
     labels: chartData?.labels,
   };
 
