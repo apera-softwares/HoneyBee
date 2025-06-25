@@ -12,7 +12,7 @@ import { UserRole } from "@/constant/userRoles";
 export default function TeamManagement() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchInput] = useState("");
-  const [order ] = useState("");
+  const [order] = useState("");
   const { user: loggedUser } = useAppSelector((state) => state.user);
   const { teams, loading } = useAppSelector((state) => state.TeamManagement);
 
@@ -20,7 +20,7 @@ export default function TeamManagement() {
     loggedUser?.role === UserRole.ADMIN ||
     (loggedUser?.role === UserRole.B_TEAM && teams.length === 0) ||
     loading;
-    
+
   return (
     <div className="w-full">
       <Toaster />
@@ -52,7 +52,7 @@ export default function TeamManagement() {
           </div> */}
           {/* Create User Button */}
 
-          {showCreateTeamButton && (
+          {showCreateTeamButton && loggedUser.role == UserRole.B_TEAM && (
             <button
               onClick={() => setIsModalOpen(true)}
               className="h-11 bg-primary hover:bg-primary-hover text-white rounded-md text-md px-4 justify-center text-center outline-none flex items-center gap-1"
@@ -68,7 +68,7 @@ export default function TeamManagement() {
                     </div> */}
 
           {/* Filter By Asc Des */}
-        
+
         </div>
       </div>
 

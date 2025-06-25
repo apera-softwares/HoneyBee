@@ -18,7 +18,7 @@ const ViewMemeberModal: React.FC<ViewMemeberModalProps> = ({
     closeModal,
     user,
 }) => {
-              const images = user?.product?.media?.length > 0 ?  user?.product?.media?.map((mediaItem:any)=>`${BACKEND_API}${mediaItem?.imageName?.slice(2,mediaItem?.imageName?.length)}`):["/assets/images/image-not-available.png"];
+    const images = user?.product?.media?.length > 0 ? user?.product?.media?.map((mediaItem: any) => `${BACKEND_API}${mediaItem?.imageName?.slice(2, mediaItem?.imageName?.length)}`) : ["/assets/images/image-not-available.png"];
     const bulletPoints = user?.product?.bulletPoints?.split(",") || [];
     const [current, setCurrent] = useState(0);
     const isFirst = current === 0;
@@ -59,10 +59,14 @@ const ViewMemeberModal: React.FC<ViewMemeberModalProps> = ({
                         Team: {user?.teamMember?.team?.name}
                     </p>
                 </div>
-
+                {user?.product && <p className="font-semibold text-gray-800 py-2">
+                    Assigned Poduct
+                </p>}
                 {/* Product Details Section */}
                 {user?.product && (
+
                     <div className="w-full bg-white border rounded-xl shadow-sm p-4 lg:p-6 flex flex-col sm:flex-row gap-4">
+
                         {/* Image Carousel */}
                         <div className="w-full sm:w-1/2 relative rounded-xl overflow-hidden aspect-square">
                             {images.length > 0 ? (
@@ -70,7 +74,7 @@ const ViewMemeberModal: React.FC<ViewMemeberModalProps> = ({
                                     <img
                                         src={images[current]}
                                         alt={"Product Image"}
-                                        className=" w-[200px] h-[188px] object-cover object-center  rounded-2xl"
+                                        className=" object-fill w-full h-full rounded-2xl"
                                     />
 
                                     {/* Arrows */}
@@ -98,8 +102,8 @@ const ViewMemeberModal: React.FC<ViewMemeberModalProps> = ({
                                             <span
                                                 key={i}
                                                 className={`w-2 h-2 rounded-full ${i === current
-                                                        ? "bg-orange-500"
-                                                        : "bg-white border border-orange-500"
+                                                    ? "bg-orange-500"
+                                                    : "bg-white border border-orange-500"
                                                     }`}
                                             />
                                         ))}

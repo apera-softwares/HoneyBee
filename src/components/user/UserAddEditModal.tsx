@@ -219,7 +219,7 @@ const UserAddEditModal: React.FC<UserAddEditModalProps> = ({ isOpen, closeModal,
                             {type == "add" ? "Create New User" : "Edit User"}
                         </h5>
                         <span className="text-base">
-                            {type == "add" && "Add a new user to the Honeybee Hive. Assign their role, team, and send a welcome email to get them started."}
+                            {type == "add" && "Add a new user to the Honeybee Hive. Assign their role, and send a welcome email to get them started."}
                         </span>
                     </div>
                 </div>

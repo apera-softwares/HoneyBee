@@ -26,6 +26,7 @@ import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { logout } from "@/lib/redux/slices/userSlice";
 import { resetUserProfile } from "@/lib/redux/slices/loginPersonProfile";
 import LogoutConfirmationModal from "@/components/common/LogoutConfirmationModal";
+import { MdFeedback } from "react-icons/md";
 
 type NavItem = {
   name: string;
@@ -42,7 +43,7 @@ const navItems: NavItem[] = [
     path: "/",
 
   },
- 
+
   {
     icon: <CoinHand />,
     name: "Referrals",
@@ -462,7 +463,13 @@ const AppSidebar: React.FC = () => {
         </nav>
 
       </div>
+
       <div className="hidden lg:block h-auto mt-auto  w-full py-3 border-t ">
+        <button onClick={()=>router.push("/feedback")} className="flex items-center gap-2 text-gray-700 dark:text-white w-full px-5 py-3 rounded-lg cursor-pointer">
+          <MdFeedback />
+          {(isExpanded || isHovered || isMobileOpen) && <span>Feedback</span>}
+        </button>
+
         <button className="flex items-center gap-2 text-gray-700 dark:text-white w-full px-5 py-3 rounded-lg   cursor-pointer " onClick={handleOpenLogoutConfirmationModal}>
           <TbLogout2 className="w-5 h-5" />
           {(isExpanded || isHovered || isMobileOpen) && <span>Logout</span>}

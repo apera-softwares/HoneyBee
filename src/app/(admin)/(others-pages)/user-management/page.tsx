@@ -12,7 +12,7 @@ export default function UserManagement() {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [SearchInput, setSearchInput] = useState("")
     const [filterRole, setFilterRole] = useState("")
-    const [order, setOrder] = useState("")
+    const [order, setOrder] = useState("desc")
 
     return (
         <div className="w-full ">
@@ -68,7 +68,7 @@ export default function UserManagement() {
                         value={order}
                         onChange={(e) => setOrder(e.target.value)}
                         className="border border-[#151D48] w-32 h-11 text-[#151D48] rounded-md text-sm justify-center text-center outline-none">
-                        <option value="">Short By</option>
+                        <option value="">Sort By Date</option>
                         <option value="asc">asc to des</option>
                         <option value="desc">des to asc</option>
                     </select>

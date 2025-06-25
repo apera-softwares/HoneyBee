@@ -5,7 +5,7 @@ import { CiSearch } from "react-icons/ci";
 import ProductSelectTable from "@/components/product-catalog/ProductSelectTable";
 import ProductCard from "@/components/product-catalog/ProductCard";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
-import { fetchSelectedProducts,selectProductCatalog,unselectProductCatalog } from "@/lib/redux/slices/productCatalogSlice";
+import { fetchSelectedProducts, selectProductCatalog, unselectProductCatalog } from "@/lib/redux/slices/productCatalogSlice";
 import toast, { Toaster } from "react-hot-toast";
 import { BACKEND_API } from "@/api";
 
@@ -33,7 +33,7 @@ export default function SelectForSelect() {
   const [selectedProductId, setSelectedProductId] = useState<any>(null);
   const { userProfile } = useAppSelector((state) => state.userProfile);
   const { user: loggedInUser } = useAppSelector((state) => state.user);
-  const {selectedProducts} = useAppSelector((state)=>state.productCatalog)
+  const { selectedProducts } = useAppSelector((state) => state.productCatalog)
   const memberId =
     userProfile?.teamMember?.find((member: any) => member.isMemberOnly === true)
       ?.id || null;
@@ -46,7 +46,7 @@ export default function SelectForSelect() {
   }, [filters]);
 
   useEffect(() => {
-      getSelectedProducts();
+    getSelectedProducts();
   }, [memberId]);
 
 
@@ -55,7 +55,7 @@ export default function SelectForSelect() {
       const response = await dispatch(fetchSelectedProducts(loggedInUser?.userId)).unwrap();
       console.log("response of selected products", response);
     } catch (error: any) {
-     console.error("Error getting selected products:", error?.message || error);
+      console.error("Error getting selected products:", error?.message || error);
     }
   };
 
@@ -70,7 +70,7 @@ export default function SelectForSelect() {
     }
     setSelectedProductId(productId);
     try {
-      
+
       const payload = {
         teamMemberId: memberId,
         productId: productId,
@@ -98,7 +98,7 @@ export default function SelectForSelect() {
     }
     setSelectedProductId(productId);
     try {
-      
+
       const payload = {
         teamMemberId: memberId,
         productId: productId,
@@ -172,17 +172,17 @@ export default function SelectForSelect() {
         <div className="w-full overflow-x-auto  no-scrollbar mb-6 lg:mb-8  ">
           <div className="w-full max-w-[900px] flex space-x-5 ">
             {selectedProducts?.map((product: any) => {
-              
-              const images = product?.media?.length > 0 ?  product?.media?.map((mediaItem:any)=>`${BACKEND_API}${mediaItem?.imageName?.slice(2,mediaItem?.imageName?.length)}`):["/assets/images/image-not-available.png"];
+
+              const images = product?.media?.length > 0 ? product?.media?.map((mediaItem: any) => `${BACKEND_API}${mediaItem?.imageName?.slice(2, mediaItem?.imageName?.length)}`) : ["/assets/images/image-not-available.png"];
 
               return (
-              <ProductCard
-                key={product?.id}
-                title={product?.name}
-                points={product?.bulletPoints?.split(",")}
-                images={images}
-              />
-            )
+                <ProductCard
+                  key={product?.id}
+                  title={product?.name}
+                  points={product?.bulletPoints?.split(",")}
+                  images={images}
+                />
+              )
             })}
           </div>
         </div>

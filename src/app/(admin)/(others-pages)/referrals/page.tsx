@@ -9,6 +9,7 @@ import LeadCard from "@/components/LeadCard";
 
 export default function UserManagement() {
     const [SearchInput, setSearchInput] = useState("")
+    const [status, setStatus] = useState("")
 
     return (
         <div className="w-full">
@@ -82,33 +83,38 @@ export default function UserManagement() {
                     title="New Referrals"
                     value="30"
                     point="5+ Increased form last month"
-                    active={true}
+                     active={status === ""}
+                     onClick={() => setStatus("")}
                 />
                 <LeadCard
                     title="Leads Pitched"
                     value="24"
                     point="5+ Increased form last month"
-                    active={false}
+                     active={status === "Pitched"}
+                     onClick={() => setStatus("Pitched")}
                 />
                 <LeadCard
                     title="Leads Sold"
                     value="12"
                     point="10+ Increased form last month"
-                    active={false}
+                    active={status === "Sold"}
+                     onClick={() => setStatus("Sold")}
 
                 />
                 <LeadCard
                     title="Total Earned (Team)"
                     value="$2,400"
                     point="15+ Increased form last month"
-                    active={false}
+                    // active={false}
+                    active={status === "Payout"}
+                     onClick={() => setStatus("Payout")}
 
                 />
             </div>
             {/* Table */}
             <div className="w-full">
                 {/* <UserTable searchText={SearchInput} role="A_TEAM" order="" from="team-a" /> */}
-                <ReferralTable searchText={SearchInput} />
+                <ReferralTable searchText={SearchInput} status={status}/>
 
 
             </div>

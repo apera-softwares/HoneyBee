@@ -4,20 +4,25 @@ import { INPUT_CLASS, INPUT_REQUIRED_ERROR_CLASS } from "@/constant/constantClas
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import Logo from '../../../../assets/logo/logo.png'
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { userSignup } from "@/lib/redux/slices/userSlice";
 import Loader from "@/components/ui/loader/Loader";
-import Radio from "@/components/form/input/Radio";
+// import Radio from "@/components/form/input/Radio";
+import LeadCard from "@/components/LeadCard";
 
 export default function CreateAccountPage() {
+    const searchParams = useSearchParams();
+    const role = searchParams.get('role'); // "a"
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
         email: "",
         password: "",
-        role: ""
+        role: role === "a" ? "A_TEAM" :
+            role === "b" ? "B_TEAM" :
+                ""
     });
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({
@@ -29,6 +34,7 @@ export default function CreateAccountPage() {
     })
     const router = useRouter()
     const dispatch = useAppDispatch()
+
 
     const loggedInUser = useAppSelector((state) => state.user.user);
 
@@ -211,22 +217,31 @@ export default function CreateAccountPage() {
                             <span className={`${INPUT_REQUIRED_ERROR_CLASS}`} >{errors.password || ""}</span>
                         </div>
                         <div>
-                            <label className="block textsm font-bold text-black mb-2">
-                                Select role ?
+                            <label className="block text-sm font-bold text-black mb-2">
+                                Select role
                             </label>
-                            <div className="flex items-center space-x-6">
-                           
-                                     <Radio id="A_TEAM" label="A Team" name="role"  value="A_TEAM" checked={formData.role === "A_TEAM"} onChange={(value:string)=>{
-                                        setFormData((prev:any)=>({...prev,role:value}))
-                                    }} 
-                                    />
-                                           <Radio id="B_TEAM" label="B Team" name="role"  value="B_TEAM" checked={formData.role === "B_TEAM"} onChange={(value:string)=>{
-                                        setFormData((prev:any)=>({...prev,role:value}))
-                                    }} 
-                                    />
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <LeadCard
+                                    title="Enroll Your Product"
+                                    value="A Team"
+                                    point="List and promote your product to a wider audience easily."
+
+                                    active={formData.role === "A_TEAM"}
+                                    onClick={() => setFormData((prev: any) => ({ ...prev, role: "A_TEAM" }))}
+                                />
+                                <LeadCard
+
+                                    title="Become a Member"
+                                    value="B Team"
+                                    point="Get access to exclusive tools and insights for team collaboration."
+
+                                    active={formData.role === "B_TEAM"}
+                                    onClick={() => setFormData((prev: any) => ({ ...prev, role: "B_TEAM" }))}
+                                />
                             </div>
-                            <span className={`${INPUT_REQUIRED_ERROR_CLASS}`} >{errors.role || ""}</span>
+                            <span className={`${INPUT_REQUIRED_ERROR_CLASS}`}>{errors.role || ""}</span>
                         </div>
+
 
                         <button
                             type="submit"
