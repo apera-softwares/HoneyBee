@@ -4,17 +4,17 @@ import { useSidebar } from "@/context/SidebarContext";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
-import Logo from '../assets/logo/logo.png'
-import { usePathname } from "next/navigation";
+import Logo from '../assets/logo/logo.png';
+//import { usePathname } from "next/navigation";
+import { useAppSelector } from "@/lib/redux/hooks";
 
 const AppHeader: React.FC = () => {
 
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
-
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
-
   //SEARCH HIGHLIGHT START
   const [searchTerm, setSearchTerm] = useState("");
+  const {pageTitle} = useAppSelector((state)=>state.app);
 
   useEffect(() => {
     const highlightMatches = (term: string) => {
@@ -71,7 +71,7 @@ const AppHeader: React.FC = () => {
   //SEARCH HIGHLIGHT END
 
   // const { userProfile } = useAppSelector((state) => state.userProfile);
-  const pathname = usePathname();
+  // const pathname = usePathname();
 
 
   const handleToggle = () => {
@@ -103,19 +103,17 @@ const AppHeader: React.FC = () => {
     };
   }, []);
 
-  const getPageTitle = (pathname: string) => {
-    const pathParts = pathname.split("/").filter(Boolean);
+  // const getPageTitle = (pathname: string) => {
+  //   const pathParts = pathname.split("/").filter(Boolean);
 
-    if (pathParts.length === 0) return "Home";
+  //   if (pathParts.length === 0) return "Home";
 
-    return pathParts
-      .filter((part) => !/^[a-zA-Z0-9]{12,}$/.test(part)) // filter out IDs
-      .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
-      .join(" / ");
-  };
-
-
-  const pageTitle = getPageTitle(pathname);
+  //   return pathParts
+  //     .filter((part) => !/^[a-zA-Z0-9]{12,}$/.test(part)) // filter out IDs
+  //     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
+  //     .join(" / ");
+  // };
+  //const pageTitle = getPageTitle(pathname);
 
   return (
     <header className="sticky top-0 flex w-full bg-white z-9999 shadow-xs">
@@ -196,9 +194,9 @@ const AppHeader: React.FC = () => {
             </svg>
           </button>
 
-          <div className="w-1/3 hidden lg:block">
+          <div className="w-full hidden lg:block ">
             {/* <span className="block mr-1 text-theme-xs">Hello</span> */}
-            <span className="block mr-1 font-medium text-theme-md">{pageTitle}</span>
+            <span className="block mr-1 text-lg font-semibold">{pageTitle}</span>
 
 
           </div>

@@ -10,15 +10,18 @@ import { useAppDispatch,useAppSelector } from "@/lib/redux/hooks";
 import { logout } from "@/lib/redux/slices/userSlice";
 import { resetUserProfile } from "@/lib/redux/slices/loginPersonProfile";
 import LogoutConfirmationModal from "@/components/common/LogoutConfirmationModal";
+import { setPageTitle } from "@/lib/redux/slices/appSlice";
 
 export default function UserDropdown() {
+
+  const dispatch = useAppDispatch();
   const [isOpen, setIsOpen] = useState(false);
   const [isLogoutConfirmModalOpen,setIsLogoutConfirmModalOpen] = useState<boolean>(false);
   const router = useRouter();
   const { userProfile } = useAppSelector((state) => state.userProfile);
-  const dispatch = useAppDispatch();
 
-  console.log(userProfile, "user pofile")
+  
+
 
 
   useEffect(() => {
@@ -51,6 +54,9 @@ export default function UserDropdown() {
     dispatch(resetUserProfile());
     router.replace("/")
   
+  }
+  const handleSetPageTitle = (title:string)=>{
+    dispatch(setPageTitle(title));
   }
   return (
     <div className="relative">
@@ -104,7 +110,10 @@ export default function UserDropdown() {
         <ul className="flex flex-col gap-1 pt-4 pb-3 border-b border-gray-200 dark:border-gray-800">
           <li>
             <DropdownItem
-              onItemClick={closeDropdown}
+              onItemClick={()=>{
+                handleSetPageTitle("Profile");
+                closeDropdown();
+              }}
               tag="a"
               href="/profile"
               className="flex items-center gap-3 px-3 py-2 font-medium text-gray-700 rounded-lg group text-theme-sm hover:bg-gray-100 hover:text-gray-700 dark:text-gray-400 dark:hover:bg-white/5 dark:hover:text-gray-300"
