@@ -12,7 +12,7 @@ export default function UserManagement() {
     const [SearchInput, setSearchInput] = useState("")
     const [status, setStatus] = useState("")
     const {
-        pieChart: { monthly, lifetime, totalLeads },
+        pieChart: { lifetime, totalLeads },
     } = useAppSelector((state) => state.statistic);
 
     console.log(lifetime, totalLeads, "referral vhart data")

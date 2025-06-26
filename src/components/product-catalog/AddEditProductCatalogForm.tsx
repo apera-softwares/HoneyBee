@@ -467,7 +467,7 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
                 </div>
               )}
             </div>
-            
+
             <div className="relative w-full">
               <input
                 type="text"
