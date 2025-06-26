@@ -8,10 +8,12 @@ import memberManagementReducer from './slices/membersSlice';
 import referralReducer from "./slices/referralSlice";
 import statisticsReducer from "./slices/statisticsSlice";
 import appReducer from "./slices/appSlice";
+import authReducer from "./slices/authSlice";
 
 
 const rootReducer = combineReducers({
   app:appReducer,
+  auth:authReducer,
   user: userReducer,
   userManagement: userManagementReducer,
   productCatalog:productCatalogReducer,
