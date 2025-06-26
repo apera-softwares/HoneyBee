@@ -11,7 +11,7 @@ export default function MemberManagement() {
 
     // const [isModalOpen, setIsModalOpen] = useState(false)
     const [SearchInput, setSearchInput] = useState("")
-    const [order, setOrder] = useState("asc")
+    const [order, setOrder] = useState("desc")
 
     return (
         <div className="w-full ">
@@ -41,16 +41,12 @@ export default function MemberManagement() {
                             className="pl-10 h-11 pr-4 py-2 border border-gray-300 rounded-md focus:outline-[#FFA819]"
                         />
                     </div>
-                    {/* Create User Button */}
-
-                   
-
-                    {/* Filter By Asc Des */}
+                    {/* Sort By Date */}
                     <select
                         value={order}
                         onChange={(e) => setOrder(e.target.value)}
                         className="border border-[#151D48] w-32 h-11 text-[#151D48] rounded-md text-sm justify-center text-center outline-none">
-                        <option value="">Sort By</option>
+                        <option value="">Sort By Date</option>
                         <option value="asc">asc to des</option>
                         <option value="desc">des to asc</option>
                     </select>

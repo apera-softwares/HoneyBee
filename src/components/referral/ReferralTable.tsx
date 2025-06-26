@@ -55,7 +55,7 @@ const ReferralTable: React.FC<ReferralTableProps> = ({ searchText, status }) => 
                 page: page,
                 limit: ITEM_PER_PAGE,
                 searchQuery: searchText,
-                status:status
+                status: status
             }
             const res = await dispatch(fetchReferrals(params)).unwrap();
             setTotalPages(res?.lastPage);
@@ -168,7 +168,7 @@ const ReferralTable: React.FC<ReferralTableProps> = ({ searchText, status }) => 
                                                     item?.submittedOn?.slice(0, 10) || ""
                                                 }
                                             </TableCell>
-                                            {loggedInUser.role == "A_TEAM" || loggedInUser.role == "ADMIN" &&  <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                                            {loggedInUser.role == "A_TEAM" || loggedInUser.role == "ADMIN" && <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                                                 <button
                                                     className="flex items-center text-primary gap-2 cursor-pointer"
                                                     onClick={() => {

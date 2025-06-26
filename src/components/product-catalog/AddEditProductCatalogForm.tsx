@@ -219,6 +219,7 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
     setErrors({
       name: "", bulletPoint1: "", bulletPoint2: "", bulletPoint3: "", elevatorPitch: "", status: "", stateId: "", image: "", price: ""
     })
+    setImages([])
     setSelectedState(null);
   };
 
@@ -281,8 +282,6 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
         onEditSuccess();
         handleClearFormData();
       }
-
-
 
       const res = await dispatch(fetchProductCatalogs(params)).unwrap();
       setPaginationData((prev: PaginationState) => ({ ...prev, totalPages: res?.lastPage || 0 }))
@@ -468,6 +467,7 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
                 </div>
               )}
             </div>
+            
             <div className="relative w-full">
               <input
                 type="text"
@@ -486,7 +486,6 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
               <span className={`${REQUIRED_ERROR}`}>{errors.price || ""}</span>
             </div>
 
-
             <div className="w-full ">
               <div className="flex items-center  gap-6 ">
                 <label className="block text-base font-medium text-gray-700  ">Status</label>
@@ -498,8 +497,8 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
                     value="true"
                     checked={formData.status === "true"}
                     onChange={(value) => { setFormData((prev: FormState) => ({ ...prev, status: value })) }}
-
                   />
+
                   <Radio
                     id="radio2"
                     label="Inactive"
