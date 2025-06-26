@@ -59,8 +59,8 @@ export default function ReferralFormPage() {
         {/* Left: Heading */}
         <div className=" w-auto">
           <CommonHeading
-            pageTitle="Catherine Chen "
-            description="Check out my top picks and refer someone who needs them!"
+            pageTitle="Landing page and submit referral"
+            description=""
           />
         </div>
         <div className="flex items-center gap-2">
