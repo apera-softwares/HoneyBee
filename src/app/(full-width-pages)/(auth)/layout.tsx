@@ -13,12 +13,12 @@ export default function AuthLayout({
         "radial-gradient(ellipse at bottom center, #FFF4D2 0%, #F8F8F8 60%)",
     }}>
       <ThemeProvider>
-          {children}
-          <Toaster
-  position="top-center"
-  reverseOrder={false}
-/>
-         
+        {children}
+        <Toaster
+          position="top-center"
+          reverseOrder={false}
+        />
+
       </ThemeProvider>
     </div>
   );

@@ -13,7 +13,6 @@ const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
 });
 
-
 export default function StatisticsPieChart() {
 
   const [isOpen, setIsOpen] = useState(false);
@@ -26,6 +25,8 @@ export default function StatisticsPieChart() {
   const {
     pieChart: { monthly, lifetime },
   } = useAppSelector((state) => state.statistic);
+      console.log( monthly, lifetime ,"pie chart data")
+
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

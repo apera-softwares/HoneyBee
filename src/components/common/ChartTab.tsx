@@ -2,16 +2,16 @@
 import React from "react";
 
 interface OptionItem {
-  label:string;
-  value:string;
+  label: string;
+  value: string;
 }
 interface ChartTabProps {
-  options:OptionItem[];
-  selected:OptionItem;
-  onSelect:(option:OptionItem)=>void;
+  options: OptionItem[];
+  selected: OptionItem;
+  onSelect: (option: OptionItem) => void;
 }
 
-const ChartTab: React.FC<ChartTabProps> = ({options,selected,onSelect}) => {
+const ChartTab: React.FC<ChartTabProps> = ({ options, selected, onSelect }) => {
 
 
   return (
@@ -20,9 +20,8 @@ const ChartTab: React.FC<ChartTabProps> = ({options,selected,onSelect}) => {
         <button
           key={item.value}
           onClick={() => onSelect(item)}
-          className={`px-3 py-2 font-medium  rounded-md text-sm   dark:hover:text-white ${
-            selected.value === item.value ? " text-white bg-primary" : "bg-white"
-          } transition-all duration-300 `}
+          className={`px-3 py-2 font-medium  rounded-md text-sm   dark:hover:text-white ${selected.value === item.value ? " text-white bg-primary" : "bg-white"
+            } transition-all duration-300 `}
         >
           {item.label}
         </button>

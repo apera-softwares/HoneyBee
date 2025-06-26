@@ -16,7 +16,8 @@ export const fetchStatisticsNumbers = createAsyncThunk(
           "ngrok-skip-browser-warning": "true",
         },
       });
-      
+      console.log(response.data,"chart data")
+
       return response.data;
 
 
@@ -54,6 +55,7 @@ interface StatisticsState {
   pieChart: {
     monthly:PieChartItem[];
     lifetime:PieChartItem[];
+    totalLeads:any
   };
   lineChart:{
     monthly:LineChartItem[];
@@ -67,6 +69,7 @@ const initialState: StatisticsState = {
   pieChart: {
     monthly:[],
     lifetime:[],
+    totalLeads:""
   },
   lineChart:{
     monthly:[],
@@ -94,6 +97,7 @@ const statisticsSlice = createSlice({
         state.lineChart.lifetime = data?.leadsByLifeTime?.map((item:any)=>({label:item?.year_number,count:item?.count}))||[];
         state.pieChart.monthly = data?.leadStatusNumbers?.map((item:any)=>({label:item?.status,count:item?._count?.status}))||[];
         state.pieChart.lifetime = data?.leadsByMonthWithStatus?.map((item:any)=>({label:item?.status,count:item?.count}))||[];
+        state.pieChart.totalLeads = data?.totalLeads
       })
       .addCase(fetchStatisticsNumbers.rejected, (state, action) => {
         state.loading = false;

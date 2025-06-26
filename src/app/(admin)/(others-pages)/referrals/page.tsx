@@ -6,10 +6,16 @@ import { CiSearch } from "react-icons/ci";
 import { Toaster } from "react-hot-toast";
 import ReferralTable from "@/components/referral/ReferralTable";
 import LeadCard from "@/components/LeadCard";
+import { useAppSelector } from "@/lib/redux/hooks";
 
 export default function UserManagement() {
     const [SearchInput, setSearchInput] = useState("")
     const [status, setStatus] = useState("")
+    const {
+        pieChart: { lifetime, totalLeads },
+    } = useAppSelector((state) => state.statistic);
+
+    console.log(lifetime, totalLeads, "referral vhart data")
 
     return (
         <div className="w-full">
@@ -80,43 +86,41 @@ export default function UserManagement() {
             </div>
             <div className="w-full  grid grid-cols-1  lg:grid-cols-4 justify-center gap-6 mb-6 ">
                 <LeadCard
-                    title="New Referrals"
-                    value="30"
+                    title="Total Referrals"
+                    value={totalLeads}
                     point="5+ Increased form last month"
-                     active={status === ""}
-                     onClick={() => setStatus("")}
+                    active={status === ""}
+                    onClick={() => setStatus("")}
                 />
                 <LeadCard
-                    title="Leads Pitched"
-                    value="24"
-                    point="5+ Increased form last month"
-                     active={status === "Pitched"}
-                     onClick={() => setStatus("Pitched")}
-                />
-                <LeadCard
-                    title="Leads Sold"
-                    value="12"
-                    point="10+ Increased form last month"
-                    active={status === "Sold"}
-                     onClick={() => setStatus("Sold")}
-
-                />
-                <LeadCard
-                    title="Total Earned (Team)"
-                    value="$2,400"
+                    title="Leads Pending"
+                    value={lifetime[1]?.count | 0}
                     point="15+ Increased form last month"
                     // active={false}
                     active={status === "Payout"}
-                     onClick={() => setStatus("Payout")}
+                    onClick={() => setStatus("Payout")}
+                />
+
+                <LeadCard
+                    title="Leads Pitched"
+                    value={lifetime[0]?.count | 0}
+                    point="5+ Increased form last month"
+                    active={status === "Pitched"}
+                    onClick={() => setStatus("Pitched")}
+                />
+                <LeadCard
+                    title="Leads Sold"
+                    value={lifetime[3]?.count | 0}
+                    point="10+ Increased form last month"
+                    active={status === "Sold"}
+                    onClick={() => setStatus("Sold")}
 
                 />
             </div>
             {/* Table */}
             <div className="w-full">
                 {/* <UserTable searchText={SearchInput} role="A_TEAM" order="" from="team-a" /> */}
-                <ReferralTable searchText={SearchInput} status={status}/>
-
-
+                <ReferralTable searchText={SearchInput} status={status} />
             </div>
         </div>
     );

@@ -11,6 +11,7 @@ import { userSignup } from "@/lib/redux/slices/userSlice";
 import Loader from "@/components/ui/loader/Loader";
 // import Radio from "@/components/form/input/Radio";
 import LeadCard from "@/components/LeadCard";
+import Spinner from "@/components/common/Spinner";
 
 function CreateAccountPage() {
     const searchParams = useSearchParams();
@@ -24,6 +25,7 @@ function CreateAccountPage() {
             role === "b" ? "B_TEAM" :
                 ""
     });
+    
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({
         firstName: "",
@@ -32,9 +34,9 @@ function CreateAccountPage() {
         password: "",
         role: ""
     })
+
     const router = useRouter()
     const dispatch = useAppDispatch()
-
 
     const loggedInUser = useAppSelector((state) => state.user.user);
 
@@ -73,7 +75,6 @@ function CreateAccountPage() {
             }
         })
     };
-
 
 
     const validateFormData = () => {
@@ -138,8 +139,8 @@ function CreateAccountPage() {
 
         setErrors(tempErrors);
         return isValidData;
-
     };
+
     return (
         <div className="flex flex-col md:flex-row min-h-screen">
             {/* Left side - Form */}
@@ -225,7 +226,7 @@ function CreateAccountPage() {
                                     title="Enroll Your Product"
                                     value="A Team"
                                     point="List and promote your product to a wider audience easily."
-
+                                    from="signup"
                                     active={formData.role === "A_TEAM"}
                                     onClick={() => setFormData((prev: any) => ({ ...prev, role: "A_TEAM" }))}
                                 />
@@ -234,7 +235,7 @@ function CreateAccountPage() {
                                     title="Become a Member"
                                     value="B Team"
                                     point="Get access to exclusive tools and insights for team collaboration."
-
+                                    from="signup"
                                     active={formData.role === "B_TEAM"}
                                     onClick={() => setFormData((prev: any) => ({ ...prev, role: "B_TEAM" }))}
                                 />
@@ -274,7 +275,7 @@ function CreateAccountPage() {
 
 export default function Page() {
     return (
-        <Suspense fallback={<div>Loading...</div>}>
+        <Suspense fallback={<Spinner />}>
             <CreateAccountPage />
         </Suspense>
     );
