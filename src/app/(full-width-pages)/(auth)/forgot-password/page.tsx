@@ -10,12 +10,12 @@ import Logo from "../../../../assets/logo/logo.png";
 import { useRouter } from "next/navigation";
 import { IoArrowBackOutline } from "react-icons/io5";
 // import Loader from "@/components/ui/loader/Loader";
-import { useAppSelector } from "@/lib/redux/hooks";
+import { useAppSelector, useAppDispatch } from "@/lib/redux/hooks";
+import { sendOtp, resetPassword } from "@/lib/redux/slices/authSlice";
 import toast, { Toaster } from "react-hot-toast";
-import axios from "axios";
-import { BACKEND_API } from "@/api";
 
 export default function ForgotPassword() {
+  const dispatch = useAppDispatch();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -54,17 +54,15 @@ export default function ForgotPassword() {
       const payload = {
         email: formData.email,
       };
-
-      const response = await axios.post(`${BACKEND_API}user/sendOtp`, payload);
-
+      await dispatch(sendOtp(payload)).unwrap();
       toast.success("OTP sent to your email.");
       setStep(1);
-      console.log("response of otp sent", response.data);
     } catch (error: any) {
-      console.error("Error sending otp:", error);
-      const errorMsg =
-        error?.response?.data?.message || "Something went wrong!";
-      toast.error(errorMsg);
+      const errorMessage =
+        typeof error === "string"
+          ? error
+          : error?.message || "Failed to select product";
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -82,21 +80,19 @@ export default function ForgotPassword() {
         password: formData.password,
       };
 
-      const response = await axios.put(
-        `${BACKEND_API}user/restPassword`,
-        payload
-      );
-      console.log("response reset password", response.data);
+      await dispatch(resetPassword(payload)).unwrap();
+
       toast.success(
         "Password reset successfully, wait you will be redirect to login page"
       );
-      router.push("/signin");
       handleClearData();
+      router.push("/signin");
     } catch (error: any) {
-      console.error("Error while reseting password", error);
-      const errorMsg =
-        error?.response?.data?.message || "Something went wrong!";
-      toast.error(errorMsg);
+      const errorMessage =
+        typeof error === "string"
+          ? error
+          : error?.message || "Failed to select product";
+      toast.error(errorMessage);
     } finally {
       setLoading(false);
     }
@@ -186,7 +182,7 @@ export default function ForgotPassword() {
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen">
-        <Toaster/>
+      <Toaster />
       {/* Left side - Form */}
 
       <div className="w-full md:w-1/2 flex flex-col justify-center items-center   px-3 sm:px-6  py-10">

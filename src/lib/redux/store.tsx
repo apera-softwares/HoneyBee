@@ -8,11 +8,13 @@ import memberManagementReducer from './slices/membersSlice';
 import referralReducer from "./slices/referralSlice";
 import statisticsReducer from "./slices/statisticsSlice";
 import appReducer from "./slices/appSlice";
+import authReducer from "./slices/authSlice";
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
       app:appReducer,
+      auth:authReducer,
       user: userReducer,
       UserManagement: userManagementReducer,
       productCatalog: productCatalogReducer,
