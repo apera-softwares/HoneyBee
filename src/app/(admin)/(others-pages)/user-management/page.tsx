@@ -23,7 +23,7 @@ export default function UserManagement() {
                 <div className="w-full lg:w-1/2 ">
                     <CommonHeading
                         pageTitle="User Management"
-                        description="Manage all users across Bee-Team, A-Team, Managers, and Admins."
+                        description="Manage all users across A-Team and B-Team"
                     />
                 </div>
 
