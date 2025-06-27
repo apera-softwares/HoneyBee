@@ -207,7 +207,7 @@ export default function UserDropdown() {
               fill=""
             />
           </svg>
-          Sign out
+          Logout
         </button>
       </Dropdown>
          <LogoutConfirmationModal isOpen={isLogoutConfirmModalOpen} 
