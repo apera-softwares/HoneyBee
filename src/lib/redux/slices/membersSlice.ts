@@ -31,8 +31,22 @@ export const fetchAssignedMembers = createAsyncThunk(
       const state: any = thunkAPI.getState();
       const token = state.user?.user?.token;
       const {page,limit, name, order}= obj;
+
+      const queryParams = new URLSearchParams({
+          page: String(page),
+          limit: String(limit),
+      });
+
+      if(name){
+        queryParams.append("name",name);
+      }
+
+      if(order){
+        queryParams.append("order",order);
+      }
+
       const response = await axios.get(
-        `${BACKEND_API}product/getMemberProductMemberCreatedByUser?name=${name}&&limit=${limit}&&page=${page}&&order=${order}`,
+        `${BACKEND_API}product/getMemberProductMemberCreatedByUser?${queryParams.toString()}`,
         {
           headers: { Authorization: `Bearer ${token}`,   'ngrok-skip-browser-warning': 'true', },
         }
