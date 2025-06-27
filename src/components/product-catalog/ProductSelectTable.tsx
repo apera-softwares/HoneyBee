@@ -101,6 +101,12 @@ const ProductSelectTable: React.FC<ProductSelectTableProps> = ({
                     isHeader
                     className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400"
                   >
+                    Price
+                  </TableCell>
+                  <TableCell
+                    isHeader
+                    className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400"
+                  >
                     Status
                   </TableCell>
                   <TableCell
@@ -125,10 +131,15 @@ const ProductSelectTable: React.FC<ProductSelectTableProps> = ({
                     );
                     return (
                       <TableRow key={product?.id}>
-                        <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                        <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                           {product?.name || ""}
                         </TableCell>
-                        <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                        <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                         {
+                          product?.price ? `$${product?.price}`:`NA`
+                         }
+                        </TableCell>
+                        <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                           <Badge
                             size="md"
                             color={product?.status ? "success" : "warning"}
@@ -137,13 +148,13 @@ const ProductSelectTable: React.FC<ProductSelectTableProps> = ({
                           </Badge>
                         </TableCell>
 
-                        <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                        <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                           {product?.elevatorPitch &&
                             (product.elevatorPitch?.length > 40
                               ? `${product.elevatorPitch.slice(0, 40)}...`
                               : product.elevatorPitch)}
                         </TableCell>
-                        <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                        <TableCell className="px-5 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                           {isSelected ? (
                             <button
                               className="w-24 flex justify-center items-center font-medium text-red-500 bg-red-500/10 px-4 py-1 rounded-full gap-2 disabled:cursor-not-allowed cursor-pointer"

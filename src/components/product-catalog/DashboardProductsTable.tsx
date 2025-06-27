@@ -74,6 +74,12 @@ const DashboardProductsTable = () => {
                     isHeader
                     className="px-5 py-4 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400"
                   >
+                    Price
+                  </TableCell>
+                  <TableCell
+                    isHeader
+                    className="px-5 py-4 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400"
+                  >
                     Status
                   </TableCell>
                   <TableCell
@@ -93,6 +99,11 @@ const DashboardProductsTable = () => {
                       </TableCell>
                       <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                         {product?.name || ""}
+                      </TableCell>
+                      <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                        {
+                          product?.price ? `$${product?.price}`:`NA`
+                        }
                       </TableCell>
                       <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                         <Badge

@@ -84,6 +84,7 @@ const ProductCatalogTable: React.FC<ProductCatalogTableProps> = ({ filters,pagin
                             <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
                                 <TableRow>
                                     <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Name</TableCell>
+                                    <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Price</TableCell>
                                     <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Status</TableCell>
                                     <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Elevator Pitch</TableCell>
                                     <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Actions</TableCell>
@@ -93,10 +94,15 @@ const ProductCatalogTable: React.FC<ProductCatalogTableProps> = ({ filters,pagin
                                 {productCatalogs && productCatalogs.length > 0 ? (
                                     productCatalogs.map((product:any)=>( 
                                     <TableRow key={product?.id} >
-                                            <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                                            <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                                            {product?.name||""}
                                             </TableCell>
-                                            <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                                            <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                                                {
+                                                   product?.price ? `$${product?.price}`:`NA`
+                                                }
+                                            </TableCell>
+                                            <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                                             
                                                 <Badge
                                                     size="md"
@@ -106,7 +112,7 @@ const ProductCatalogTable: React.FC<ProductCatalogTableProps> = ({ filters,pagin
                                                 </Badge>
                                             </TableCell>
                                          
-                                            <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                                            <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                                           {product?.elevatorPitch && (
                                             product.elevatorPitch?.length > 40
                                             ? `${product.elevatorPitch.slice(0, 40)}...`
@@ -114,7 +120,7 @@ const ProductCatalogTable: React.FC<ProductCatalogTableProps> = ({ filters,pagin
                                             )}
 
                                             </TableCell>
-                                            <TableCell className="px-4 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                                            <TableCell className="px-5 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                                                <button className="flex items-center text-primary gap-2 cursor-pointer " onClick={() =>onEdit(product)}>
                                                  <FiEdit className="h-5 w-5 text-primary cursor-pointer "  />
                                                     Edit
