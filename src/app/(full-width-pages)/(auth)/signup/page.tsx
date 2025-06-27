@@ -59,7 +59,7 @@ function CreateAccountPage() {
         setLoading(true)
         dispatch(userSignup(formData)).then((res: any) => {
             if (res.meta.requestStatus === "fulfilled") {
-                toast.success("Account Creation successful!");
+                toast.success("Successful! Verification email sent. Please verify before login");
                 setFormData({
                     firstName: "",
                     lastName: "",
