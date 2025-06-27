@@ -26,7 +26,8 @@ import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { logout } from "@/lib/redux/slices/userSlice";
 import { resetUserProfile } from "@/lib/redux/slices/loginPersonProfile";
 import LogoutConfirmationModal from "@/components/common/LogoutConfirmationModal";
-import { MdFeedback } from "react-icons/md";
+import { MdOutlineFeedback } from "react-icons/md";
+
 import { setPageTitle } from "@/lib/redux/slices/appSlice";
 
 type NavItem = {
@@ -476,7 +477,8 @@ const AppSidebar: React.FC = () => {
           handleSetPageTitle("Feedback");
           router.push("/feedback");
         }} className="flex items-center gap-2 text-gray-700 dark:text-white w-full px-5 py-3 rounded-lg cursor-pointer">
-          <MdFeedback />
+          {/* <MdFeedback /> */}
+          <MdOutlineFeedback className="text-lg"/>
           {(isExpanded || isHovered || isMobileOpen) && <span>Feedback</span>}
         </button>
 
