@@ -44,7 +44,7 @@ const TeamTable: React.FC<TeamTableProps> = ({ searchText, role, order,isCreateT
     useEffect(() => {
 
         if (userProfile?.role === UserRole.ADMIN) {
-            dispatch(fetchTeams({ page: currentPage, limit: ITEM_PER_PAGE })).then((res: any) => {
+            dispatch(fetchTeams({ page: currentPage, limit: ITEM_PER_PAGE ,name:searchText})).then((res: any) => {
                 if (res.meta.requestStatus === "fulfilled") {
                     if (res.payload) {
                         setTeamData(res.payload.data || []);
@@ -60,7 +60,7 @@ const TeamTable: React.FC<TeamTableProps> = ({ searchText, role, order,isCreateT
                 }
             });
         } else {
-            dispatch(fetchTeamsByUserId({ page: currentPage, limit: ITEM_PER_PAGE })).then((res: any) => {
+            dispatch(fetchTeamsByUserId({ page: currentPage, limit: ITEM_PER_PAGE,name:searchText})).then((res: any) => {
                 if (res.meta.requestStatus === "fulfilled") {
                     if (res.payload) {
                         setTeamData(res.payload || []);

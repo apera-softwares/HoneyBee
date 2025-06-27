@@ -8,7 +8,7 @@ export const fetchTeams = createAsyncThunk(
     try {
       const state: any = thunkAPI.getState();
       const token = state.user?.user?.token;
-      const { page, limit,name } = obj;
+      const { page,limit,name } = obj;
 
       const queryParams = new URLSearchParams({
           page: String(page),
