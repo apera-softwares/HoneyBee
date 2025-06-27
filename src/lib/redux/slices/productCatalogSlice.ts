@@ -46,8 +46,10 @@ export const fetchProductCatalogs = createAsyncThunk(
       queryParams.append("status", status);
       }
 
+      queryParams.append("order","desc");
+
       const response = await axios.get(
-        `${BACKEND_API}admin/products?${queryParams.toString()}&&order=desc`,
+        `${BACKEND_API}admin/products?${queryParams.toString()}`,
         {
           headers: { Authorization: `Bearer ${token}`,   'ngrok-skip-browser-warning': 'true', },
           

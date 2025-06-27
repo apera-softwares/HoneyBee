@@ -7,15 +7,13 @@ interface ProductCardProps {
   title: string;
   points: string[];
   images: string[];
-  product:any;
-  onClickViewMore:(product:any)=>void,
+  onClickViewMore:()=>void,
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({
   title,
   points,
   images,
-  product,
   onClickViewMore,
   
 }) => {
@@ -87,7 +85,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
           ))}
         </ul>
         <button className=" h-5 text-primary font-semibold text-sm text-left"
-         onClick={()=>onClickViewMore(product)}
+         onClick={onClickViewMore}
         >
           View More
         </button>

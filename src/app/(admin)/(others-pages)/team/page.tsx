@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import CommonHeading from "@/components/common/CommonHeading";
-// import { CiSearch } from "react-icons/ci";
+import { CiSearch } from "react-icons/ci";
 import { HiOutlinePlus } from "react-icons/hi";
 import { Toaster } from "react-hot-toast";
 import TeamAddEdit from "@/components/team/TeamAddEdit";
@@ -11,7 +11,7 @@ import { UserRole } from "@/constant/userRoles";
 
 export default function TeamManagement() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [searchInput] = useState("");
+  const [searchInput,setSearchInput] = useState("");
   const [order] = useState("");
   const { user: loggedUser } = useAppSelector((state) => state.user);
   const { teams, loading } = useAppSelector((state) => state.TeamManagement);
@@ -37,7 +37,8 @@ export default function TeamManagement() {
         {/* Right: Actions */}
         <div className="w-full lg:w-1/2 flex flex-wrap justify-start lg:justify-end items-center gap-3">
           {/* Search Input */}
-          {/* <div className="relative h-11">
+          {
+            loggedUser?.role === UserRole.ADMIN && ( <div className="relative h-11">
             <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
               <CiSearch className="text-lg" />
             </span>
@@ -49,10 +50,12 @@ export default function TeamManagement() {
               onChange={(e) => setSearchInput(e.target.value)}
               className="pl-10 h-11 pr-4 py-2 border border-gray-300 rounded-md focus:outline-primary "
             />
-          </div> */}
+          </div>)
+          }
+
           {/* Create User Button */}
 
-          {showCreateTeamButton && loggedUser.role == UserRole.B_TEAM && (
+          {showCreateTeamButton && (
             <button
               onClick={() => setIsModalOpen(true)}
               className="h-11 bg-primary hover:bg-primary-hover text-white rounded-md text-md px-4 justify-center text-center outline-none flex items-center gap-1"

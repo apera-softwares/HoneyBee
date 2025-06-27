@@ -96,11 +96,10 @@ export default function ReferralFormPage() {
               return (
                 <ProductCard
                   key={product?.id}
-                  product={product}
                   title={product?.name}
                   points={product?.bulletPoints?.split(",")}
                   images={images}
-                  onClickViewMore={handleViewProductDetails}
+                  onClickViewMore={()=>handleViewProductDetails({...product,images})}
                 />
               )
             })}

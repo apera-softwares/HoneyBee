@@ -97,8 +97,8 @@ export default function UserManagement() {
                     value={lifetime[1]?.count | 0}
                     point="15+ Increased form last month"
                     // active={false}
-                    active={status === "Payout"}
-                    onClick={() => setStatus("Payout")}
+                    active={status === "Pending"}
+                    onClick={() => setStatus("Pending")}
                 />
 
                 <LeadCard
