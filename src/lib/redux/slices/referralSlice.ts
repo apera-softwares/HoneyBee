@@ -43,8 +43,14 @@ export const fetchReferrals = createAsyncThunk(
       queryParams.append("name", searchQuery);
       }
 
+      if(status){
+        queryParams.append("status",status);
+      }
+      
+      queryParams.append("order","desc");
+
       const response = await axios.get(
-        `${BACKEND_API}lead?${queryParams.toString()}&&order=desc&&${status &&`status=${status}`}`,
+        `${BACKEND_API}lead?${queryParams.toString()}`,
         {
           headers: { Authorization: `Bearer ${token}`,   'ngrok-skip-browser-warning': 'true', },
           
@@ -66,8 +72,11 @@ export const updateReferral = createAsyncThunk(
     try {
       const state: any = thunkAPI.getState();
       const token = state.user?.user?.token;
+      const data = {
+        status:status
+      }
 
-      const response = await axios.put(`${BACKEND_API}lead/${id}`, {status: status}, {
+      const response = await axios.put(`${BACKEND_API}lead/${id}`,data, {
         headers: { Authorization: `Bearer ${token}`,  'ngrok-skip-browser-warning': 'true', },
       });
 
