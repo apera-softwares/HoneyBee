@@ -6,15 +6,41 @@ import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
 import Logo from '../assets/logo/logo.png';
 //import { usePathname } from "next/navigation";
-import { useAppSelector } from "@/lib/redux/hooks";
+import { useAppSelector,useAppDispatch } from "@/lib/redux/hooks";
+import { fetchStatisticsNumbers } from "@/lib/redux/slices/statisticsSlice";
 
 const AppHeader: React.FC = () => {
-
+  const dispatch = useAppDispatch();
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
   //SEARCH HIGHLIGHT START
   const [searchTerm, setSearchTerm] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
   const {pageTitle} = useAppSelector((state)=>state.app);
+
+  //SEARCH HIGHLIGHT END
+  // const { userProfile } = useAppSelector((state) => state.userProfile);
+  // const pathname = usePathname();
+
+
+  useEffect(() => {
+    getStatNumbers();
+  }, []);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if ((event.metaKey || event.ctrlKey) && event.key === "k") {
+        event.preventDefault();
+        inputRef.current?.focus();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, []);
 
   useEffect(() => {
     const highlightMatches = (term: string) => {
@@ -68,11 +94,15 @@ const AppHeader: React.FC = () => {
       removeHighlights();
     };
   }, [searchTerm]);
-  //SEARCH HIGHLIGHT END
 
-  // const { userProfile } = useAppSelector((state) => state.userProfile);
-  // const pathname = usePathname();
-
+  const getStatNumbers = async () => {
+    try {
+      const payload = {};
+      await dispatch(fetchStatisticsNumbers(payload)).unwrap();
+    } catch (error: any) {
+      console.log("error while getting statistics number", error);
+    }
+  };
 
   const handleToggle = () => {
     if (window.innerWidth >= 1024) {
@@ -85,23 +115,6 @@ const AppHeader: React.FC = () => {
   const toggleApplicationMenu = () => {
     setApplicationMenuOpen(!isApplicationMenuOpen);
   };
-
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if ((event.metaKey || event.ctrlKey) && event.key === "k") {
-        event.preventDefault();
-        inputRef.current?.focus();
-      }
-    };
-
-    document.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, []);
 
   // const getPageTitle = (pathname: string) => {
   //   const pathParts = pathname.split("/").filter(Boolean);
