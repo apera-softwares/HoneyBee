@@ -7,12 +7,17 @@ interface ProductCardProps {
   title: string;
   points: string[];
   images: string[];
+  product:any;
+  onClickViewMore:(product:any)=>void,
 }
 
 const ProductCard: React.FC<ProductCardProps> = ({
   title,
   points,
   images,
+  product,
+  onClickViewMore,
+  
 }) => {
     
   const [current, setCurrent] = useState(0);
@@ -29,7 +34,8 @@ const ProductCard: React.FC<ProductCardProps> = ({
   };
 
   return (
-    <div className="w-full shrink-0 min-w-[340px] max-w-sm h-[200px]  flex     gap-4 p-2  bg-white rounded-3xl border border-[#E0E0E0]  ">
+    <div className="w-full shrink-0 min-w-[340px] max-w-sm h-[200px]  flex     gap-4 p-2  bg-white rounded-3xl border border-[#E0E0E0]  "
+    >
       {/* Left: Image Carousel */}
       <div className="w-[50%] aspect-square relative rounded-xl overflow-hidden  shrink-0 ">
         <img
@@ -80,7 +86,9 @@ const ProductCard: React.FC<ProductCardProps> = ({
             </li>
           ))}
         </ul>
-        <button className=" h-5 text-primary font-semibold text-sm text-left">
+        <button className=" h-5 text-primary font-semibold text-sm text-left"
+         onClick={()=>onClickViewMore(product)}
+        >
           View More
         </button>
       </div>

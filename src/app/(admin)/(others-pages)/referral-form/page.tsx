@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, { useEffect,useState } from "react";
 import CommonHeading from "@/components/common/CommonHeading";
 import ReferralForm from "@/components/referral/ReferralForm";
 import ProductCard from "@/components/product-catalog/ProductCard";
@@ -9,10 +9,13 @@ import { fetchSelectedProducts } from "@/lib/redux/slices/productCatalogSlice";
 import { UserRole } from "@/constant/userRoles";
 import { BACKEND_API } from "@/api";
 import toast from "react-hot-toast";
+import ViewProductDetailsModal from "@/components/product-catalog/ViewProductDetailsModal";
 
 export default function ReferralFormPage() {
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const [showViewProductDetailsModal,setShowViewProductDetailsModal] = useState<boolean>(false);
+  const[selectedProduct,setSelectedProduct] = useState<any>(null);
   const { selectedProducts } = useAppSelector((state) => state.productCatalog);
   const { user: loggedInUser } = useAppSelector((state) => state.user)
   const { userProfile } = useAppSelector((state) => state.userProfile);
@@ -52,6 +55,18 @@ export default function ReferralFormPage() {
     }
   };
 
+  const handleViewProductDetails = (product:any)=>{
+
+    if(product){
+
+      setSelectedProduct(product);
+      setShowViewProductDetailsModal(true);
+      return ;
+    }
+    setShowViewProductDetailsModal(false);
+    setSelectedProduct(null);
+  }
+
 
   return (
     <div>
@@ -81,9 +96,11 @@ export default function ReferralFormPage() {
               return (
                 <ProductCard
                   key={product?.id}
+                  product={product}
                   title={product?.name}
                   points={product?.bulletPoints?.split(",")}
                   images={images}
+                  onClickViewMore={handleViewProductDetails}
                 />
               )
             })}
@@ -102,6 +119,7 @@ export default function ReferralFormPage() {
         </div>
         <ReferralForm />
       </div>
+      <ViewProductDetailsModal isOpen={showViewProductDetailsModal} closeModal={()=>handleViewProductDetails(null)} selectedProduct={selectedProduct} />
     </div>
   );
 }

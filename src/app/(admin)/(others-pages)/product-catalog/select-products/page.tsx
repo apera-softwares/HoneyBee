@@ -8,6 +8,7 @@ import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { fetchSelectedProducts, selectProductCatalog, unselectProductCatalog } from "@/lib/redux/slices/productCatalogSlice";
 import toast, { Toaster } from "react-hot-toast";
 import { BACKEND_API } from "@/api";
+import ViewProductDetailsModal from "@/components/product-catalog/ViewProductDetailsModal";
 
 interface FiltersState {
   searchQuery: string;
@@ -31,6 +32,8 @@ export default function SelectForSelect() {
     totalPages: 0,
   });
   const [selectedProductId, setSelectedProductId] = useState<any>(null);
+  const [showViewProductDetailsModal,setShowViewProductDetailsModal] = useState<boolean>(false);
+  const[selectedProduct,setSelectedProduct] = useState<any>(null);
   const { userProfile } = useAppSelector((state) => state.userProfile);
   const { user: loggedInUser } = useAppSelector((state) => state.user);
   const { selectedProducts } = useAppSelector((state) => state.productCatalog)
@@ -118,6 +121,16 @@ export default function SelectForSelect() {
     }
   };
 
+  const handleViewProductDetails = (product:any)=>{
+    if(product){
+      setSelectedProduct(product);
+      setShowViewProductDetailsModal(true);
+      return ;
+    }
+    setShowViewProductDetailsModal(false);
+    setSelectedProduct(null);
+  }
+
   return (
     <div className="w-full">
       <Toaster />
@@ -178,9 +191,11 @@ export default function SelectForSelect() {
               return (
                 <ProductCard
                   key={product?.id}
+                  product={product}
                   title={product?.name}
                   points={product?.bulletPoints?.split(",")}
                   images={images}
+                  onClickViewMore={handleViewProductDetails}
                 />
               )
             })}
@@ -203,6 +218,7 @@ export default function SelectForSelect() {
           onProductUnselect={handleSubmitUnselectedProduct}
         />
       </div>
+      <ViewProductDetailsModal isOpen={showViewProductDetailsModal} closeModal={()=>handleViewProductDetails(null)} selectedProduct={selectedProduct} />
     </div>
   );
 }
