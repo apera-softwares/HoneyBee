@@ -27,6 +27,39 @@ export const getUserProfile = createAsyncThunk(
   }
 );
 
+export const uploadProfileImage = createAsyncThunk(
+  "user/UpdateProfileImage",
+  async (data: FormData, thunkAPI) => {
+    try {
+      const state: any = thunkAPI.getState();
+      const id = state.user?.user?.userId;
+      const token = state.user?.user?.token;
+
+      const response = await axios.post(
+        `${BACKEND_API}user/uploadMedia/${id}`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'ngrok-skip-browser-warning': 'true',
+            // DO NOT manually set Content-Type when sending FormData
+          },
+        }
+      );
+
+      const updatedUser = response.data;
+      console.log(updatedUser, "User Profile response");
+
+      return updatedUser;
+    } catch (error: any) {
+      console.log(error, "User Profile Image Update error");
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to update profile image"
+      );
+    }
+  }
+);
+
 
 interface UserState {
   userProfile: any;
@@ -53,29 +86,45 @@ const userProfileSlice = createSlice({
     },
     
   },
-  extraReducers: (builder) => {
-    // get Login Profile
-    builder
-      .addCase(getUserProfile.pending, (state) => {
-        state.loading = true;
-        state.userProfile = null;
-        state.error = null;
-      })
-      .addCase(getUserProfile.fulfilled, (state, action) => {
-        state.loading = false;
-        state.userProfile = action.payload;
-        state.error = null;
-      })
-      .addCase(getUserProfile.rejected, (state, action) => {
-        state.loading = false;
-        state.userProfile = null;
-        if (action.error.message === "Request failed with Status code 401") {
-          state.error = "Access Denied!";
-        } else {
-          state.error = action.payload as string;
-        }
-      });
-    }
+extraReducers: (builder) => {
+  // getUserProfile Thunk
+  builder
+    .addCase(getUserProfile.pending, (state) => {
+      state.loading = true;
+      state.userProfile = null;
+      state.error = null;
+    })
+    .addCase(getUserProfile.fulfilled, (state, action) => {
+      state.loading = false;
+      state.userProfile = action.payload;
+      state.error = null;
+    })
+    .addCase(getUserProfile.rejected, (state, action) => {
+      state.loading = false;
+      state.userProfile = null;
+      if (action.error.message === "Request failed with Status code 401") {
+        state.error = "Access Denied!";
+      } else {
+        state.error = action.payload as string;
+      }
+    })
+
+    // ✅ uploadProfileImage Thunk
+    .addCase(uploadProfileImage.pending, (state) => {
+      state.loading = true;
+      state.error = null;
+    })
+   .addCase(uploadProfileImage.fulfilled, (state, action) => {
+  state.loading = false;
+  state.userProfile = action.payload; // ✅ This updates the profile image
+  state.error = null;
+})
+
+    .addCase(uploadProfileImage.rejected, (state, action) => {
+      state.loading = false;
+      state.error = action.payload as string;
+    });
+}
    
 });
 
