@@ -97,8 +97,7 @@ const AppHeader: React.FC = () => {
 
   const getStatNumbers = async () => {
     try {
-      const payload = {};
-      await dispatch(fetchStatisticsNumbers(payload)).unwrap();
+      await dispatch(fetchStatisticsNumbers()).unwrap();
     } catch (error: any) {
       console.log("error while getting statistics number", error);
     }

@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import StatisticsLineChart from "../statistic-charts/StatisticsLineChart";
+import StatisticsAreaChart from "../statistic-charts/StatisticsAreaChart";
 import StatisticsPieChart from "../statistic-charts/StatisticsPieChart";
 import DashboardProductsTable from "../product-catalog/DashboardProductsTable";
 
@@ -12,7 +12,7 @@ const ATeamDashboard = () => {
           <StatisticsPieChart/>
         </div>
         <div className="w-full col-span-12 lg:col-span-7 ">
-          <StatisticsLineChart />
+          <StatisticsAreaChart />
         </div>
       </div>
 

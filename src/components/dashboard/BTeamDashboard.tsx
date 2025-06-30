@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import StatisticsLineChart from "../statistic-charts/StatisticsLineChart";
+import StatisticsAreaChart from "../statistic-charts/StatisticsAreaChart";
 import TeamCard from "@/components/team/TeamCard";
 import StatisticsPieChart from "../statistic-charts/StatisticsPieChart";
 import axios from "axios";
@@ -106,7 +106,7 @@ const BTeamDashboard = () => {
           <StatisticsPieChart />
         </div>
         <div className="w-full col-span-12 lg:col-span-7 ">
-          <StatisticsLineChart />
+          <StatisticsAreaChart />
         </div>
       </div>
 

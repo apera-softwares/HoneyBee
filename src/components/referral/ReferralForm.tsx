@@ -7,6 +7,7 @@ import axios from "axios";
 import { BACKEND_API } from "@/api";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { createReferral } from "@/lib/redux/slices/referralSlice";
+import { fetchStatisticsNumbers } from "@/lib/redux/slices/statisticsSlice";
 import toast, { Toaster } from "react-hot-toast";
 
 interface FormDataState {
@@ -144,18 +145,27 @@ const ReferralForm = () => {
     }
   };
 
+   const getStatNumbers = async () => {
+    try {
+      await dispatch(fetchStatisticsNumbers()).unwrap();
+    } catch (error: any) {
+      console.log("error while getting statistics number", error);
+    }
+  };
+
 
   const handleSubmitReferrals = async () => {
     
     if (!validateFormData()) return;
+    setLoading(true);
     
     try {
 
-      setLoading(true);
       const payload = {...formData,teamMemberId:loggedInUser?.userId}; 
       await dispatch(createReferral(payload)).unwrap();
-      toast.success("Created referral successfully");
+      toast.success("Referral created successfully");
       handleClearFormData();
+      getStatNumbers();
 
     } catch (error: any) {
       console.error("Error while creating referral:", error);
