@@ -93,6 +93,12 @@ const DashboardProductsTable = () => {
                     isHeader
                     className="px-5 py-4 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400"
                   >
+                    Estimated Price
+                  </TableCell>
+                  <TableCell
+                    isHeader
+                    className="px-5 py-4 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400"
+                  >
                     Price
                   </TableCell>
                   <TableCell
@@ -100,12 +106,6 @@ const DashboardProductsTable = () => {
                     className="px-5 py-4 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400"
                   >
                     Status
-                  </TableCell>
-                  <TableCell
-                    isHeader
-                    className="px-5 py-4 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400"
-                  >
-                    Elevator Pitch
                   </TableCell>
                   <TableCell
                     isHeader
@@ -127,6 +127,11 @@ const DashboardProductsTable = () => {
                       </TableCell>
                       <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                         {
+                          product?.estimatedPrice ? `$${product?.estimatedPrice}`:`NA`
+                        }
+                      </TableCell>
+                      <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                        {
                           product?.price ? `$${product?.price}`:`NA`
                         }
                       </TableCell>
@@ -138,17 +143,10 @@ const DashboardProductsTable = () => {
                           {product?.status ? "Active" : "Inactive"}
                         </Badge>
                       </TableCell>
-
-                      <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                        {product?.elevatorPitch &&
-                          (product.elevatorPitch?.length > 40
-                            ? `${product.elevatorPitch.slice(0, 40)}...`
-                            : product.elevatorPitch)}
-                      </TableCell>
                       <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                           <div className="flex flex-col items-start gap-1">
                               <button className="flex items-center text-primary text-nowrap gap-2 cursor-pointer" onClick={() =>handleViewProductDetails(product)}>
-                                  <FaRegEye className="h-5 w-5 text-primary cursor-pointer"  />
+                                  <FaRegEye className="h-5 w-5  cursor-pointer"  />
                                                     View
                               </button>
                           </div>

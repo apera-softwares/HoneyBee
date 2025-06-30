@@ -87,9 +87,10 @@ const ProductCatalogTable: React.FC<ProductCatalogTableProps> = ({ filters,pagin
                             <TableHeader className="border-b border-gray-100 dark:border-white/[0.05]">
                                 <TableRow>
                                     <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Name</TableCell>
+                                    <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Estimated Price</TableCell>
                                     <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Price</TableCell>
                                     <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Status</TableCell>
-                                    <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Elevator Pitch</TableCell>
+                                    {/* <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Elevator Pitch</TableCell> */}
                                     <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Actions</TableCell>
                                 </TableRow>
                             </TableHeader>
@@ -102,6 +103,11 @@ const ProductCatalogTable: React.FC<ProductCatalogTableProps> = ({ filters,pagin
                                             </TableCell>
                                             <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                                                 {
+                                                   product?.estimatedPrice ? `$${product?.estimatedPrice}`:`NA`
+                                                }
+                                            </TableCell>
+                                            <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                                               {
                                                    product?.price ? `$${product?.price}`:`NA`
                                                 }
                                             </TableCell>
@@ -115,14 +121,14 @@ const ProductCatalogTable: React.FC<ProductCatalogTableProps> = ({ filters,pagin
                                                 </Badge>
                                             </TableCell>
                                          
-                                            <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                                            {/* <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                                           {product?.elevatorPitch && (
                                             product.elevatorPitch?.length > 40
                                             ? `${product.elevatorPitch.slice(0, 40)}...`
                                             : product.elevatorPitch
                                             )}
 
-                                            </TableCell>
+                                            </TableCell> */}
                                             <TableCell className="px-5 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                                               <div className="flex flex-col items-start gap-1">
                                                 <button className="flex items-center text-primary gap-2 cursor-pointer" onClick={() =>onEdit(product)}>
