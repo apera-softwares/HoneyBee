@@ -97,7 +97,7 @@ export default function ProductCatalog() {
                     </span>
                     <input
                         type="text"
-                        placeholder="Search by name, product, date"
+                        placeholder="Search by product name"
                         name="searchQuery"
                         value={filters.searchQuery}
                         onChange={(e) => setFilters((prevFilters: FiltersState) => ({ ...prevFilters, searchQuery: e.target.value }))}

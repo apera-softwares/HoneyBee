@@ -34,7 +34,7 @@ export default function MemberManagement() {
                         </span>
                         <input
                             type="text"
-                            placeholder="Search team by name"
+                            placeholder="Search by name"
                             name="SearchInput"
                             value={SearchInput}
                             onChange={(e) => setSearchInput(e.target.value)}
