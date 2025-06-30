@@ -25,7 +25,7 @@ function CreateAccountPage() {
             role === "b" ? "B_TEAM" :
                 ""
     });
-    
+
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({
         firstName: "",
@@ -37,18 +37,15 @@ function CreateAccountPage() {
 
     const router = useRouter()
     const dispatch = useAppDispatch()
-
     const loggedInUser = useAppSelector((state) => state.user.user);
 
     useEffect(() => {
-
         if (loggedInUser) {
             router.replace("/")
         }
     }, [loggedInUser]);
 
     // if (loggedInUser) return null;
-
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -75,7 +72,6 @@ function CreateAccountPage() {
             }
         })
     };
-
 
     const validateFormData = () => {
         let isValidData = true;
@@ -242,7 +238,6 @@ function CreateAccountPage() {
                             </div>
                             <span className={`${INPUT_REQUIRED_ERROR_CLASS}`}>{errors.role || ""}</span>
                         </div>
-
 
                         <button
                             type="submit"
