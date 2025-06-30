@@ -15,6 +15,10 @@ export default function Referrals() {
         pieChart: { lifetime, totalLeads },
     } = useAppSelector((state) => state.statistic);
 
+    const getCountByStatus = (label: string): number =>{
+        return lifetime.find(item => item?.label === label)?.count || 0;
+    }
+
     return (
         <div className="w-full">
             <Toaster />
@@ -92,7 +96,7 @@ export default function Referrals() {
                 />
                 <LeadCard
                     title="Leads Pending"
-                    value={lifetime[1]?.count | 0}
+                    value={getCountByStatus("Pending")}
                     point="15+ Increased form last month"
                     // active={false}
                     active={status === "Pending"}
@@ -101,14 +105,14 @@ export default function Referrals() {
 
                 <LeadCard
                     title="Leads Pitched"
-                    value={lifetime[0]?.count | 0}
+                    value={getCountByStatus("Pitched")}
                     point="5+ Increased form last month"
                     active={status === "Pitched"}
                     onClick={() => setStatus("Pitched")}
                 />
                 <LeadCard
                     title="Leads Sold"
-                    value={lifetime[3]?.count | 0}
+                    value={getCountByStatus("Sold")}
                     point="10+ Increased form last month"
                     active={status === "Sold"}
                     onClick={() => setStatus("Sold")}
