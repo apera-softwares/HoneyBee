@@ -14,12 +14,17 @@ import { fetchProductCatalogs } from "@/lib/redux/slices/productCatalogSlice";
 import Spinner from "../common/Spinner";
 import Pagination from "../tables/Pagination";
 import { Toaster } from "react-hot-toast";
+import ViewProductDetailsModal from "./ViewProductDetailsModal";
+import { BACKEND_API } from "@/api";
+import { FaRegEye } from "react-icons/fa";
 
 const DashboardProductsTable = () => {
   const dispatch = useDispatch<AppDispatch>();
   const ITEM_PER_PAGE = 5;
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [totalPages, setTotalPages] = useState<number>(0);
+  const [ selectedProduct,setSelectedProduct ] = useState<any>(null);
+  const[showViewProductDetailsModal,setShowViewProductViewDetailsModal]=useState<boolean>(false);
   const { productCatalogs, loading } = useSelector(
     (state: RootState) => state.productCatalog
   );
@@ -46,6 +51,20 @@ const DashboardProductsTable = () => {
     setCurrentPage(page);
   };
 
+  const handleViewProductDetails = (data:any)=>{
+    if(data){
+
+    const images = data?.media?.length > 0 ? data?.media?.map((mediaItem: any) => `${BACKEND_API}${mediaItem?.imageName?.slice(2, mediaItem?.imageName?.length)}`) : ["/assets/images/image-not-available.png"];
+    setSelectedProduct({...data,images});
+    setShowViewProductViewDetailsModal(true);
+    return ;
+    }
+
+    setShowViewProductViewDetailsModal(false);
+    setSelectedProduct(null);
+
+  }
+  
   return (
     <div className="w-full overflow-hidden rounded-xl bg-white dark:bg-white/[0.03] shadow-md">
       <div className="w-full overflow-x-auto">
@@ -74,6 +93,12 @@ const DashboardProductsTable = () => {
                     isHeader
                     className="px-5 py-4 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400"
                   >
+                    Estimated Price
+                  </TableCell>
+                  <TableCell
+                    isHeader
+                    className="px-5 py-4 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400"
+                  >
                     Price
                   </TableCell>
                   <TableCell
@@ -86,7 +111,7 @@ const DashboardProductsTable = () => {
                     isHeader
                     className="px-5 py-4 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400"
                   >
-                    Elevator Pitch
+                    Actions
                   </TableCell>
                 </TableRow>
               </TableHeader>
@@ -102,6 +127,11 @@ const DashboardProductsTable = () => {
                       </TableCell>
                       <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                         {
+                          product?.estimatedPrice ? `$${product?.estimatedPrice}`:`NA`
+                        }
+                      </TableCell>
+                      <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                        {
                           product?.price ? `$${product?.price}`:`NA`
                         }
                       </TableCell>
@@ -113,12 +143,13 @@ const DashboardProductsTable = () => {
                           {product?.status ? "Active" : "Inactive"}
                         </Badge>
                       </TableCell>
-
                       <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                        {product?.elevatorPitch &&
-                          (product.elevatorPitch?.length > 40
-                            ? `${product.elevatorPitch.slice(0, 40)}...`
-                            : product.elevatorPitch)}
+                          <div className="flex flex-col items-start gap-1">
+                              <button className="flex items-center text-primary text-nowrap gap-2 cursor-pointer" onClick={() =>handleViewProductDetails(product)}>
+                                  <FaRegEye className="h-5 w-5  cursor-pointer"  />
+                                                    View
+                              </button>
+                          </div>
                       </TableCell>
                     </TableRow>
                   ))
@@ -144,6 +175,8 @@ const DashboardProductsTable = () => {
           />
         </div>
       )}
+
+      <ViewProductDetailsModal isOpen={showViewProductDetailsModal} closeModal={()=>handleViewProductDetails(null)} selectedProduct={selectedProduct}/>
     </div>
   );
 };

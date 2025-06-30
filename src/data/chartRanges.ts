@@ -4,6 +4,10 @@ export const CHART_RANGES = [
     value: "monthly",
   },
   {
+    label: "This Year",
+    value: "yearly",
+  },
+  {
     label: "Life Time",
     value: "lifetime",
   },

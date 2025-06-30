@@ -36,7 +36,7 @@ export default function UserManagement() {
                         </span>
                         <input
                             type="text"
-                            placeholder="Search by name, product, date"
+                            placeholder="Search by name"
                             name="SearchInput"
                             value={SearchInput}
                             onChange={(e) => setSearchInput(e.target.value)}

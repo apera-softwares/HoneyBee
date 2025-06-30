@@ -18,7 +18,7 @@ const ViewProductDetailsModal: React.FC<ViewProductDetailsModalProps> = ({
   const bulletPoints = selectedProduct?.bulletPoints?.split(",") || [];
   const [current, setCurrent] = useState(0);
   const isFirst = current === 0;
-  const isLast = current === selectedProduct?.images.length - 1;
+  const isLast = current === selectedProduct?.images?.length - 1;
 
   const nextSlide = () => !isLast && setCurrent((prev) => prev + 1);
   const prevSlide = () => !isFirst && setCurrent((prev) => prev - 1);

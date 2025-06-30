@@ -123,7 +123,8 @@ export default function SelectForSelect() {
 
   const handleViewProductDetails = (product:any)=>{
     if(product){
-      setSelectedProduct(product);
+      const images = product?.media?.length > 0 ? product?.media?.map((mediaItem: any) => `${BACKEND_API}${mediaItem?.imageName?.slice(2, mediaItem?.imageName?.length)}`) : ["/assets/images/image-not-available.png"];
+      setSelectedProduct({...product,images});
       setShowViewProductDetailsModal(true);
       return ;
     }
@@ -150,7 +151,7 @@ export default function SelectForSelect() {
             </span>
             <input
               type="text"
-              placeholder="Search by name, product, date"
+              placeholder="Search by product name"
               name="searchQuery"
               value={filters.searchQuery}
               onChange={(e) =>
@@ -194,7 +195,7 @@ export default function SelectForSelect() {
                   title={product?.name}
                   points={product?.bulletPoints?.split(",")}
                   images={images}
-                  onClickViewMore={()=>handleViewProductDetails({...product,images})}
+                  onClickViewMore={()=>handleViewProductDetails(product)}
                 />
               )
             })}
@@ -215,6 +216,7 @@ export default function SelectForSelect() {
           selectedProducts={selectedProducts}
           onProductSelect={handleSubmitSelectedProduct}
           onProductUnselect={handleSubmitUnselectedProduct}
+          onView={handleViewProductDetails}
         />
       </div>
       <ViewProductDetailsModal isOpen={showViewProductDetailsModal} closeModal={()=>handleViewProductDetails(null)} selectedProduct={selectedProduct} />

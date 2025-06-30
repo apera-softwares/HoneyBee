@@ -23,9 +23,8 @@ export default function StatisticsPieChart() {
   } | null>(null);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const {
-    pieChart: { monthly, lifetime },
+    pieChart: { monthly, yearly,lifetime },
   } = useAppSelector((state) => state.statistic);
-      console.log( monthly, lifetime ,"pie chart data")
 
 
   useEffect(() => {
@@ -44,7 +43,7 @@ export default function StatisticsPieChart() {
 
 
   useEffect(() => {
-    const selectedData = selected.value === "monthly" ? monthly : lifetime;
+    const selectedData = selected.value === "monthly" ? monthly : selected.value === "yearly" ? yearly :  lifetime;
 
     if (!selectedData || selectedData.length === 0) {
       setChartData(null);
@@ -54,7 +53,7 @@ export default function StatisticsPieChart() {
     const labels = selectedData.map((item) => item.label);
     const series = selectedData.map((item) => item.count);
     setChartData({ labels, series });
-  }, [selected, monthly, lifetime]);
+  }, [selected, monthly,yearly,lifetime]);
 
   const handleSelect = (option: (typeof CHART_RANGES)[0]) => {
     setSelected(option);

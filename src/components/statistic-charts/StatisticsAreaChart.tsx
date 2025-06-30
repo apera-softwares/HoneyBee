@@ -16,17 +16,18 @@ interface OptionItem {
   label: string;
   value: string;
 }
-export default function StatisticsLineChart() {
+export default function StatisticsAreaChart() {
 
   const [chartData, setChartData] = useState<any>({});
   const [selected, setSelected] = useState<OptionItem>(CHART_RANGES[0]);
   const {
-    lineChart: { monthly, lifetime },
+    lineChart: { monthly,yearly, lifetime },
   } = useAppSelector((state) => state.statistic);
 
 
   useEffect(() => {
-    const selectedData = selected.value === "monthly" ? monthly : lifetime;
+    
+    const selectedData = selected.value === "monthly" ? monthly : selected.value === "yearly" ? yearly :  lifetime;
 
     if (!selectedData || selectedData.length === 0) {
       setChartData(null);
@@ -42,7 +43,7 @@ export default function StatisticsLineChart() {
     };
 
     setChartData(data);
-  }, [selected, monthly, lifetime]);
+  }, [selected, monthly,yearly,lifetime]);
 
   const handleChange = (option: OptionItem) => {
     setSelected(option);

@@ -5,7 +5,7 @@ import { BACKEND_API } from "@/api";
 // Fetch stat numbers
 export const fetchStatisticsNumbers = createAsyncThunk(
   "statistics/fetchStatisticsNumbers",
-  async (params: any, thunkAPI) => {
+  async (_:void, thunkAPI) => {
     try {
       const state: any = thunkAPI.getState();
       const token = state.user?.user?.token;
@@ -16,7 +16,6 @@ export const fetchStatisticsNumbers = createAsyncThunk(
           "ngrok-skip-browser-warning": "true",
         },
       });
-      console.log(response.data,"chart data")
 
       return response.data;
 
@@ -54,11 +53,13 @@ interface LineChartItem {
 interface StatisticsState {
   pieChart: {
     monthly:PieChartItem[];
+    yearly:PieChartItem[];
     lifetime:PieChartItem[];
     totalLeads:any
   };
   lineChart:{
     monthly:LineChartItem[];
+    yearly:LineChartItem[];
     lifetime:LineChartItem[];
   }
   loading: boolean;
@@ -68,11 +69,13 @@ interface StatisticsState {
 const initialState: StatisticsState = {
   pieChart: {
     monthly:[],
+    yearly:[],
     lifetime:[],
     totalLeads:""
   },
   lineChart:{
     monthly:[],
+    yearly:[],
     lifetime:[],
   },
   loading: false,
@@ -93,10 +96,12 @@ const statisticsSlice = createSlice({
       .addCase(fetchStatisticsNumbers.fulfilled, (state, action) => {
         const data = action.payload;
         state.loading = false;
-        state.lineChart.monthly = data?.leadsByMonth?.map((item:any)=>({label:item?.month?.slice(0,3),count:item?.count}))||[];
+        state.lineChart.monthly = data?.leadsByDayMonth?.map((item:any)=>({label:item?.day_number,count:item?.count}))||[];
+        state.lineChart.yearly = data?.leadsByMonth?.map((item:any)=>({label:item?.month?.slice(0,3),count:item?.count}))||[];
         state.lineChart.lifetime = data?.leadsByLifeTime?.map((item:any)=>({label:item?.year_number,count:item?.count}))||[];
-        state.pieChart.monthly = data?.leadStatusNumbers?.map((item:any)=>({label:item?.status,count:item?._count?.status}))||[];
-        state.pieChart.lifetime = data?.leadsByMonthWithStatus?.map((item:any)=>({label:item?.status,count:item?.count}))||[];
+        state.pieChart.monthly = data?.leadsForMonthPerDayStatus?.map((item:any)=>({label:item?.status,count:item?.count}))||[];
+        state.pieChart.yearly = data?.leadsByMonthWithStatus?.map((item:any)=>({label:item?.status,count:item?.count}))||[];
+        state.pieChart.lifetime = data?.leadStatusNumbers?.map((item:any)=>({label:item?.status,count:item?._count?.status}))||[];
         state.pieChart.totalLeads = data?.totalLeads
       })
       .addCase(fetchStatisticsNumbers.rejected, (state, action) => {

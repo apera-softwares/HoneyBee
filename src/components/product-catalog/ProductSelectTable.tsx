@@ -13,6 +13,7 @@ import { fetchProductCatalogs } from "@/lib/redux/slices/productCatalogSlice";
 import Spinner from "../common/Spinner";
 import Pagination from "../tables/Pagination";
 import { TbLoader2 } from "react-icons/tb";
+import { FaRegEye } from "react-icons/fa";
 
 interface FiltersState {
   searchQuery: string;
@@ -32,6 +33,7 @@ interface ProductSelectTableProps {
   selectedProducts: any[];
   onProductSelect: (productId: string) => void;
   onProductUnselect:(productId:string)=>void;
+  onView:(product:any)=>void;
 }
 
 const ProductSelectTable: React.FC<ProductSelectTableProps> = ({
@@ -42,6 +44,7 @@ const ProductSelectTable: React.FC<ProductSelectTableProps> = ({
   selectedProducts,
   onProductSelect,
   onProductUnselect,
+  onView
 }) => {
   const dispatch = useAppDispatch();
   const LIMIT = 5;
@@ -101,6 +104,12 @@ const ProductSelectTable: React.FC<ProductSelectTableProps> = ({
                     isHeader
                     className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400"
                   >
+                    Estimated Price
+                  </TableCell>
+                  <TableCell
+                    isHeader
+                    className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400"
+                  >
                     Price
                   </TableCell>
                   <TableCell
@@ -109,12 +118,12 @@ const ProductSelectTable: React.FC<ProductSelectTableProps> = ({
                   >
                     Status
                   </TableCell>
-                  <TableCell
+                  {/* <TableCell
                     isHeader
                     className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400"
                   >
                     Elevator Pitch
-                  </TableCell>
+                  </TableCell> */}
                   <TableCell
                     isHeader
                     className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400"
@@ -136,6 +145,11 @@ const ProductSelectTable: React.FC<ProductSelectTableProps> = ({
                         </TableCell>
                         <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                          {
+                          product?.estimatedPrice ? `$${product?.estimatedPrice}`:`NA`
+                         }
+                        </TableCell>
+                        <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                         {
                           product?.price ? `$${product?.price}`:`NA`
                          }
                         </TableCell>
@@ -148,14 +162,15 @@ const ProductSelectTable: React.FC<ProductSelectTableProps> = ({
                           </Badge>
                         </TableCell>
 
-                        <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                        {/* <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                           {product?.elevatorPitch &&
                             (product.elevatorPitch?.length > 40
                               ? `${product.elevatorPitch.slice(0, 40)}...`
                               : product.elevatorPitch)}
-                        </TableCell>
+                        </TableCell> */}
                         <TableCell className="px-5 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                          {isSelected ? (
+                        <div className="flex flex-col items-start gap-1">
+                                                    {isSelected ? (
                             <button
                               className="w-24 flex justify-center items-center font-medium text-red-500 bg-red-500/10 px-4 py-1 rounded-full gap-2 disabled:cursor-not-allowed cursor-pointer"
                               disabled={Boolean(selectedProductId)}
@@ -176,6 +191,14 @@ const ProductSelectTable: React.FC<ProductSelectTableProps> = ({
                               Select
                             </button>
                           )}
+
+                            <button
+                              className="w-24 flex justify-center items-center font-medium text-primary bg-primary/10 px-4 py-1 rounded-full gap-2 disabled:cursor-not-allowed cursor-pointer"
+                              onClick={() => onView(product)}
+                            >
+                             <FaRegEye className="w-5 h-5"/> View
+                            </button>
+                        </div>
                         </TableCell>
                       </TableRow>
                     );
