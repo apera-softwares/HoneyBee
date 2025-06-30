@@ -272,13 +272,13 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
       if (editData) {
         await dispatch(updateProductCatalog({ id: editData?.id, data })).unwrap();
 
-        toast.success("Updated product catalog successfully");
+        toast.success("Product updated successfully");
         onEditSuccess();
         handleClearFormData();
 
       } else {
         await dispatch(createProductCatalog(data)).unwrap();
-        toast.success("Created product catalog successfully");
+        toast.success("Product created successfully");
         onEditSuccess();
         handleClearFormData();
       }
