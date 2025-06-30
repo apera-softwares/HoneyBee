@@ -6,6 +6,8 @@ import { HiOutlinePlus } from "react-icons/hi";
 import ProductCatalogTable from "@/components/product-catalog/ProductCatalogTable";
 // import { FiEdit } from "react-icons/fi";
 import AddEditProductCatalogForm from "@/components/product-catalog/AddEditProductCatalogForm";
+import ViewProductDetailsModal from "@/components/product-catalog/ViewProductDetailsModal";
+import { BACKEND_API } from "@/api";
 
 interface FiltersState {
   searchQuery: string;
@@ -29,7 +31,9 @@ export default function ProductCatalog() {
   const [editProductCatalogData, setEditProductCatalogData] = useState<
     any | null
   >(null);
+  const [selectedProduct,setSelectedProduct] = useState<any>(null);
   const [showAddEditForm, setShowAddEditForm] = useState<boolean>(false);
+  const[showViewProductDetailsModal,setShowViewProductViewDetailsModal] = useState<boolean>(false);
   const formRef = useRef<HTMLDivElement | null>(null);
   const headingRef = useRef<HTMLDivElement | null>(null);
 
@@ -66,6 +70,18 @@ export default function ProductCatalog() {
     setEditProductCatalogData({ ...rest, ...bulletPointsObject });
     handleShowFormAndScrollToTop();
   };
+
+  const handleViewProductDetails = (data:any)=>{
+    if(data)
+    {
+       const images = data?.media?.length > 0 ? data?.media?.map((mediaItem: any) => `${BACKEND_API}${mediaItem?.imageName?.slice(2, mediaItem?.imageName?.length)}`) : ["/assets/images/image-not-available.png"];
+       setSelectedProduct({...data,images});
+       setShowViewProductViewDetailsModal(true);
+       return ;
+    }
+    setShowViewProductViewDetailsModal(false);
+    setSelectedProduct(null);
+  }
 
   const handleShowFormAndScrollToTop = () => {
     if (!showAddEditForm) {
@@ -159,6 +175,7 @@ export default function ProductCatalog() {
           paginationData={paginationData}
           setPaginationData={setPaginationData}
           onEdit={handleEditProductCatalog}
+          onView={handleViewProductDetails}
         />
       </div>
 
@@ -186,6 +203,8 @@ export default function ProductCatalog() {
           </div>
         )}
       </div>
+
+      <ViewProductDetailsModal isOpen={showViewProductDetailsModal} closeModal={()=>handleViewProductDetails(null)} selectedProduct={selectedProduct}/>
     </div>
   );
 }

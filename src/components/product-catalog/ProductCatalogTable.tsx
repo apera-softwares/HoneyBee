@@ -9,6 +9,8 @@ import {
 } from "../ui/table";
 import Badge from "../ui/badge/Badge";
 import { FiEdit } from "react-icons/fi";
+import { FaRegEye } from "react-icons/fa";
+
 import { useDispatch, useSelector } from "react-redux";
 import { AppDispatch, RootState } from "@/lib/redux/store";
 import { fetchProductCatalogs } from "@/lib/redux/slices/productCatalogSlice";
@@ -31,10 +33,11 @@ interface ProductCatalogTableProps {
     paginationData:PaginationState,
     setPaginationData:React.Dispatch<React.SetStateAction<PaginationState>>,
     onEdit:(data:any)=>void;
+    onView:(data:any)=>void;
 }
 
 const LIMIT = 5;
-const ProductCatalogTable: React.FC<ProductCatalogTableProps> = ({ filters,paginationData,setPaginationData,onEdit, }) => {
+const ProductCatalogTable: React.FC<ProductCatalogTableProps> = ({ filters,paginationData,setPaginationData,onEdit,onView }) => {
 
     const dispatch = useDispatch<AppDispatch>();
     const {productCatalogs, loading } = useSelector((state: RootState) => state.productCatalog);
@@ -121,10 +124,16 @@ const ProductCatalogTable: React.FC<ProductCatalogTableProps> = ({ filters,pagin
 
                                             </TableCell>
                                             <TableCell className="px-5 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                                               <button className="flex items-center text-primary gap-2 cursor-pointer " onClick={() =>onEdit(product)}>
+                                              <div className="flex flex-col items-start gap-1">
+                                                <button className="flex items-center text-primary gap-2 cursor-pointer" onClick={() =>onEdit(product)}>
                                                  <FiEdit className="h-5 w-5 text-primary cursor-pointer "  />
                                                     Edit
                                                </button>
+                                               <button className="flex items-center text-primary text-nowrap gap-2 cursor-pointer" onClick={() =>onView(product)}>
+                                                 <FaRegEye className="h-5 w-5 text-primary cursor-pointer "  />
+                                                    View
+                                               </button>
+                                              </div>
                                                     
                                             </TableCell>
                                         </TableRow>))
