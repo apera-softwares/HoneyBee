@@ -29,7 +29,7 @@ type BadgeColor =
     | "dark";
 
 const ReferralTable: React.FC<ReferralTableProps> = ({ searchText, status }) => {
-    const ITEM_PER_PAGE = 5;
+    const ITEM_PER_PAGE = 20;
     const dispatch = useAppDispatch();
     const { referralList, loading } = useAppSelector((state) => state.referral)
     const [currentPage, setCurrentPage] = useState(1);

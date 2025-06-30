@@ -8,14 +8,12 @@ import ReferralTable from "@/components/referral/ReferralTable";
 import LeadCard from "@/components/LeadCard";
 import { useAppSelector } from "@/lib/redux/hooks";
 
-export default function UserManagement() {
+export default function Referrals() {
     const [SearchInput, setSearchInput] = useState("")
     const [status, setStatus] = useState("")
     const {
         pieChart: { lifetime, totalLeads },
     } = useAppSelector((state) => state.statistic);
-
-    console.log(lifetime, totalLeads, "referral vhart data")
 
     return (
         <div className="w-full">
