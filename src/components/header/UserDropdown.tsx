@@ -11,6 +11,7 @@ import { logout } from "@/lib/redux/slices/userSlice";
 import { resetUserProfile } from "@/lib/redux/slices/loginPersonProfile";
 import LogoutConfirmationModal from "@/components/common/LogoutConfirmationModal";
 import { setPageTitle } from "@/lib/redux/slices/appSlice";
+import { BACKEND_API } from "@/api";
 
 export default function UserDropdown() {
 
@@ -58,16 +59,22 @@ export default function UserDropdown() {
   const handleSetPageTitle = (title:string)=>{
     dispatch(setPageTitle(title));
   }
+
+    const imageSrc =
+      userProfile?.media?.[0]?.imageName
+        ? `${BACKEND_API}uploads/${userProfile.media[0].imageName}`
+        : "/images/user/demo-profile.jpg";
+
   return (
     <div className="relative">
       <button
         onClick={toggleDropdown}
         className="flex items-center text-gray-700 dark:text-gray-400 dropdown-toggle">
-        <span className="mr-3 overflow-hidden rounded-full h-11 w-11">
-          <Image
+        <span className="mr-3 overflow-hidden border-2 border-primary rounded-full h-11 w-11">
+          <img
             width={44}
             height={44}
-            src="/images/user/useradmin.png"
+            src={imageSrc}
             alt="User" />
         </span>
         <div className="">
