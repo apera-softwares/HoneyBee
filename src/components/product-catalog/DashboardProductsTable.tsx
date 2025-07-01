@@ -99,7 +99,7 @@ const DashboardProductsTable = () => {
                     isHeader
                     className="px-5 py-4 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400"
                   >
-                    Price
+                    Sold Price
                   </TableCell>
                   <TableCell
                     isHeader
@@ -145,7 +145,7 @@ const DashboardProductsTable = () => {
                       </TableCell>
                       <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                           <div className="flex flex-col items-start gap-1">
-                              <button className="flex items-center text-primary text-nowrap gap-2 cursor-pointer" onClick={() =>handleViewProductDetails(product)}>
+                              <button className="flex justify-center items-center font-medium text-primary bg-primary/10 px-3 py-1 rounded-full gap-2 disabled:cursor-not-allowed cursor-pointer" onClick={() =>handleViewProductDetails(product)}>
                                   <FaRegEye className="h-5 w-5  cursor-pointer"  />
                                                     View
                               </button>

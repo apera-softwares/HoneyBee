@@ -14,6 +14,8 @@ import Spinner from "../common/Spinner";
 import Pagination from "../tables/Pagination";
 import { TbLoader2 } from "react-icons/tb";
 import { FaRegEye } from "react-icons/fa";
+import { FaCheck } from "react-icons/fa";
+import { ImCross } from "react-icons/im";
 
 interface FiltersState {
   searchQuery: string;
@@ -110,7 +112,7 @@ const ProductSelectTable: React.FC<ProductSelectTableProps> = ({
                     isHeader
                     className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400"
                   >
-                    Price
+                    Sold Price
                   </TableCell>
                   <TableCell
                     isHeader
@@ -172,10 +174,11 @@ const ProductSelectTable: React.FC<ProductSelectTableProps> = ({
                         <div className="flex flex-col items-start gap-1">
                                                     {isSelected ? (
                             <button
-                              className="w-24 flex justify-center items-center font-medium text-red-500 bg-red-500/10 px-4 py-1 rounded-full gap-2 disabled:cursor-not-allowed cursor-pointer"
+                              className="w-24 flex justify-center items-center font-medium text-red-500 bg-red-500/10 px-3 py-1 rounded-full gap-1.5 disabled:cursor-not-allowed cursor-pointer"
                               disabled={Boolean(selectedProductId)}
                               onClick={() => onProductUnselect(product.id)}
                             >
+                              <ImCross className="w-2 h-2 shrink-0"/>
                                Unselect
                             </button>
                           ) : selectedProductId === product.id ? (
@@ -188,6 +191,7 @@ const ProductSelectTable: React.FC<ProductSelectTableProps> = ({
                               disabled={Boolean(selectedProductId)}
                               onClick={() => onProductSelect(product.id)}
                             >
+                              <FaCheck className="w-5 h-5"/>
                               Select
                             </button>
                           )}

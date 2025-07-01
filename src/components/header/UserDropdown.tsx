@@ -12,6 +12,7 @@ import { resetUserProfile } from "@/lib/redux/slices/loginPersonProfile";
 import LogoutConfirmationModal from "@/components/common/LogoutConfirmationModal";
 import { setPageTitle } from "@/lib/redux/slices/appSlice";
 import { BACKEND_API } from "@/api";
+import { DEFAULT_PROFILE_IMAGE } from "@/constant/defaultImages";
 
 export default function UserDropdown() {
 
@@ -63,7 +64,7 @@ export default function UserDropdown() {
     const imageSrc =
       userProfile?.media?.[0]?.imageName
         ? `${BACKEND_API}uploads/${userProfile.media[0].imageName}`
-        : "/images/user/demo-profile.jpg";
+        : DEFAULT_PROFILE_IMAGE;
 
   return (
     <div className="relative">

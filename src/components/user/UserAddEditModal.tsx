@@ -210,11 +210,11 @@ const UserAddEditModal: React.FC<UserAddEditModalProps> = ({ isOpen, closeModal,
             {/* <Toaster /> */}
 
             <div className="w-full">
-                <div className="flex items-center">
+                <div className="flex items-center gap-4 lg:gap-6 mb-6">
                     <span className="bg-primary p-1 sm:p-2 flex justify-center items-center rounded-full">
                         <Users1 />
                     </span>
-                    <div className="ml-4 w-4/5">
+                    <div className=" w-4/5">
                         <h5 className="font-semibold text-gray-800 text-xl sm:text-2xl lg:text-3xl dark:text-white/90">
                             {type == "add" ? "Create New User" : "Edit User"}
                         </h5>
@@ -224,9 +224,9 @@ const UserAddEditModal: React.FC<UserAddEditModalProps> = ({ isOpen, closeModal,
                     </div>
                 </div>
 
-                <div className="p-2">
-                    <div>
-                        <div className="w-full my-6">
+                <div className=" max-h-72 overflow-y-auto px-2 mb-8">
+                    <div className="space-y-6">
+                        <div className="w-full">
                             <input
                                 type="text"
                                 name="firstName"
@@ -238,7 +238,7 @@ const UserAddEditModal: React.FC<UserAddEditModalProps> = ({ isOpen, closeModal,
                             <span className={REQUIRED_ERROR}>{errors.firstName || ""}</span>
                         </div>
 
-                        <div className="w-full my-6">
+                        <div className="w-full">
                             <input
                                 type="text"
                                 name="lastName"
@@ -250,7 +250,7 @@ const UserAddEditModal: React.FC<UserAddEditModalProps> = ({ isOpen, closeModal,
                             <span className={REQUIRED_ERROR}>{errors.lastName || ""}</span>
                         </div>
 
-                        <div className="w-full my-6">
+                        <div className="w-full">
                             <input
                                 type="email"
                                 name="email"
@@ -262,7 +262,7 @@ const UserAddEditModal: React.FC<UserAddEditModalProps> = ({ isOpen, closeModal,
                             <span className={REQUIRED_ERROR}>{errors.email || ""}</span>
                         </div>
 
-                        <div className="w-full my-6">
+                        <div className="w-full">
                             <Select
                                 options={Role}
                                 defaultValue={formData.role}
@@ -284,7 +284,7 @@ const UserAddEditModal: React.FC<UserAddEditModalProps> = ({ isOpen, closeModal,
                             <span className={REQUIRED_ERROR}></span>
                         </div> */}
 
-                        <div className="flex flex-wrap items-center gap-8 mb-6">
+                        <div className="flex flex-wrap items-center gap-8 text-[#717171] ">
                             <div className="w-20">Verified:</div>
                             <Radio
                                 id="radio3"
@@ -306,7 +306,7 @@ const UserAddEditModal: React.FC<UserAddEditModalProps> = ({ isOpen, closeModal,
 
 
 
-                        <div className="flex justify-between">
+                        <div className="flex justify-between text-[#717171]">
                             <div className="flex flex-wrap items-center gap-4">
                                 <div className="w-20">Status:</div>
                                 <Radio
@@ -338,7 +338,7 @@ const UserAddEditModal: React.FC<UserAddEditModalProps> = ({ isOpen, closeModal,
                     </div>
                 </div>
 
-                <div className="flex items-center justify-end w-full gap-3 mt-8">
+                <div className="flex items-center justify-end w-full gap-3">
                     <Button size="sm" onClick={type == "add" ? handleAddUser : handleEdit}>
                         Save User
                     </Button>

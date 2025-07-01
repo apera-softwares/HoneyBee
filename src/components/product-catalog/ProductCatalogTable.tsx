@@ -88,7 +88,7 @@ const ProductCatalogTable: React.FC<ProductCatalogTableProps> = ({ filters,pagin
                                 <TableRow>
                                     <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Name</TableCell>
                                     <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Estimated Price</TableCell>
-                                    <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Price</TableCell>
+                                    <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Sold Price</TableCell>
                                     <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Status</TableCell>
                                     {/* <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Elevator Pitch</TableCell> */}
                                     <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Actions</TableCell>
@@ -131,11 +131,11 @@ const ProductCatalogTable: React.FC<ProductCatalogTableProps> = ({ filters,pagin
                                             </TableCell> */}
                                             <TableCell className="px-5 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                                               <div className="flex flex-col items-start gap-1">
-                                                <button className="flex items-center text-primary gap-2 cursor-pointer" onClick={() =>onEdit(product)}>
+                                                <button className="w-24 flex justify-center items-center font-medium text-primary bg-primary/10 px-4 py-1 rounded-full gap-2 disabled:cursor-not-allowed cursor-pointer" onClick={() =>onEdit(product)}>
                                                  <FiEdit className="h-5 w-5 text-primary cursor-pointer "  />
                                                     Edit
                                                </button>
-                                               <button className="flex items-center text-primary text-nowrap gap-2 cursor-pointer" onClick={() =>onView(product)}>
+                                               <button className="w-24 flex justify-center items-center font-medium text-primary bg-primary/10 px-4 py-1 rounded-full gap-2 disabled:cursor-not-allowed cursor-pointer" onClick={() =>onView(product)}>
                                                  <FaRegEye className="h-5 w-5 text-primary cursor-pointer "  />
                                                     View
                                                </button>
