@@ -9,7 +9,6 @@ import { RxCross2 } from "react-icons/rx";
 import axios from "axios";
 import { BACKEND_API } from "@/api";
 
-
 interface SearchAndSelectMemberModalProps {
     isOpen: boolean;
     closeModal: () => void;
@@ -47,8 +46,6 @@ const fetchMembers = async () => {
   }
 
   const token = loggedInUser?.token;
-
-       
 
   try {
       
