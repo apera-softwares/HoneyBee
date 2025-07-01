@@ -148,7 +148,10 @@ export default function ProductCatalog() {
                 </select> */}
 
           <button
-            onClick={handleShowFormAndScrollToTop}
+            onClick={()=>{
+              setEditProductCatalogData(null);
+              handleShowFormAndScrollToTop();
+            }}
             className="h-11 bg-primary hover:bg-primary-hover text-white rounded-md text-md px-4 justify-center text-center outline-none flex items-center gap-1  "
           >
             <HiOutlinePlus className="text-white" />

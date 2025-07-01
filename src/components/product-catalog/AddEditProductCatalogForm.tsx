@@ -55,7 +55,7 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
   const [isStateCityDropdownOpen, setIsStateCityDropdownOpen] = useState(false);
   const stateDropdownRef = useRef<HTMLDivElement | null>(null);
 
-  const [images, setImages] = React.useState([]);
+  const [images, setImages] = useState([]);
   const maxNumber = 3;
 
   const [loading, setLoading] = useState<boolean>(false);
@@ -90,11 +90,20 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
         price: editData?.price || 0,
         estimatedPrice:editData?.estimatedPrice|| 0,
       });
+    }else{
+      handleClearFormData();
     }
   }, [editData]);
 
 
-  console.log(images, "images")
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      fetchStates();
+    }, 300); // debounce
+    return () => clearTimeout(timeoutId);
+  }, [stateName]);
+
+
 
   const handleClickOutside = (e: MouseEvent) => {
     if (stateDropdownRef.current && !stateDropdownRef.current.contains(e.target as Node)) {
@@ -231,6 +240,7 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
     })
     setImages([])
     setSelectedState(null);
+    setIsStateCityDropdownOpen(false);
   };
 
   const handleSubmit = async () => {
@@ -310,16 +320,6 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
     }
   };
 
-  // const handleDelete = async (id: string) => {
-  //   try {
-  //     await dispatch(deleteProductCatalog(id)).unwrap();
-  //     toast.success("Deleted successfully");
-  //     dispatch(fetchProductCatalogs({...filters,...paginationData}));
-  //   } catch (err: any) {
-  //     toast.error(err || "Failed to delete");
-  //   }
-  // };
-
   const fetchStates = async () => {
 
     if (!stateName.trim()) {
@@ -342,18 +342,6 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
     }
   }
 
-  useEffect(() => {
-
-    const timeoutId = setTimeout(() => {
-      fetchStates();
-    }, 300); // debounce
-
-    return () => clearTimeout(timeoutId);
-  }, [stateName]);
-
-
-  console.log("form data", formData);
-  console.log("edit data", editData);
   return (
     <div className="w-full max-w-[1500px] bg-white px-6 md:px-8 py-8 rounded-xl ">
 
@@ -429,7 +417,7 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
             <div className="relative w-full">
               <input
                 type="text"
-                placeholder="Price ($)"
+                placeholder="Sold Price ($)"
                 name="price"
                 className={`${FORM_INPUT_CLASS} ${TEXT_SIZE}`}
                 value={formData.price}
