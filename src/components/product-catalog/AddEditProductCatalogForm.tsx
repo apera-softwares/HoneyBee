@@ -22,7 +22,6 @@ interface FormState {
   status: string;
   price: string
   estimatedPrice: string
-  
 }
 
 interface PaginationState {
@@ -578,7 +577,7 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
                         Remove All
                       </button>
                     </div>
-                    <span className="text-orange-400">note: upload only 3 images</span>
+                    <span className="text-orange-400">note: provide 3 images and a bullet point slide</span>
 
                     {/* Uploaded Images Grid */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
