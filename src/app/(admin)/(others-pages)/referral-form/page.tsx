@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { fetchSelectedProducts } from "@/lib/redux/slices/productCatalogSlice";
 import { UserRole } from "@/constant/userRoles";
-import { BACKEND_API } from "@/api";
+import { BACKEND_API, LANDING_PAGE_URL } from "@/api";
 import toast from "react-hot-toast";
 import ViewProductDetailsModal from "@/components/product-catalog/ViewProductDetailsModal";
 
@@ -43,10 +43,10 @@ export default function ReferralFormPage() {
   };
 
   const handleRedirectToLandingPage = () => {
-    router.push(`http://209.182.232.11:3033/landing/${loggedInUser.userId}`);
+    router.push(`${LANDING_PAGE_URL}landing/${loggedInUser.userId}`);
   }
   const handleCopyLink = async () => {
-    const url = `http://209.182.232.11:3033/landing/${loggedInUser.userId}`;
+    const url = `${LANDING_PAGE_URL}landing/${loggedInUser.userId}`;
     try {
       await navigator.clipboard.writeText(url);
       toast.success("Link copied");

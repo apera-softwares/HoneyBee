@@ -15,7 +15,7 @@ export default function Referrals() {
         pieChart: { lifetime, totalLeads },
     } = useAppSelector((state) => state.statistic);
 
-    const getCountByStatus = (label: string): number =>{
+    const getCountByStatus = (label: string): number => {
         return lifetime.find(item => item?.label === label)?.count || 0;
     }
 
