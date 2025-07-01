@@ -10,6 +10,7 @@ import toast from "react-hot-toast";
 import { getUserProfile, uploadProfileImage } from "@/lib/redux/slices/loginPersonProfile";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import { BACKEND_API } from "@/api";
+import { DEFAULT_PROFILE_IMAGE } from "@/constant/defaultImages";
 
 export default function UserMetaCard() {
   const { isOpen, closeModal, openModal } = useModal();
@@ -58,10 +59,7 @@ export default function UserMetaCard() {
   const imageSrc =
     userProfile?.media?.[0]?.imageName
       ? `${BACKEND_API}uploads/${userProfile.media[0].imageName}`
-      : "/images/user/demo-profile.jpg";
-
-
-  console.log(imageSrc, "imageSrc")
+      : DEFAULT_PROFILE_IMAGE;
   return (
     <>
       <div className="p-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
