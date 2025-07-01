@@ -7,13 +7,13 @@ import { BiSolidEditAlt } from "react-icons/bi";
 import { TbArrowNarrowLeft, TbArrowNarrowRight } from "react-icons/tb";
 import { BACKEND_API } from "@/api";
 
-interface ViewMemeberModalProps {
+interface ViewMemberModalProps {
     isOpen: boolean;
     closeModal: () => void;
     user: any; // Pass full referral object
 }
 
-const ViewMemeberModal: React.FC<ViewMemeberModalProps> = ({
+const ViewMemberModal: React.FC<ViewMemberModalProps> = ({
     isOpen,
     closeModal,
     user,
@@ -35,19 +35,20 @@ const ViewMemeberModal: React.FC<ViewMemeberModalProps> = ({
         >
             <div className="w-full">
                 {/* Header */}
-                <div className="flex items-center mb-6">
+                <div className="flex items-center gap-4 mb-6">
                     <span className="bg-primary p-2 flex justify-center items-center rounded-full">
                         <BiSolidEditAlt className="text-white" size={20} />
                     </span>
-                    <div className="ml-4">
+                    <div className="">
                         <h5 className="font-semibold text-gray-800 text-xl sm:text-2xl dark:text-white/90">
                             Assigned Member Details
                         </h5>
                     </div>
                 </div>
 
-                {/* Team Member Info */}
-                <div className="p-4 border rounded-md bg-gray-50 mb-6">
+                <div className="w-full max-h-80 overflow-y-auto">
+                                    {/* Team Member Info */}
+                <div className="px-4 py-3 border rounded-md bg-gray-50 mb-6">
                     <p className="font-semibold text-gray-800">
                         Name: {user?.teamMember?.user?.firstName}{" "}
                         {user?.teamMember?.user?.lastName}
@@ -59,7 +60,7 @@ const ViewMemeberModal: React.FC<ViewMemeberModalProps> = ({
                         Team: {user?.teamMember?.team?.name}
                     </p>
                 </div>
-                {user?.product && <p className="font-semibold text-gray-800 py-2">
+                {user?.product && <p className="font-semibold text-gray-800 mb-1">
                     Assigned Poduct
                 </p>}
                 {/* Product Details Section */}
@@ -130,6 +131,7 @@ const ViewMemeberModal: React.FC<ViewMemeberModalProps> = ({
                     </div>
                 )}
 
+                </div>
                 {/* Action Buttons */}
                 <div className="flex items-center justify-end w-full gap-3 mt-6">
                     <Button size="sm" variant="outline" onClick={closeModal}>
@@ -141,4 +143,4 @@ const ViewMemeberModal: React.FC<ViewMemeberModalProps> = ({
     );
 };
 
-export default ViewMemeberModal;
+export default ViewMemberModal;

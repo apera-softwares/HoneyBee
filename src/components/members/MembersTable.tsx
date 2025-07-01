@@ -14,7 +14,7 @@ import  { Toaster } from "react-hot-toast";
 //import { MdRemoveRedEye } from "react-icons/md";
 import {  fetchAssignedMembers } from "@/lib/redux/slices/membersSlice";
 // import { EyeIcon } from "@/icons";
-import ViewMemeberModal from "./ViewMemberModal";
+import ViewMemberModal from "./ViewMemberModal";
 import { FiEdit } from "react-icons/fi";
 
 interface TeamTableProps {
@@ -116,27 +116,30 @@ const AssignedMembersTable: React.FC<TeamTableProps> = ({ searchText, role, orde
                                                         {(currentPage - 1) * ITEM_PER_PAGE + index + 1}
                                                     </span>
                                                 </TableCell>
-                                                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                                                <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                                                     {user?.teamMember?.user?.firstName} {user?.user?.lastName}
                                                 </TableCell>
-                                                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                                                <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                                                     {user?.teamMember?.user?.email}
                                                 </TableCell>
-                                                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                                                <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                                                     {user?.teamMember?.team?.name}
                                                 </TableCell>
-                                                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                                    {user?.product?.name}
+                                                <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                                                 
+                                                    {
+                                                        user?.product?.name?.length > 32 ? `${user?.product?.name?.slice(0,32)}...`:`${user?.product?.name}`
+                                                    }
                                                 </TableCell>
-                                                <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                                                <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                                                     <button
-                                                        className="flex items-center text-primary gap-2 cursor-pointer"
+                                                        className="flex items-center text-primary font-medium gap-2 cursor-pointer"
                                                         onClick={() => {
                                                             setIsModalOpen(true)
                                                             setuserData(user)
                                                         }}
                                                     >
-                                                        View <FiEdit className="mr-1.5" />
+                                                        View <FiEdit className="w-4 h-4" />
                                                     </button>
 
 
@@ -195,7 +198,7 @@ const AssignedMembersTable: React.FC<TeamTableProps> = ({ searchText, role, orde
                 </div>)
             }
 
-            <ViewMemeberModal isOpen={isModalOpen} closeModal={() => setIsModalOpen(false)} user={userData}
+            <ViewMemberModal isOpen={isModalOpen} closeModal={() => setIsModalOpen(false)} user={userData}
             />
 
 
