@@ -9,6 +9,7 @@ import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { createReferral } from "@/lib/redux/slices/referralSlice";
 import { fetchStatisticsNumbers } from "@/lib/redux/slices/statisticsSlice";
 import toast, { Toaster } from "react-hot-toast";
+import ProductDropdown from "../product-catalog/ProductDropdown";
 
 interface FormDataState {
   firstName: string;
@@ -513,7 +514,7 @@ const ReferralForm = () => {
               />
               <span className={`${REQUIRED_ERROR}`}>{errors.postalCode || ""}</span>
             </div>
-            <div className="w-full">
+            {/* <div className="w-full">
               <select
                 name="productId"
                 className={`${FORM_INPUT_CLASS}`}
@@ -526,6 +527,10 @@ const ReferralForm = () => {
                 
                 }
               </select>
+              <span className={`${REQUIRED_ERROR}`}>{errors.productId || ""}</span>
+            </div> */}
+            <div className="w-full">
+              <ProductDropdown products={selectedProducts||[]} selectedProductId={formData.productId} onChange={(value)=>setFormData((prev:FormDataState)=>({...prev,productId:value}))}  />
               <span className={`${REQUIRED_ERROR}`}>{errors.productId || ""}</span>
             </div>
           </div>

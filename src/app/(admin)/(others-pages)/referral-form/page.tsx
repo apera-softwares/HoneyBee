@@ -24,16 +24,15 @@ export default function ReferralFormPage() {
       ?.id || null;
 
   useEffect(() => {
-    if (loggedInUser?.role !== UserRole.B_TEAM) return;
-    getSelectedProducts();
-  }, [memberId]);
+    if (!loggedInUser || loggedInUser?.role !== UserRole.B_TEAM) return;
+      getSelectedProducts();
+  }, [loggedInUser, memberId]);
 
 
   const getSelectedProducts = async () => {
-
+    const userId = loggedInUser?.userId;
     try {
-      const response = await dispatch(fetchSelectedProducts(loggedInUser?.userId)).unwrap();
-      console.log("response of selected products", response);
+      await dispatch(fetchSelectedProducts(userId)).unwrap();
     } catch (error: any) {
       console.error(
         "Error getting selected products:",
