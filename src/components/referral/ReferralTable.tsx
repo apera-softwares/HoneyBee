@@ -90,14 +90,14 @@ const ReferralTable: React.FC<ReferralTableProps> = ({
   };
 
   const handleStatusUpdate = async (id: string, status: string) => {
-    console.log(status, "status");
+    const payload = { id, status };
     try {
-      await dispatch(updateReferral({ id, status }));
+      await dispatch(updateReferral(payload));
       toast.success("Status updated successfully!");
       getReferrals(currentPage);
     } catch (error) {
-      console.log(error, "error");
-      toast.error("Failed to update status.");
+      console.log(error, "error white status update");
+      toast.error("Failed to update status. Please try again.");
     }
   };
 
@@ -188,11 +188,11 @@ const ReferralTable: React.FC<ReferralTableProps> = ({
                           {item?.product?.name || ""}
                         </TableCell>
                         <TableCell className="px-5 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                          <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-2">
                             <img
                               alt="Profile Photo"
                               src={imgSrc}
-                              className="w-7 h-7 object-cover object-center rounded"
+                              className="w-8 h-8 object-cover object-center rounded-full border border-primary"
                             />
                             <span className="">
                               {`${item?.referredBy?.user?.firstName || ""} ${

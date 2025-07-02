@@ -6,8 +6,8 @@ import Button from "../ui/button/Button";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/redux/store";
 import ImageUploading, { ImageListType } from "react-images-uploading";
-import toast from "react-hot-toast";
-import { getUserProfile, uploadProfileImage } from "@/lib/redux/slices/loginPersonProfile";
+import toast,{Toaster} from "react-hot-toast";
+import { fetchUserProfile, uploadProfileImage } from "@/lib/redux/slices/loginPersonProfile";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import { BACKEND_API } from "@/api";
 import { DEFAULT_PROFILE_IMAGE } from "@/constant/defaultImages";
@@ -36,13 +36,11 @@ export default function UserMetaCard() {
     try {
       const data = new FormData();
       data.append("file", image[0].file as Blob);
-
       await dispatch(uploadProfileImage(data)).unwrap();
-      dispatch(getUserProfile())
+      toast.success("Profile image updated successfully");
+      dispatch(fetchUserProfile());
       setImage([]);
       closeModal();
-      toast.success("Profile image updated successfully");
-
     } catch (error: any) {
       console.error("Error while uploading image:", error);
       const errorMessage =
@@ -60,9 +58,11 @@ export default function UserMetaCard() {
     userProfile?.media?.[0]?.imageName
       ? `${BACKEND_API}uploads/${userProfile.media[0].imageName}`
       : DEFAULT_PROFILE_IMAGE;
+      
   return (
-    <>
+    <div className="">
       <div className="p-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
+        <Toaster/>
         <div className="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
           <div className="flex flex-col items-center w-full gap-6 xl:flex-row">
             <div className="flex flex-col items-center gap-2">
@@ -96,7 +96,6 @@ export default function UserMetaCard() {
           </div>
         </div>
       </div>
-
       {/* Image Upload Modal */}
       <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[500px] m-4">
         <div className="relative w-full rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-8">
@@ -151,6 +150,6 @@ export default function UserMetaCard() {
           </div>
         </div>
       </Modal>
-    </>
+    </div>
   );
 }

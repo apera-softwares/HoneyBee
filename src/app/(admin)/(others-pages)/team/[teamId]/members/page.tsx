@@ -54,7 +54,6 @@ export default function UserManagement() {
       if (res.meta.requestStatus === "fulfilled") {
         if (res.payload) {
           setTeamDataMembers(res.payload.data || []);
-          console.log(res.payload, "team memebers data");
           const lastPage = res.payload.lastPage;
           setTotalPages(lastPage);
         } else {
@@ -80,16 +79,14 @@ export default function UserManagement() {
         if (res.payload) {
           setTeamDataMembers(res.payload.data || []);
           getTeamMembers();
-          toast.success("Team Member Deleted successful!");
-
-          console.log(res.payload, "Member Deleted");
+          toast.success("Team member deleted successfully!");
         }
       } else {
         console.log(
           "Failed to Delete Team Member:",
           res.payload || "Unknown error"
         );
-        toast.error("Error in delete Team Member!");
+        toast.error("Failed to delete team member. Please try again.");
       }
     });
   };
@@ -222,11 +219,11 @@ export default function UserManagement() {
                               </span>
                             </TableCell>
                             <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                              <div className="flex items-center gap-3">
+                              <div className="flex items-center gap-2">
                                 <img
                                   alt="Profile Photo"
                                   src={imgSrc}
-                                  className="w-7 h-7 object-cover object-center rounded"
+                                  className="w-8 h-8 object-cover object-center rounded-full border border-primary"
                                 />
                                 <span className="">
                                   {`${member?.user?.firstName || ""}  ${

@@ -10,6 +10,7 @@ import { UserRole } from "@/constant/userRoles";
 import { BACKEND_API, LANDING_PAGE_URL } from "@/api";
 import toast from "react-hot-toast";
 import ViewProductDetailsModal from "@/components/product-catalog/ViewProductDetailsModal";
+import { DEFAULT_PRODUCT_IMAGE } from "@/constant/defaultImages";
 
 export default function ReferralFormPage() {
   const dispatch = useAppDispatch();
@@ -24,16 +25,15 @@ export default function ReferralFormPage() {
       ?.id || null;
 
   useEffect(() => {
-    if (loggedInUser?.role !== UserRole.B_TEAM) return;
-    getSelectedProducts();
-  }, [memberId]);
+    if (!loggedInUser || loggedInUser?.role !== UserRole.B_TEAM) return;
+      getSelectedProducts();
+  }, [loggedInUser, memberId]);
 
 
   const getSelectedProducts = async () => {
-
+    const userId = loggedInUser?.userId;
     try {
-      const response = await dispatch(fetchSelectedProducts(loggedInUser?.userId)).unwrap();
-      console.log("response of selected products", response);
+      await dispatch(fetchSelectedProducts(userId)).unwrap();
     } catch (error: any) {
       console.error(
         "Error getting selected products:",
@@ -91,8 +91,7 @@ export default function ReferralFormPage() {
         <div className="w-full overflow-x-auto  no-scrollbar mb-6 lg:mb-8 ">
           <div className="w-full max-w-[900px] flex space-x-5 ">
             {selectedProducts?.map((product: any) => {
-
-              const images = product?.media?.length > 0 ? product?.media?.map((mediaItem: any) => `${BACKEND_API}${mediaItem?.imageName?.slice(2, mediaItem?.imageName?.length)}`) : ["/assets/images/image-not-available.png"];
+              const images = product?.media?.length > 0 ? product?.media?.map((mediaItem: any) => `${BACKEND_API}${mediaItem?.imageName?.slice(2)}`) : [DEFAULT_PRODUCT_IMAGE];
               return (
                 <ProductCard
                   key={product?.id}

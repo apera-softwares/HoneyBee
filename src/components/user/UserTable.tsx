@@ -52,8 +52,7 @@ const UserTable: React.FC<UserTableProps> = ({
     ).then((res: any) => {
       if (res.meta.requestStatus === "fulfilled") {
         if (res.payload) {
-          setUsersData(res.payload.data || []);
-          console.log(res.payload);
+          setUsersData(res.payload.data || []);;
           const lastPage = res.payload.lastPage;
           setTotalPages(lastPage);
         } else {
@@ -136,15 +135,15 @@ const UserTable: React.FC<UserTableProps> = ({
                           </span>
                         </TableCell>
                         <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                                      <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-2">
                             <img
                               alt="Profile Photo"
                               src={imgSrc}
-                              className="w-7 h-7 object-cover object-center rounded"
+                              className="w-8 h-8 object-cover object-center rounded-full border border-primary"
                             />
                             <span className="">
                               {`${user?.firstName || ""} ${
-                                user?.user?.lastName || ""
+                                user?.lastName || ""
                               }`}
                             </span>
                           </div>

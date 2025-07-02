@@ -77,7 +77,6 @@ const AssignedMembersTable: React.FC<TeamTableProps> = ({
     ).then((res: any) => {
       if (res.meta.requestStatus === "fulfilled") {
         if (res.payload) {
-          console.log(res.payload, "Assigend members");
           const lastPage = res.payload.lastPage;
           setTotalPages(lastPage);
         } else {
@@ -177,14 +176,14 @@ const AssignedMembersTable: React.FC<TeamTableProps> = ({
                           </span>
                         </TableCell>
                         <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                          <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-2">
                             <img
                               alt="Profile Photo"
                               src={imgSrc}
-                              className="w-7 h-7  object-cover object-center rounded"
+                              className="w-8 h-8  object-cover object-center rounded-full border border-primary"
                             />
                             <span className="">
-                            {`${user?.teamMember?.user?.firstName} ${user?.teamMember?.user?.lastName}`}
+                            {`${user?.teamMember?.user?.firstName||""} ${user?.teamMember?.user?.lastName||""}`}
                             </span>
                           </div>
                         </TableCell>

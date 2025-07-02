@@ -6,7 +6,7 @@ import { Users1 } from "../../icons/index";
 import { FORM_INPUT_CLASS, REQUIRED_ERROR } from "@/constant/constantClassName";
 import Select from "../form/Select";
 import Radio from "../form/input/Radio";
-import Checkbox from "../form/input/Checkbox";
+// import Checkbox from "../form/input/Checkbox";
 import { CreateUser, UpdateUser } from "@/lib/redux/slices/userManagementSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/lib/redux/store";
@@ -58,7 +58,6 @@ const UserAddEditModal: React.FC<UserAddEditModalProps> = ({ isOpen, closeModal,
                 team: userData?.team || "",
                 status: Boolean(userData?.status),
                 verified: Boolean(userData?.verified),
-
                 sendWelcomeEmail: false,
             });
         }
@@ -143,14 +142,11 @@ const UserAddEditModal: React.FC<UserAddEditModalProps> = ({ isOpen, closeModal,
 
 
     const handleEdit = () => {
-        console.log("Form Data: Update User", formData);
         if (!validateFormData()) return
         dispatch(UpdateUser(formData)).then((res: any) => {
             if (res.meta.requestStatus === "fulfilled") {
                 if (res.payload) {
                     toast.success("User Updated successful!");
-
-                    console.log(res.payload)
                     closeModal();
                     clear()
                 } else {
@@ -164,15 +160,12 @@ const UserAddEditModal: React.FC<UserAddEditModalProps> = ({ isOpen, closeModal,
     };
 
     const handleAddUser = () => {
-        console.log("Form Data: Add User", formData);
+
         if (!validateFormData()) return
         dispatch(CreateUser(formData)).then((res: any) => {
             if (res.meta.requestStatus === "fulfilled") {
                 if (res.payload) {
-                    toast.success("User Created successful!");
-                    console.log("User Created successful!");
-
-                    console.log(res.payload)
+                    toast.success("User created successful!");
                     closeModal();
                     clear()
                 } else {
@@ -195,9 +188,14 @@ const UserAddEditModal: React.FC<UserAddEditModalProps> = ({ isOpen, closeModal,
             status: false,
             sendWelcomeEmail: true,
             verified: false
-        })
+        });
+        setErrors({
+            firstName: "",
+            lastName: "",
+            email: "",
+            role: "",
+        });
     }
-
     return (
         <Modal
             isOpen={isOpen}
@@ -327,13 +325,13 @@ const UserAddEditModal: React.FC<UserAddEditModalProps> = ({ isOpen, closeModal,
                                 />
                             </div>
 
-                            {type == "add" && <Checkbox
+                            {/* {type == "add" && <Checkbox
                                 checked={formData.sendWelcomeEmail}
                                 onChange={(val: boolean) =>
                                     setFormData((prev) => ({ ...prev, sendWelcomeEmail: val }))
                                 }
                                 label="Send Welcome Email"
-                            />}
+                            />} */}
                         </div>
                     </div>
                 </div>
