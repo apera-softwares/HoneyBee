@@ -9,6 +9,7 @@ import { fetchSelectedProducts, selectProductCatalog, unselectProductCatalog } f
 import toast, { Toaster } from "react-hot-toast";
 import { BACKEND_API } from "@/api";
 import ViewProductDetailsModal from "@/components/product-catalog/ViewProductDetailsModal";
+import { DEFAULT_PRODUCT_IMAGE } from "@/constant/defaultImages";
 
 interface FiltersState {
   searchQuery: string;
@@ -187,7 +188,7 @@ export default function SelectForSelect() {
           <div className="w-full max-w-[900px] flex space-x-5 ">
             {selectedProducts?.map((product: any) => {
 
-              const images = product?.media?.length > 0 ? product?.media?.map((mediaItem: any) => `${BACKEND_API}${mediaItem?.imageName?.slice(2, mediaItem?.imageName?.length)}`) : ["/assets/images/image-not-available.png"];
+              const images = product?.media?.length > 0 ? product?.media?.map((mediaItem: any) => `${BACKEND_API}${mediaItem?.imageName?.slice(2)}`) : [DEFAULT_PRODUCT_IMAGE];
 
               return (
                 <ProductCard
