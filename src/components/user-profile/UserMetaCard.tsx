@@ -38,11 +38,10 @@ export default function UserMetaCard() {
       data.append("file", image[0].file as Blob);
 
       await dispatch(uploadProfileImage(data)).unwrap();
-      dispatch(getUserProfile())
+      dispatch(getUserProfile());
       setImage([]);
       closeModal();
       toast.success("Profile image updated successfully");
-
     } catch (error: any) {
       console.error("Error while uploading image:", error);
       const errorMessage =
