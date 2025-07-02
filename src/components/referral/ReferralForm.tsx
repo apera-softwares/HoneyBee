@@ -367,8 +367,8 @@ const ReferralForm = () => {
     <div className="w-full max-w-[1500px] bg-white p-6 lg:p-8 rounded-xl">
       <Toaster />
       <div className="w-full ">
-        <div className="w-full space-y-10 lg:space-y-14 mb-8">
-          <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-16 ">
+        <div className="w-full space-y-8 lg:space-y-14 mb-8">
+          <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-14 ">
             <div className="w-full">
               <input
                 type="text"
@@ -411,7 +411,7 @@ const ReferralForm = () => {
             </div>
           </div>
 
-          <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-16 ">
+          <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-14 ">
             <div className="w-full">
               <input
                 type="text"
@@ -496,7 +496,7 @@ const ReferralForm = () => {
             </div>
           </div>
 
-          <div className="w-full grid grid-cols-1 md:grid-cols-3 gap-10 lg:gap-16 ">
+          <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-14 ">
 
             <div className="w-full">
               <input
@@ -547,7 +547,7 @@ const ReferralForm = () => {
             </div>
           </div>
         </div>
-        <div className="w-full flex items-center justify-center sm:justify-end gap-6 flex-wrapj mb-8 md:mb-12 ">
+        <div className="w-full flex items-center justify-center sm:justify-end gap-6 flex-wrap mb-8 md:mb-12 ">
           {/* <div className=" w-full  md:w-3/5 flex items-start gap-3 text-sm font-medium  ">
              <Checkbox checked={true} onChange={()=>{}} />
             Customer Consents to receive SMS Notifications, Alerts & Occasional
