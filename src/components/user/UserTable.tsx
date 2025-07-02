@@ -52,8 +52,7 @@ const UserTable: React.FC<UserTableProps> = ({
     ).then((res: any) => {
       if (res.meta.requestStatus === "fulfilled") {
         if (res.payload) {
-          setUsersData(res.payload.data || []);
-          console.log(res.payload);
+          setUsersData(res.payload.data || []);;
           const lastPage = res.payload.lastPage;
           setTotalPages(lastPage);
         } else {
