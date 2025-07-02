@@ -2,9 +2,9 @@ import { BACKEND_API } from "@/api";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
-// Async get UserProfile Thunk
-export const getUserProfile = createAsyncThunk(
-  "user/getProfile",
+//Fetch user profile
+export const fetchUserProfile = createAsyncThunk(
+  "user/fetchUserProfile",
   async (_, thunkAPI) => {
     try {
       const state: any = thunkAPI.getState();
@@ -80,17 +80,17 @@ const userProfileSlice = createSlice({
   extraReducers: (builder) => {
     //fetch user profile
     builder
-      .addCase(getUserProfile.pending, (state) => {
+      .addCase(fetchUserProfile.pending, (state) => {
         state.loading = true;
         state.userProfile = null;
         state.error = null;
       })
-      .addCase(getUserProfile.fulfilled, (state, action) => {
+      .addCase(fetchUserProfile.fulfilled, (state, action) => {
         state.loading = false;
         state.userProfile = action.payload;
         state.error = null;
       })
-      .addCase(getUserProfile.rejected, (state, action) => {
+      .addCase(fetchUserProfile.rejected, (state, action) => {
         state.loading = false;
         state.userProfile = null;
         if (action.error.message === "Request failed with Status code 401") {
@@ -100,7 +100,7 @@ const userProfileSlice = createSlice({
         }
       });
 
-    //update user profile
+    //update user profile image
     builder
       .addCase(uploadProfileImage.pending, (state) => {
         state.loading = true;

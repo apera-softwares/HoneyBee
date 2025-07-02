@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import { Dropdown } from "../ui/dropdown/Dropdown";
 import { DropdownItem } from "../ui/dropdown/DropdownItem";
-import { getUserProfile } from "@/lib/redux/slices/loginPersonProfile";
+import { fetchUserProfile } from "@/lib/redux/slices/loginPersonProfile";
 import { useAppDispatch,useAppSelector } from "@/lib/redux/hooks";
 import { logout } from "@/lib/redux/slices/userSlice";
 import { resetUserProfile } from "@/lib/redux/slices/loginPersonProfile";
@@ -27,14 +27,17 @@ export default function UserDropdown() {
 
 
   useEffect(() => {
-
-    const getUserProfileData = () => {
-      dispatch(getUserProfile())
-    }
-
-    getUserProfileData()
+    getUserProfile();
 
   }, [])
+
+const getUserProfile = async () => {
+  try {
+    await dispatch(fetchUserProfile()).unwrap();
+  } catch (error) {
+    console.error("Failed to fetch user profile:", error);
+  }
+};
 
   function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
     e.stopPropagation();

@@ -12,7 +12,7 @@ import { useAppSelector } from "@/lib/redux/hooks";
 import { RxCross2 } from "react-icons/rx";
 import axios from "axios";
 import { BACKEND_API } from "@/api";
-import { getUserProfile } from "@/lib/redux/slices/loginPersonProfile";
+import { fetchUserProfile } from "@/lib/redux/slices/loginPersonProfile";
 
 interface ChangeTeamModalProps {
   isOpen: boolean;
@@ -83,7 +83,7 @@ const ChangeTeamModal: React.FC<ChangeTeamModalProps> = ({
 
       console.log("team change response data", response.data);
       toast.success("Team changed successfully");
-      await dispatch(getUserProfile());
+      await dispatch(fetchUserProfile());
       handleCloseModal();
     } catch (error: any) {
       if (axios.isAxiosError(error)) {

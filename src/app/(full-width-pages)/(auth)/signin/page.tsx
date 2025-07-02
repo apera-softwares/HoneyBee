@@ -9,7 +9,7 @@ import toast from "react-hot-toast";
 import { loginUser } from "@/lib/redux/slices/userSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import Loader from "@/components/ui/loader/Loader";
-import { getUserProfile } from "@/lib/redux/slices/loginPersonProfile";
+import { fetchUserProfile } from "@/lib/redux/slices/loginPersonProfile";
 import Checkbox from "@/components/form/input/Checkbox";
 
 export default function Login() {
@@ -53,7 +53,7 @@ export default function Login() {
                     setLoading(false);
                     return;
                 } else {
-                    dispatch(getUserProfile())
+                    dispatch(fetchUserProfile());
                     toast.success("Login successful!");
                     setFormData({ email: "", password: "" });
                     router.push("/");
