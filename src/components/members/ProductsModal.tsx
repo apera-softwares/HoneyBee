@@ -30,9 +30,6 @@ const ProductListModal: React.FC<ProductListModalProps> = ({
   onRemove,
 }) => {
 
-
-  console.log(products,"products products")
-
   return (
     <Modal
       isOpen={isOpen}

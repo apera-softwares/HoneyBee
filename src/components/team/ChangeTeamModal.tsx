@@ -7,11 +7,9 @@ import { FORM_INPUT_CLASS } from "@/constant/constantClassName";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/lib/redux/store";
 import toast,{Toaster} from "react-hot-toast";
-import { fetchTeams } from "@/lib/redux/slices/teamManagementSlice";
+import { fetchTeams,changeTeam } from "@/lib/redux/slices/teamManagementSlice";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { RxCross2 } from "react-icons/rx";
-import axios from "axios";
-import { BACKEND_API } from "@/api";
 import { fetchUserProfile } from "@/lib/redux/slices/loginPersonProfile";
 
 interface ChangeTeamModalProps {
@@ -27,7 +25,6 @@ const ChangeTeamModal: React.FC<ChangeTeamModalProps> = ({
   const [searchText, setSearchText] = useState("");
   const [selectedTeam, setSelectedTeam] = useState<any | null>(null);
   const [loading,setLoading] = useState<boolean>(false);
-  const { user:loggedInUser } = useAppSelector((state) => state.user);
   const { teams } = useAppSelector((state) => state.TeamManagement);
 
   const dispatch = useDispatch<AppDispatch>();
@@ -62,45 +59,26 @@ const ChangeTeamModal: React.FC<ChangeTeamModalProps> = ({
       toast.error("Please select a team");
       return;
     }
+    const payload = {
+      teamId: selectedTeam.id,
+    };
+    setLoading(true); 
 
     try {
-      setLoading(true);
-      const payload = {
-        teamId: selectedTeam.id,
-      };
-
-      const token = loggedInUser?.token;
-      const response = await axios.post(
-        `${BACKEND_API}team/changeTeam`,
-        payload,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "ngrok-skip-browser-warning": "true",
-          },
-        }
-      );
-
-      console.log("team change response data", response.data);
+      await dispatch(changeTeam(payload));
       toast.success("Team changed successfully");
       await dispatch(fetchUserProfile());
       handleCloseModal();
     } catch (error: any) {
-      if (axios.isAxiosError(error)) {
         console.error(
           "Error changing team ",
           error.response?.data || error.message
         );
-        toast.error(
-          error.response?.data?.message || "Failed to Change team"
-        );
-      } else {
-        toast.error("Failed to change team");
-      }
+      const errorMessage =
+      typeof error === "string"? error : error?.message || "Failed to select product";
+      toast.error(errorMessage);
     } finally {
-        
      setLoading(false);
-
     }
   };
 

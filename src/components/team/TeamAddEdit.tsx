@@ -8,9 +8,9 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/lib/redux/store";
 import toast,{Toaster} from "react-hot-toast";
 import {
-  CreateTeam,
+  createTeam,
   fetchTeams,
-  UpdateTeam,
+  updateTeam,
 } from "@/lib/redux/slices/teamManagementSlice";
 import { fetchUsers } from "@/lib/redux/slices/userManagementSlice";
 import { useAppSelector } from "@/lib/redux/hooks";
@@ -121,7 +121,7 @@ const TeamAddEdit: React.FC<TeamAddEditProps> = ({
   const handleEdit = () => {
 
     if (!validateFormData()) return;
-    dispatch(UpdateTeam(formData)).then((res: any) => {
+    dispatch(updateTeam(formData)).then((res: any) => {
       if (res.meta.requestStatus === "fulfilled") {
         if (res.payload) {
           toast.success("Team Updated successful!");
@@ -140,7 +140,7 @@ const TeamAddEdit: React.FC<TeamAddEditProps> = ({
 
     if (!validateFormData()) return;
     dispatch(
-      CreateTeam({ name: formData?.name, mangerId: selectedMember?.id })
+      createTeam({ name: formData?.name, mangerId: selectedMember?.id })
     ).then((res: any) => {
       if (res.meta.requestStatus === "fulfilled") {
         if (res.payload) {
