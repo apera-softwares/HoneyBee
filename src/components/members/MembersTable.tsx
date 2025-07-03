@@ -64,7 +64,7 @@ const AssignedMembersTable: React.FC<TeamTableProps> = ({
         );
       }
     });
-  }, [dispatch, searchText, role, order, isModalOpen]);
+  }, [dispatch, searchText, role, order]);
 
   useEffect(() => {
     dispatch(
