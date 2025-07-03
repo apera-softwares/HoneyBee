@@ -4,7 +4,7 @@ import { BACKEND_API } from "@/api";
 
 // Create Product
 export const createMember = createAsyncThunk(
-  "member/createMeber",
+  "member/createMember",
   async (data: any, thunkAPI) => {
     try {
       const state: any = thunkAPI.getState();
@@ -25,7 +25,7 @@ export const createMember = createAsyncThunk(
 
 // Fetch Assigned Memebrs
 export const fetchAssignedMembers = createAsyncThunk(
-  "members/fetchAssignedMembers",
+  "member/fetchAssignedMembers",
   async (obj: any, thunkAPI) => {
     try {
       const state: any = thunkAPI.getState();
@@ -51,7 +51,6 @@ export const fetchAssignedMembers = createAsyncThunk(
           headers: { Authorization: `Bearer ${token}`,   'ngrok-skip-browser-warning': 'true', },
         }
       );
-      console.log(response.data,"assigend members")
       return response.data;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(
@@ -62,9 +61,8 @@ export const fetchAssignedMembers = createAsyncThunk(
 );
 
   export const deleteAssignedMemberProduct = createAsyncThunk(
-  "member/memberProductDelete",
+  "member/deleteAssignedMemberProduct",
   async (id: any, thunkAPI) => {
-    console.log(id, "delete id");
     try {
       const state: any = thunkAPI.getState();
       const token = state.user?.user?.token;
@@ -91,20 +89,20 @@ export const fetchAssignedMembers = createAsyncThunk(
 
 
 
-interface ProductCatalogState {
+interface MemberState {
   members: any[];
   loading: boolean;
   error: string | null;
 }
 
-const initialState: ProductCatalogState = {
+const initialState: MemberState = {
   members: [],
   loading: false,
   error: null,
 };
 
-const memberManagementSlice = createSlice({
-  name: "memberManagement",
+const memberSlice = createSlice({
+  name: "member",
   initialState,
   reducers: {},
   extraReducers: (builder) => {
@@ -158,4 +156,4 @@ const memberManagementSlice = createSlice({
   },
 });
 
-export default memberManagementSlice.reducer;
+export default memberSlice.reducer;

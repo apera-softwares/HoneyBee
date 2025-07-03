@@ -16,7 +16,7 @@ import {
     fetchTeamMembers,
 } from "@/lib/redux/slices/teamManagementSlice";
 import { fetchProductCatalogs } from "@/lib/redux/slices/productCatalogSlice";
-import { createMember, fetchAssignedMembers } from "@/lib/redux/slices/membersSlice";
+import { createMember, fetchAssignedMembers } from "@/lib/redux/slices/memberSlice";
 
 interface MemberAddModalProps {
     isOpen: boolean;
