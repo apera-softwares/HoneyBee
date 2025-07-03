@@ -3,7 +3,7 @@ import { FORM_INPUT_CLASS, REQUIRED_ERROR, TEXT_SIZE } from "@/constant/constant
 import React, { useState, useEffect, useRef } from "react";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import { createProductCatalog, fetchProductCatalogs, updateProductCatalog } from "@/lib/redux/slices/productCatalogSlice";
-import axios from "axios";
+import { fetchStates } from "@/lib/redux/slices/appSlice";
 import { BACKEND_API } from "@/api";
 import toast from "react-hot-toast";
 import Radio from "../form/input/Radio";
@@ -47,16 +47,14 @@ interface AddEditProductCatalogFormProps {
 const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ filters, paginationData, setPaginationData, editData, onEditSuccess }) => {
 
   const dispatch = useAppDispatch();
+  const maxNumber = 3;
   const [formData, setFormData] = useState<FormState>({ name: "", bulletPoint1: "", bulletPoint2: "", bulletPoint3: "", elevatorPitch: "", status: "", stateId: "", price: "", estimatedPrice:"" });
   const [states, setStates] = useState<any[]>([]);
   const [stateName, setStateName] = useState<string>("");
   const [selectedState, setSelectedState] = useState<any>(null);
-  const [isStateCityDropdownOpen, setIsStateCityDropdownOpen] = useState(false);
+  const [isStateDropdownOpen, setIsStateDropdownOpen] = useState(false);
   const stateDropdownRef = useRef<HTMLDivElement | null>(null);
-
   const [images, setImages] = useState([]);
-  const maxNumber = 3;
-
   const [loading, setLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState({
     name: "", bulletPoint1: "", bulletPoint2: "", bulletPoint3: "", elevatorPitch: "", status: "", stateId: "", image: "", price: "",estimatedPrice:""
@@ -97,7 +95,7 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
 
   useEffect(() => {
     const timeoutId = setTimeout(() => {
-      fetchStates();
+      getStates();
     }, 300); // debounce
     return () => clearTimeout(timeoutId);
   }, [stateName]);
@@ -106,14 +104,14 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
 
   const handleClickOutside = (e: MouseEvent) => {
     if (stateDropdownRef.current && !stateDropdownRef.current.contains(e.target as Node)) {
-      setIsStateCityDropdownOpen(false);
+      setIsStateDropdownOpen(false);
       setStateName("");
       setStates([]);
     }
   };
 
   const handleOpenStateCityDropdown = () => {
-    setIsStateCityDropdownOpen(true);
+    setIsStateDropdownOpen(true);
   };
 
 
@@ -215,7 +213,7 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
 
     if (value) {
       setSelectedState(value);
-      setIsStateCityDropdownOpen(false);
+      setIsStateDropdownOpen(false);
       setFormData((prev: FormState) => ({
         ...prev,
         stateId: `${value?.id}`,
@@ -239,7 +237,7 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
     })
     setImages([])
     setSelectedState(null);
-    setIsStateCityDropdownOpen(false);
+    setIsStateDropdownOpen(false);
   };
 
   const handleSubmit = async () => {
@@ -319,24 +317,18 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
     }
   };
 
-  const fetchStates = async () => {
-
-    if (!stateName.trim()) {
+  const getStates = async () => {
+    const query = stateName.trim();
+    if (!query) {
       setStates([]);
       return;
     }
     try {
-
-      const response = await axios.get(
-        `${BACKEND_API}state?name=${stateName}`,
-        {
-          headers: { 'ngrok-skip-browser-warning': 'true', },
-        }
-      );
-
-      setStates(response?.data?.data || []);
+      const response = await dispatch(fetchStates(query)).unwrap();
+      setStates(response?.data || []);
     }
     catch (error) {
+      setStates([]);
       console.log("error while fetching state", error);
     }
   }
@@ -461,12 +453,12 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
                   selectedState ? `${selectedState?.name}` : ""
                 }
                 onClick={handleOpenStateCityDropdown}
-                placeholder="City or state"
+                placeholder="State"
                 className={`${FORM_INPUT_CLASS} cursor-pointer`}
               />
               <span className={`${REQUIRED_ERROR}`}>{errors.stateId || ""}</span>
 
-              {isStateCityDropdownOpen && (
+              {isStateDropdownOpen && (
                 <div className="absolute z-50 top-full left-0 w-full bg-white border border-gray-200 rounded-md shadow-lg mt-1 px-2 py-2">
                   {selectedState && (
                     <div className="mb-2 flex items-center justify-between gap-2 px-3 py-1 bg-gray-100 rounded">

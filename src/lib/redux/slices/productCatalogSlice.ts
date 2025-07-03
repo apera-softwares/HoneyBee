@@ -55,10 +55,6 @@ export const fetchProductCatalogs = createAsyncThunk(
           
         }
       );
-
-console.log(response.data,"products")
-
-
       return response.data;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(
@@ -105,7 +101,6 @@ export const updateProductCatalog = createAsyncThunk(
       const response = await axios.put(`${BACKEND_API}product/${id}`, data, {
         headers: { Authorization: `Bearer ${token}`,  'ngrok-skip-browser-warning': 'true', },
       });
-console.log(response.data,"response.data")
       return response.data;
     } catch (error: any) {
       console.log(error,"product error")
@@ -124,10 +119,9 @@ export const deleteProductCatalog = createAsyncThunk(
       const state: any = thunkAPI.getState();
       const token = state.user?.user?.token;
 
-      const response = await axios.delete(`${BACKEND_API}product/${id}`, {
+      await axios.delete(`${BACKEND_API}product/${id}`, {
         headers: { Authorization: `Bearer ${token}`,   'ngrok-skip-browser-warning': 'true', },
       });
-      console.log(response,"delete response")
 
       return id ; 
     } catch (error: any) {

@@ -3,11 +3,10 @@ import React, { useState, useEffect, useRef } from "react";
 import Button from "../ui/button/Button";
 // import Checkbox from "./form/input/Checkbox";
 import { FORM_INPUT_CLASS, REQUIRED_ERROR } from "@/constant/constantClassName";
-import axios from "axios";
-import { BACKEND_API } from "@/api";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { createReferral } from "@/lib/redux/slices/referralSlice";
 import { fetchStatisticsNumbers } from "@/lib/redux/slices/statisticsSlice";
+import { fetchStateAndCity } from "@/lib/redux/slices/appSlice";
 import toast, { Toaster } from "react-hot-toast";
 import ProductDropdown from "../product-catalog/ProductDropdown";
 
@@ -91,7 +90,7 @@ const ReferralForm = () => {
   useEffect(() => {
 
     const timeoutId = setTimeout(() => {
-      fetchStateCity();
+      getStateAndCity();
     }, 300);
 
     return () => clearTimeout(timeoutId);
@@ -99,24 +98,16 @@ const ReferralForm = () => {
 
 
 
-  const fetchStateCity = async () => {
-    if (!stateCityName.trim()) {
+  const getStateAndCity = async () => {
+    const query = stateCityName.trim();
+
+    if (!query) {
       setStateCityList([]);
       return;
     }
-
     try {
-      const token = loggedInUser?.token;
-      const response = await axios.get(`${BACKEND_API}user/getStateCity?name=${stateCityName.trim()}`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'ngrok-skip-browser-warning': 'true',
-          },
-        }
-      );
-      const locationData = response?.data?.data as LocationData;
-
+      const response = await dispatch(fetchStateAndCity(query)).unwrap();
+      const locationData = response?.data as LocationData;
       const parsedLocations: ParsedLocation[] = Object.entries(locationData)?.map(([key, value]) => {
         if (value[1] === "city") {
           const [cityId, , stateName, stateId] = value;
@@ -136,14 +127,11 @@ const ReferralForm = () => {
           };
         }
       });
-
       setStateCityList(parsedLocations || []);
-
     } catch (error: any) {
+      setStateCityList([]);
       console.log("error while fetching state and city", error);
-    } finally {
-
-    }
+    } 
   };
 
    const getStatNumbers = async () => {
