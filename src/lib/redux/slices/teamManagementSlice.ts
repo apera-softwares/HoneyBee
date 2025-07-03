@@ -3,7 +3,7 @@ import axios from "axios";
 import { BACKEND_API } from "@/api";
 
 export const fetchTeams = createAsyncThunk(
-  "team/fetchTeams",
+  "teamManagement/fetchTeams",
   async (obj: any, thunkAPI) => {
     try {
       const state: any = thunkAPI.getState();
@@ -38,7 +38,7 @@ export const fetchTeams = createAsyncThunk(
   }
 );
 export const fetchTeamsByUserId = createAsyncThunk(
-  "team/fetchTeamsByUserId",
+  "teamManagement/fetchTeamsByUserId",
   async (obj: any, thunkAPI) => {
     try {
       const state: any = thunkAPI.getState();
@@ -73,7 +73,7 @@ export const fetchTeamsByUserId = createAsyncThunk(
 );
 
 export const fetchTeamMembers = createAsyncThunk(
-  "team/fetchTeamMembers",
+  "teamManagement/fetchTeamMembers",
   async (obj: any, thunkAPI) => {
     try {
       const state: any = thunkAPI.getState();
@@ -99,8 +99,8 @@ export const fetchTeamMembers = createAsyncThunk(
   }
 );
 
-export const CreateTeam = createAsyncThunk(
-  "team/Create",
+export const createTeam = createAsyncThunk(
+  "teamManagement/createTeam",
   async (obj: any, thunkAPI) => {
     try {
       const state: any = thunkAPI.getState();
@@ -124,8 +124,8 @@ export const CreateTeam = createAsyncThunk(
   }
 );
 
-export const UpdateTeam = createAsyncThunk(
-  "team/Update",
+export const updateTeam = createAsyncThunk(
+  "teamManagement/updateTeam",
   async (obj: any, thunkAPI) => {
     try {
       const state: any = thunkAPI.getState();
@@ -148,8 +148,29 @@ export const UpdateTeam = createAsyncThunk(
   }
 );
 
+export const changeTeam = createAsyncThunk(
+  "teamManagement/changeTeam",
+  async (payload: any, thunkAPI) => {
+    try {
+      const state: any = thunkAPI.getState();
+      const token = state.user?.user?.token;
+      const response = await axios.post(`${BACKEND_API}team/changeTeam`,payload, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "ngrok-skip-browser-warning": "true",
+        },
+      });
+      return response.data;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to change team"
+      );
+    }
+  }
+);
+
 export const addTeamMember = createAsyncThunk(
-  "add/teamMember",
+  "teamManagement/addTeamMember",
   async (obj: any, thunkAPI) => {
     try {
       const state: any = thunkAPI.getState();
@@ -183,7 +204,7 @@ export const addTeamMember = createAsyncThunk(
 );
 
 export const deleteTeamMember = createAsyncThunk(
-  "team/memberDelete",
+  "teamManagement/deleteTeamDelete",
   async (id: any, thunkAPI) => {
     console.log(id, "delete id");
     try {
@@ -263,32 +284,46 @@ const teamManagementSlice = createSlice({
     //Create Team
 
     builder
-      .addCase(CreateTeam.pending, (state) => {
+      .addCase(createTeam.pending, (state) => {
         state.loading = true;
         state.error = null;
         state.teams = [];
       })
-      .addCase(CreateTeam.fulfilled, (state, action) => {
+      .addCase(createTeam.fulfilled, (state, action) => {
         state.loading = false;
         state.teams = action.payload;
       })
-      .addCase(CreateTeam.rejected, (state, action) => {
+      .addCase(createTeam.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });
 
     //Update Team
     builder
-      .addCase(UpdateTeam.pending, (state) => {
+      .addCase(updateTeam.pending, (state) => {
         state.loading = true;
         state.error = null;
         state.teams = [];
       })
-      .addCase(UpdateTeam.fulfilled, (state, action) => {
+      .addCase(updateTeam.fulfilled, (state, action) => {
         state.loading = false;
         state.teams = action.payload;
       })
-      .addCase(UpdateTeam.rejected, (state, action) => {
+      .addCase(updateTeam.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      });
+
+    //change team by B_TEAM user
+    builder
+      .addCase(changeTeam.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(changeTeam.fulfilled, (state) => {
+        state.loading = false;
+      })
+      .addCase(changeTeam.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });

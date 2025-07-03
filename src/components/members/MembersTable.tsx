@@ -6,13 +6,12 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/lib/redux/store";
+import { useAppDispatch,useAppSelector } from "@/lib/redux/hooks";
 import Spinner from "../common/Spinner";
 import Pagination from "../tables/Pagination";
 import { Toaster } from "react-hot-toast";
 //import { MdRemoveRedEye } from "react-icons/md";
-import { fetchAssignedMembers } from "@/lib/redux/slices/membersSlice";
+import { fetchAssignedMembers } from "@/lib/redux/slices/memberSlice";
 // import { EyeIcon } from "@/icons";
 import ViewMemberModal from "./ViewMemberModal";
 import { FiEdit } from "react-icons/fi";
@@ -31,65 +30,38 @@ const AssignedMembersTable: React.FC<TeamTableProps> = ({
   order,
 }) => {
   const ITEM_PER_PAGE = 5;
-  const dispatch = useDispatch<AppDispatch>();
+  const dispatch = useAppDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const { loading, members } = useSelector(
-    (state: RootState) => state.memberManagement
-  );
+  const {loading,members} = useAppSelector((state)=>state.member);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [userData, setuserData] = useState("");
 
   useEffect(() => {
     setCurrentPage(1);
-    dispatch(
-      fetchAssignedMembers({
-        page: 1,
-        limit: ITEM_PER_PAGE,
-        name: searchText,
-        order: order,
-      })
-    ).then((res: any) => {
-      if (res.meta.requestStatus === "fulfilled") {
-        if (res.payload) {
-          const lastPage = res.payload.lastPage;
-          setTotalPages(lastPage);
-        } else {
-          setTotalPages(0);
-        }
-      } else {
-        console.log(
-          "Failed to fetch Assigend Members:",
-          res.payload || "Unknown error"
-        );
-      }
-    });
-  }, [dispatch, searchText, role, order, isModalOpen]);
+    getAssignMembers(1);
+  }, [dispatch, searchText, role, order]);
 
   useEffect(() => {
-    dispatch(
-      fetchAssignedMembers({
-        page: currentPage,
+    getAssignMembers(currentPage);
+  }, [dispatch, currentPage]);
+
+
+    const getAssignMembers = async (page:number) => {
+        const payload = {
+        page: page,
         limit: ITEM_PER_PAGE,
         name: searchText,
         order: order,
-      })
-    ).then((res: any) => {
-      if (res.meta.requestStatus === "fulfilled") {
-        if (res.payload) {
-          const lastPage = res.payload.lastPage;
-          setTotalPages(lastPage);
-        } else {
-          setTotalPages(0);
         }
-      } else {
-        console.log(
-          "Failed to fetch Assigend Members:",
-          res.payload || "Unknown error"
-        );
-      }
-    });
-  }, [dispatch, currentPage]);
+        try {
+          const response = await dispatch(fetchAssignedMembers(payload)).unwrap();
+          setTotalPages(response?.lastPage||0);
+        } catch (error: any) {
+          setTotalPages(0);
+          console.log(error?.message || "Failed to fetch assigned members");
+        }
+  };
 
   const handlePageChange = (page: any) => {
     setCurrentPage(page);

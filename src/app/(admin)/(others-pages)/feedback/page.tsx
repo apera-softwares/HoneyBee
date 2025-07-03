@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 
-const Contact = () => {
+const Feedback = () => {
     const [result, setResult] = useState("");
 
     const onSubmit = async (event: any) => {
@@ -60,7 +60,7 @@ const Contact = () => {
 
                     <div>
                         <label htmlFor="message" className="block text-sm font-medium text-gray-700">
-                            Feedback Feedback
+                            Feedback
                         </label>
                         <textarea
                             name="message"
@@ -87,4 +87,4 @@ const Contact = () => {
     );
 };
 
-export default Contact;
+export default Feedback;

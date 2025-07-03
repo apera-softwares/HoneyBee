@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import StatisticsAreaChart from "../statistic-charts/StatisticsAreaChart";
-import TeamCard from "@/components/team/TeamCard";
+import TeamAndMemberListing from "@/components/team/TeamAndMemberListing";
 import StatisticsPieChart from "../statistic-charts/StatisticsPieChart";
 import axios from "axios";
 import { useAppSelector } from "@/lib/redux/hooks";
@@ -86,21 +86,6 @@ const BTeamDashboard = () => {
 
   return (
     <div className="w-full">
-      {/* <div className="w-full grid grid-cols-12 gap-5 mb-5">
-        <div
-          className={`col-span-12 ${
-            team?.teamId ? "lg:col-span-8" : ""
-          } `}
-        >
-          <StatisticsChart />
-        </div>
-        {team?.teamId && (
-          <div className="col-span-12 lg:col-span-4 lg:h-full">
-            <TeamCard team={team} teamMembers={teamMembers} />
-          </div>
-        )}
-      </div> */}
-
       <div className="w-full grid grid-cols-12 gap-5 mb-5">
         <div className="w-full col-span-12 lg:col-span-5 h-full ">
           <StatisticsPieChart />
@@ -112,7 +97,7 @@ const BTeamDashboard = () => {
 
       {team?.teamId && (
         <div className="w-full ">
-          <TeamCard team={team} teamMembers={teamMembers} />
+          <TeamAndMemberListing team={team} teamMembers={teamMembers} />
         </div>
       )}
 
