@@ -22,7 +22,7 @@ export const makeStore = () => {
       userProfile: userProfileReducer,
       member: memberReducer,
       referral:referralReducer,
-      statistic:statisticsReducer,
+      statistics:statisticsReducer,
     },
   });
 };

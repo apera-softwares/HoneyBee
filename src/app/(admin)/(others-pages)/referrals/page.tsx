@@ -11,7 +11,7 @@ export default function Referrals() {
 
     const {
         pieChart: { lifetime, totalLeads },
-    } = useAppSelector((state) => state.statistic);
+    } = useAppSelector((state) => state.statistics);
     const [searchInput, setSearchInput] = useState("")
     const [status, setStatus] = useState("");
 

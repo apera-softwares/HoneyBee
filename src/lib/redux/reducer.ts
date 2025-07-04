@@ -21,7 +21,7 @@ const rootReducer = combineReducers({
   userProfile: userProfileReducer,
   member:memberReducer,
   referral:referralReducer,
-  statistic:statisticsReducer,
+  statistics:statisticsReducer,
 })
 
 export type RootReducer = ReturnType<typeof rootReducer> ;

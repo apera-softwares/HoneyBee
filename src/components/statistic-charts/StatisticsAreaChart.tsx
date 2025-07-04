@@ -18,11 +18,11 @@ interface OptionItem {
 }
 export default function StatisticsAreaChart() {
 
-  const [chartData, setChartData] = useState<any>({});
-  const [selected, setSelected] = useState<OptionItem>(CHART_RANGES[0]);
   const {
     lineChart: { monthly,yearly, lifetime },
-  } = useAppSelector((state) => state.statistic);
+  } = useAppSelector((state) => state.statistics);
+  const [chartData, setChartData] = useState<any>({});
+  const [selected, setSelected] = useState<OptionItem>(CHART_RANGES[0]);
 
 
   useEffect(() => {
