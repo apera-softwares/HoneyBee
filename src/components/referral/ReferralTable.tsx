@@ -47,13 +47,17 @@ const ReferralTable: React.FC<ReferralTableProps> = ({
   const { user: loggedInUser } = useAppSelector((state) => state.user);
 
   useEffect(() => {
-    getReferrals(currentPage);
-  }, [dispatch, currentPage]);
+    if(currentPage === 1 ){
+      getReferrals(1);
+    }else{
+      setCurrentPage(1);
+    }
+  }, [searchText, status]);
 
   useEffect(() => {
-    setCurrentPage(1);
-    getReferrals(1);
-  }, [dispatch, searchText, status]);
+    getReferrals(currentPage);
+  }, [currentPage]);
+
 
   const getReferrals = async (page: number) => {
     try {
@@ -63,8 +67,8 @@ const ReferralTable: React.FC<ReferralTableProps> = ({
         searchQuery: searchText,
         status: status,
       };
-      const res = await dispatch(fetchReferrals(params)).unwrap();
-      setTotalPages(res?.lastPage);
+      const response = await dispatch(fetchReferrals(params)).unwrap();
+      setTotalPages(response?.lastPage||0);
     } catch (error: any) {
       console.log(error?.message || "Failed to fetch products");
     }

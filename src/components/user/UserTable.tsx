@@ -8,8 +8,7 @@ import {
 } from "../ui/table";
 import Badge from "../ui/badge/Badge";
 import { FiEdit } from "react-icons/fi";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/lib/redux/store";
+import { useAppDispatch,useAppSelector } from "@/lib/redux/hooks";
 import { fetchUsers } from "@/lib/redux/slices/userManagementSlice";
 import Spinner from "../common/Spinner";
 import Pagination from "../tables/Pagination";
@@ -22,53 +21,66 @@ interface UserTableProps {
   searchText: string;
   role: string;
   order: string;
+  isUserAddModalOpen?:boolean;
   from?: string;
+
 }
 
 const UserTable: React.FC<UserTableProps> = ({
   searchText,
   role,
   order,
+  isUserAddModalOpen,
   from,
 }) => {
+  
   const ITEM_PER_PAGE = 5;
-  const dispatch = useDispatch<AppDispatch>();
-  const [usersData, setUsersData] = useState<any[]>([]);
+  const dispatch = useAppDispatch();
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
-  const { loading } = useSelector((state: RootState) => state.UserManagement);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editUserData, setEditUserData] = useState<any>({});
+  const { loading, users } = useAppSelector((state) => state.userManagement);
+  const [isEditUserModalOpen, setIsUserEditModalOpen] = useState(false);
+  const [editUserData, setEditUserData] = useState<any>(null);
 
   useEffect(() => {
-    dispatch(
-      fetchUsers({
-        page: currentPage,
+    if(currentPage===1){
+       getUsers(1)
+    }else{
+      setCurrentPage(1);
+    }
+  }, [searchText, role, order]);
+
+  useEffect(() => {
+    getUsers(currentPage);
+  }, [currentPage,isEditUserModalOpen,isUserAddModalOpen]);
+
+
+  const getUsers = async (page:number) => {
+        const params = {
+        page:  page,
         limit: ITEM_PER_PAGE,
-        name: searchText,
+        name: searchText.trim(),
         role: role,
-        order,
-      })
-    ).then((res: any) => {
-      if (res.meta.requestStatus === "fulfilled") {
-        if (res.payload) {
-          setUsersData(res.payload.data || []);;
-          const lastPage = res.payload.lastPage;
-          setTotalPages(lastPage);
-        } else {
-          setUsersData([]);
-          setTotalPages(0);
-        }
-      } else {
-        console.log("Failed to fetch users:", res.payload || "Unknown error");
+        order:order,
       }
-    });
-  }, [dispatch, currentPage, searchText, role, isModalOpen, order]);
+        try {
+            const response = await dispatch(fetchUsers(params)).unwrap();
+            setTotalPages(response?.lastPage||0);
+
+        } catch (error: any) {
+            console.log(error, "error while fetching users");
+        }
+  };
+
+  const handleCloseEditUserModal = ()=>{
+    setIsUserEditModalOpen(false);
+    setEditUserData(null);
+  }
 
   const handlePageChange = (page: any) => {
     setCurrentPage(page);
+    setEditUserData(null);
   };
-
   return (
     <div className="w-full overflow-hidden rounded-xl bg-white dark:bg-white/[0.03] shadow-md">
       <div className="w-full overflow-x-auto">
@@ -122,8 +134,8 @@ const UserTable: React.FC<UserTableProps> = ({
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {usersData.length > 0 ? (
-                  usersData.map((user: any, index: number) => {
+                {users.length > 0 ? (
+                  users.map((user: any, index: number) => {
                     const imgSrc = user?.media?.[0]?.imageName
                       ? `${BACKEND_API}uploads/${user?.media?.[0]?.imageName}`
                       : DEFAULT_PROFILE_IMAGE;
@@ -174,7 +186,7 @@ const UserTable: React.FC<UserTableProps> = ({
                               className="flex items-center gap-1 cursor-pointer"
                               onClick={() => {
                                 setEditUserData(user);
-                                setIsModalOpen(true);
+                                setIsUserEditModalOpen(true);
                               }}
                             >
                               <FiEdit className="h-5 w-5 text-primary" />
@@ -208,8 +220,8 @@ const UserTable: React.FC<UserTableProps> = ({
       )}
 
       <UserAddEditModal
-        isOpen={isModalOpen}
-        closeModal={() => setIsModalOpen(false)}
+        isOpen={isEditUserModalOpen}
+        closeModal={handleCloseEditUserModal}
         userData={editUserData}
         type="update"
       />

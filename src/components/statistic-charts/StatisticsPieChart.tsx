@@ -14,17 +14,16 @@ const ReactApexChart = dynamic(() => import("react-apexcharts"), {
 });
 
 export default function StatisticsPieChart() {
-
+  const {
+    pieChart: { monthly, yearly,lifetime },
+  } = useAppSelector((state) => state.statistics);
+  const dropdownRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(CHART_RANGES[0]);
   const [chartData, setChartData] = useState<{
     labels: string[];
     series: number[];
   } | null>(null);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const {
-    pieChart: { monthly, yearly,lifetime },
-  } = useAppSelector((state) => state.statistic);
 
 
   useEffect(() => {

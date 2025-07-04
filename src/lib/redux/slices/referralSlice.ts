@@ -32,7 +32,6 @@ export const fetchReferrals = createAsyncThunk(
       const token = state.user?.user?.token;
    
       const {page,limit,searchQuery, status}= params;
-      console.log(params,"params")
     
       const queryParams = new URLSearchParams({
           page: String(page),

@@ -22,8 +22,11 @@ interface PaginationState {
 }
 
 export default function SelectForSelect() {
-  const dispatch = useAppDispatch();
   const MAX_ALLOWED_PRODUCTS = 3;
+  const dispatch = useAppDispatch();
+  const { user: loggedInUser } = useAppSelector((state) => state.user);
+  const { userProfile } = useAppSelector((state) => state.userProfile);
+  const { selectedProducts } = useAppSelector((state) => state.productCatalog)
   const [filters, setFilters] = useState<FiltersState>({
     searchQuery: "",
     status: "",
@@ -35,9 +38,7 @@ export default function SelectForSelect() {
   const [selectedProductId, setSelectedProductId] = useState<any>(null);
   const [showViewProductDetailsModal,setShowViewProductDetailsModal] = useState<boolean>(false);
   const[selectedProduct,setSelectedProduct] = useState<any>(null);
-  const { userProfile } = useAppSelector((state) => state.userProfile);
-  const { user: loggedInUser } = useAppSelector((state) => state.user);
-  const { selectedProducts } = useAppSelector((state) => state.productCatalog)
+
   const memberId =
     userProfile?.teamMember?.find((member: any) => member.isMemberOnly === true)
       ?.id || null;
@@ -55,9 +56,9 @@ export default function SelectForSelect() {
 
 
   const getSelectedProducts = async () => {
+    const userId = loggedInUser?.userId;
     try {
-      const response = await dispatch(fetchSelectedProducts(loggedInUser?.userId)).unwrap();
-      console.log("response of selected products", response);
+      await dispatch(fetchSelectedProducts(userId)).unwrap();
     } catch (error: any) {
       console.error("Error getting selected products:", error?.message || error);
     }
@@ -72,16 +73,15 @@ export default function SelectForSelect() {
       toast.error("You can select up to 3 products");
       return;
     }
+    const payload = {
+      teamMemberId: memberId,
+      productId: productId,
+    };
     setSelectedProductId(productId);
     try {
 
-      const payload = {
-        teamMemberId: memberId,
-        productId: productId,
-      };
-
       await dispatch(selectProductCatalog(payload)).unwrap();
-      toast.success("Selected product  successfully");
+      toast.success("Product selected successfully");
       getSelectedProducts();
     } catch (error: any) {
       const errorMessage =
@@ -100,15 +100,15 @@ export default function SelectForSelect() {
       toast.error("You are not a member of any team.");
       return;
     }
+
+    const payload = {
+      teamMemberId: memberId,
+      productId: productId,
+    };
     setSelectedProductId(productId);
     try {
-
-      const payload = {
-        teamMemberId: memberId,
-        productId: productId,
-      };
       await dispatch(unselectProductCatalog(payload)).unwrap();
-      toast.success("Unselected product  successfully");
+      toast.success("Product unselected successfully");
       getSelectedProducts();
     } catch (error: any) {
       const errorMessage =

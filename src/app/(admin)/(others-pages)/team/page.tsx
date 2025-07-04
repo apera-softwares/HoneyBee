@@ -14,7 +14,7 @@ export default function TeamManagement() {
   const [searchInput,setSearchInput] = useState("");
   const [order] = useState("");
   const { user: loggedUser } = useAppSelector((state) => state.user);
-  const { teams, loading } = useAppSelector((state) => state.TeamManagement);
+  const { teams, loading } = useAppSelector((state) => state.teamManagement);
 
   const showCreateTeamButton =
     loggedUser?.role === UserRole.ADMIN ||

@@ -48,12 +48,12 @@ export default function ForgotPassword() {
   const handleSendOtp = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateFormData()) return;
-    setLoading(true);
 
+    const payload = {
+      email: formData.email,
+    };
+    setLoading(true);
     try {
-      const payload = {
-        email: formData.email,
-      };
       await dispatch(sendOtp(payload)).unwrap();
       toast.success("OTP sent to your email.");
       setStep(1);
@@ -61,7 +61,7 @@ export default function ForgotPassword() {
       const errorMessage =
         typeof error === "string"
           ? error
-          : error?.message || "Failed to select product";
+          : error?.message || "Failed to send otp. Please try again";
       toast.error(errorMessage);
     } finally {
       setLoading(false);
@@ -71,17 +71,16 @@ export default function ForgotPassword() {
   const handleResetPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateResetPasswordFormData()) return;
+
+    const payload = {
+      otp: formData.otp,
+      email: formData.email,
+      password: formData.password,
+    };
     setLoading(true);
 
     try {
-      const payload = {
-        otp: formData.otp,
-        email: formData.email,
-        password: formData.password,
-      };
-
       await dispatch(resetPassword(payload)).unwrap();
-
       toast.success(
         "Password reset successfully, wait you will be redirect to login page"
       );
@@ -91,7 +90,7 @@ export default function ForgotPassword() {
       const errorMessage =
         typeof error === "string"
           ? error
-          : error?.message || "Failed to select product";
+          : error?.message || "Failed to reset password. Please try again";
       toast.error(errorMessage);
     } finally {
       setLoading(false);
@@ -178,7 +177,6 @@ export default function ForgotPassword() {
     });
   };
 
-  //console.log("formd data in reset passwed", formData);
 
   return (
     <div className="flex flex-col md:flex-row min-h-screen">

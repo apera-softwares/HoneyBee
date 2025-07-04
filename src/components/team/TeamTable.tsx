@@ -7,8 +7,6 @@ import {
     TableRow,
 } from "../ui/table";
 import { FiEdit } from "react-icons/fi";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/lib/redux/store";
 import Spinner from "../common/Spinner";
 import Pagination from "../tables/Pagination";
 import { Toaster } from "react-hot-toast";
@@ -16,7 +14,7 @@ import TeamAddEdit from "./TeamAddEdit";
 import { fetchTeams, fetchTeamsByUserId } from "@/lib/redux/slices/teamManagementSlice";
 import { MdRemoveRedEye } from "react-icons/md";
 import { useRouter } from "next/navigation";
-import { useAppSelector } from "@/lib/redux/hooks";
+import { useAppSelector,useAppDispatch } from "@/lib/redux/hooks";
 import { UserRole } from "@/constant/userRoles";
 
 
@@ -29,54 +27,67 @@ interface TeamTableProps {
 
 const TeamTable: React.FC<TeamTableProps> = ({ searchText, role, order,isCreateTeamModalOpen }) => {
     const ITEM_PER_PAGE = 5;
-    const dispatch = useDispatch<AppDispatch>();
-    const [teamData, setTeamData] = useState<any[]>([]);
+    const router = useRouter();
+    const dispatch = useAppDispatch();
+    const {user:loggedInUser} = useAppSelector((state)=>state.user);
+    const { loading, teams } = useAppSelector((state) => state.teamManagement);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
-    const { loading } = useSelector((state: RootState) => state.TeamManagement);
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [editTeamData, setEditTeamData] = useState<any>({});
-    const { userProfile } = useAppSelector((state) => state.userProfile);
-
-
-    const router = useRouter()
+    
 
     useEffect(() => {
+        if (loggedInUser?.role === UserRole.ADMIN) {
+            if(currentPage === 1)
+            {
+                getTeams(1);
+            }else{
+                setCurrentPage(1);
+            }
 
-        if (userProfile?.role === UserRole.ADMIN) {
-            dispatch(fetchTeams({ page: currentPage, limit: ITEM_PER_PAGE ,name:searchText})).then((res: any) => {
-                if (res.meta.requestStatus === "fulfilled") {
-                    if (res.payload) {
-                        setTeamData(res.payload.data || []);
-                        //console.log(res.payload)
-                        const lastPage = res.payload.lastPage;
-                        setTotalPages(lastPage);
-                    } else {
-                        setTeamData([]);
-                        setTotalPages(0);
-                    }
-                } else {
-                    console.log("Failed to fetch Teams:", res.payload || "Unknown error");
-                }
-            });
         } else {
-            dispatch(fetchTeamsByUserId({ page: currentPage, limit: ITEM_PER_PAGE,name:searchText})).then((res: any) => {
-                if (res.meta.requestStatus === "fulfilled") {
-                    if (res.payload) {
-                        setTeamData(res.payload || []);
-                        const lastPage = res.payload.lastPage;
-                        setTotalPages(lastPage);
-                    } else {
-                        setTeamData([]);
-                        setTotalPages(0);
-                    }
-                } else {
-                    console.log("Failed to fetch Teams:", res.payload || "Unknown error");
-                }
-            });
+            getTeamsByUserId(1);
         }
 
-    }, [dispatch, currentPage, searchText, role, isModalOpen, order,isCreateTeamModalOpen,userProfile]);
+    }, [searchText, role,order]);
+
+    useEffect(() => {
+        if (loggedInUser?.role === UserRole.ADMIN) {
+            getTeams(currentPage);
+        } else {
+            getTeamsByUserId(currentPage);
+        }
+    }, [currentPage,isModalOpen,isCreateTeamModalOpen]);
+
+
+    const getTeams = async (page:number) => {
+        const params = {
+           page: page, 
+           limit: ITEM_PER_PAGE ,
+           name:searchText
+        }
+        try {
+            const response = await dispatch(fetchTeams(params)).unwrap();
+            setTotalPages(response?.lastPage||0);
+     
+        } catch (error: any) {
+            console.log(error, "error while fetching teams");
+        }
+  };
+    const getTeamsByUserId = async (page:number) => {
+        const params = {
+           page: page, 
+           limit: ITEM_PER_PAGE ,
+           name:searchText
+        }
+        try {
+            await dispatch(fetchTeamsByUserId(params)).unwrap();
+            setTotalPages(1);
+        } catch (error: any) {
+            console.log(error, "error while fetching teams");
+        }
+    };
 
     const handlePageChange = (page: any) => {
         setCurrentPage(page);
@@ -101,8 +112,8 @@ const TeamTable: React.FC<TeamTableProps> = ({ searchText, role, order,isCreateT
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {teamData.length > 0 ? (
-                                    teamData.map((user: any, index) => (
+                                {teams.length > 0 ? (
+                                    teams.map((user: any, index) => (
                                         <TableRow key={user?.id}>
                                             <TableCell className="px-5 py-4 text-start">
                                                 <span className="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
@@ -158,7 +169,7 @@ const TeamTable: React.FC<TeamTableProps> = ({ searchText, role, order,isCreateT
                 </div>
             </div>
             {
-               userProfile?.role !== UserRole.B_TEAM && totalPages > 0 && (            
+               loggedInUser?.role !== UserRole.B_TEAM && totalPages > 0 && (            
                <div className=" w-full flex justify-end  px-4 py-6 ">
                 <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
             </div>)

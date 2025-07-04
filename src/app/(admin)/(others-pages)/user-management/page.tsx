@@ -9,10 +9,10 @@ import { Toaster } from "react-hot-toast";
 
 export default function UserManagement() {
 
-    const [isModalOpen, setIsModalOpen] = useState(false)
-    const [SearchInput, setSearchInput] = useState("")
-    const [filterRole, setFilterRole] = useState("")
-    const [order, setOrder] = useState("desc")
+    const [isAddUserModalOpen, setIsUserAddModalOpen] = useState(false)
+    const [searchInput, setSearchInput] = useState("");
+    const [filterRole, setFilterRole] = useState("");
+    const [order, setOrder] = useState("desc");
 
     return (
         <div className="w-full ">
@@ -37,8 +37,8 @@ export default function UserManagement() {
                         <input
                             type="text"
                             placeholder="Search by name"
-                            name="SearchInput"
-                            value={SearchInput}
+                            name="searchInput"
+                            value={searchInput}
                             onChange={(e) => setSearchInput(e.target.value)}
                             className="pl-10 h-11 pr-4 py-2 border border-gray-300 rounded-md outline-primary "
                         />
@@ -46,7 +46,7 @@ export default function UserManagement() {
                     {/* Create User Button */}
 
                     <button
-                        onClick={() => setIsModalOpen(true)}
+                        onClick={() => setIsUserAddModalOpen(true)}
                         className="border border-[#151D48] w-32 h-11 text-[#151D48] rounded-md text-sm justify-center text-center outline-none flex items-center gap-1">
                         <HiOutlinePlus />
                         Create User
@@ -84,8 +84,8 @@ export default function UserManagement() {
 
             {/* Table */}
             <div className="w-full">
-                <UserTable searchText={SearchInput} role={filterRole} order={order} />
-                <UserAddEditModal isOpen={isModalOpen} closeModal={() => setIsModalOpen(false)} type="add" />
+                <UserTable searchText={searchInput} role={filterRole} order={order} isUserAddModalOpen={isAddUserModalOpen} />
+                <UserAddEditModal isOpen={isAddUserModalOpen} closeModal={() => setIsUserAddModalOpen(false)} type="add" />
 
             </div>
         </div>

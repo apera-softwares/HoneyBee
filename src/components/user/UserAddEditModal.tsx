@@ -6,8 +6,8 @@ import { Users1 } from "../../icons/index";
 import { FORM_INPUT_CLASS, REQUIRED_ERROR } from "@/constant/constantClassName";
 import Select from "../form/Select";
 import Radio from "../form/input/Radio";
-// import Checkbox from "../form/input/Checkbox";
-import { CreateUser, UpdateUser } from "@/lib/redux/slices/userManagementSlice";
+//import Checkbox from "../form/input/Checkbox";
+import { createUser, updateUser } from "@/lib/redux/slices/userManagementSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "@/lib/redux/store";
 import toast from "react-hot-toast";
@@ -26,6 +26,8 @@ interface UserAddEditModalProps {
 }
 
 const UserAddEditModal: React.FC<UserAddEditModalProps> = ({ isOpen, closeModal, userData, type }) => {
+
+    const dispatch = useDispatch<AppDispatch>();
     const [formData, setFormData] = useState({
         id: "",
         firstName: "",
@@ -44,8 +46,7 @@ const UserAddEditModal: React.FC<UserAddEditModalProps> = ({ isOpen, closeModal,
         email: "",
         role: ""
     })
-
-    const dispatch = useDispatch<AppDispatch>();
+    const[loading,setLoading] = useState<boolean>(false);
 
     useEffect(() => {
         if (userData) {
@@ -140,42 +141,34 @@ const UserAddEditModal: React.FC<UserAddEditModalProps> = ({ isOpen, closeModal,
 
     };
 
+    const handleSubmit = async () => {
+    if (!validateFormData()) return;
+    const payload = {...formData};
+    setLoading(true);
+    try {
+      if (userData) {
+        await dispatch(updateUser(payload)).unwrap();
+        toast.success("User updated successfully!");
+        handleCloseAndClearModal();
+      } else {
+        await dispatch(createUser(payload)).unwrap();
+        toast.success("User created successfully!");
+        handleCloseAndClearModal();
+      }
 
-    const handleEdit = () => {
-        if (!validateFormData()) return
-        dispatch(UpdateUser(formData)).then((res: any) => {
-            if (res.meta.requestStatus === "fulfilled") {
-                if (res.payload) {
-                    toast.success("User Updated successful!");
-                    closeModal();
-                    clear()
-                } else {
-                }
-            } else {
-                console.log("Failed to Update User:", res.payload || "Unknown error");
-                toast.error("Failed to Update user");
-
-            }
-        });
-    };
-
-    const handleAddUser = () => {
-
-        if (!validateFormData()) return
-        dispatch(CreateUser(formData)).then((res: any) => {
-            if (res.meta.requestStatus === "fulfilled") {
-                if (res.payload) {
-                    toast.success("User created successful!");
-                    closeModal();
-                    clear()
-                } else {
-                }
-            } else {
-                console.log("Failed to Create user:", res.payload || "Unknown error");
-                toast.error("Failed to Create user");
-            }
-        });
+    } catch (error: any) {
+      console.error("Error while add, update user", error);
+      const message = userData ? "Failed to update user":"Failed to create user";
+      const errorMessage =
+        typeof error === "string"
+          ? error
+          : error?.message || message;
+      toast.error(errorMessage);
     }
+    finally{
+        setLoading(false);
+    }
+  };
 
     const clear = () => {
         setFormData({
@@ -196,12 +189,16 @@ const UserAddEditModal: React.FC<UserAddEditModalProps> = ({ isOpen, closeModal,
             role: "",
         });
     }
+    const handleCloseAndClearModal = ()=>{
+        closeModal();
+        clear();
+    }
     return (
         <Modal
             isOpen={isOpen}
-            onClose={() => {
-                closeModal()
-                clear()
+            onClose={()=>{
+                if(loading) return ;
+                    handleCloseAndClearModal();
             }}
             className="max-w-[800px] p-6 lg:p-10 pt-10 "
         >
@@ -337,13 +334,10 @@ const UserAddEditModal: React.FC<UserAddEditModalProps> = ({ isOpen, closeModal,
                 </div>
 
                 <div className="flex items-center justify-end w-full gap-3">
-                    <Button size="sm" onClick={type == "add" ? handleAddUser : handleEdit}>
+                    <Button size="sm" disabled={loading} onClick={handleSubmit}>
                         Save User
                     </Button>
-                    <Button size="sm" variant="outline" onClick={() => {
-                        closeModal()
-                        clear()
-                    }}>
+                    <Button disabled={loading} size="sm" variant="outline" onClick={handleCloseAndClearModal}>
                         Cancel
                     </Button>
                 </div>

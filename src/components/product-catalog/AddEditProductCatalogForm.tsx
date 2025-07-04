@@ -276,7 +276,7 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
         }
       });
 
-      console.log(imgIds, "imgIds")
+      //console.log(imgIds, "imgIds")
 
       data.append("mediaIds", imgIds);
 
@@ -306,10 +306,11 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
 
     } catch (error: any) {
       console.error("Error while creating product:", error);
+      const message = editData ? "Failed to update product":"Failed to create product";
       const errorMessage =
         typeof error === "string"
           ? error
-          : error?.message || "Failed to create Product.";
+          : error?.message || message;
       toast.error(errorMessage);
     }
     finally {

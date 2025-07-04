@@ -16,13 +16,13 @@ export const makeStore = () => {
       app:appReducer,
       auth:authReducer,
       user: userReducer,
-      UserManagement: userManagementReducer,
+      userManagement: userManagementReducer,
       productCatalog: productCatalogReducer,
-      TeamManagement: teamManagementReducer,
+      teamManagement: teamManagementReducer,
       userProfile: userProfileReducer,
       member: memberReducer,
       referral:referralReducer,
-      statistic:statisticsReducer,
+      statistics:statisticsReducer,
     },
   });
 };

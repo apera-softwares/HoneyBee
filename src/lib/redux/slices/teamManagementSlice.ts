@@ -258,7 +258,7 @@ const teamManagementSlice = createSlice({
       })
       .addCase(fetchTeams.fulfilled, (state, action) => {
         state.loading = false;
-        state.teams = action.payload.data;
+        state.teams = action.payload?.data||[];
       })
       .addCase(fetchTeams.rejected, (state, action) => {
         state.loading = false;

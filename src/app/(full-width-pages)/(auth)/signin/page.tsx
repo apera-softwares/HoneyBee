@@ -13,19 +13,19 @@ import { fetchUserProfile } from "@/lib/redux/slices/loginPersonProfile";
 import Checkbox from "@/components/form/input/Checkbox";
 
 export default function Login() {
+
+    const router = useRouter();
+    const dispatch = useAppDispatch();
+    const loggedInUser = useAppSelector((state) => state.user.user);
     const [formData, setFormData] = useState({
         email: "",
         password: "",
     });
-    const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({
         email: "",
         password: "",
     });
-    const router = useRouter()
-    const dispatch = useAppDispatch()
-
-    const loggedInUser = useAppSelector((state) => state.user.user);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
 
@@ -33,8 +33,6 @@ export default function Login() {
             router.replace("/")
         }
     }, [loggedInUser]);
-
-    // if (loggedInUser) return null;
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });

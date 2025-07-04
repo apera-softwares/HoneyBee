@@ -25,7 +25,7 @@ const ChangeTeamModal: React.FC<ChangeTeamModalProps> = ({
   const [searchText, setSearchText] = useState("");
   const [selectedTeam, setSelectedTeam] = useState<any | null>(null);
   const [loading,setLoading] = useState<boolean>(false);
-  const { teams } = useAppSelector((state) => state.TeamManagement);
+  const { teams } = useAppSelector((state) => state.teamManagement);
 
   const dispatch = useDispatch<AppDispatch>();
 
