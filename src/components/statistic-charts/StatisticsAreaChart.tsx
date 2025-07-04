@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useMemo } from "react";
 // import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
 import ChartTab from "../common/ChartTab";
@@ -16,34 +16,61 @@ interface OptionItem {
   label: string;
   value: string;
 }
+
+interface ChartData {
+  categories: string[];
+  series1: {
+    name: string;
+    data: number[];
+  };
+  series2: {
+    name: string;
+    data: number[];
+  };
+}
+
 export default function StatisticsAreaChart() {
 
   const {
     lineChart: { monthly,yearly, lifetime },
+    revenue:{monthly:monthlyRevenue,yearly:yearlyRevenue, lifetime:lifetimeRevenue}
   } = useAppSelector((state) => state.statistics);
-  const [chartData, setChartData] = useState<any>({});
+  const [chartData, setChartData] = useState<ChartData | null>(null);
   const [selected, setSelected] = useState<OptionItem>(CHART_RANGES[0]);
+  
+  const transformedChartData = useMemo(() => {
+    const selectedKey = selected.value;
+
+    const leadData =
+      selectedKey === "monthly" ? monthly :
+      selectedKey === "yearly" ? yearly :
+      lifetime;
+
+    const revenueData =
+      selectedKey === "monthly" ? monthlyRevenue :
+      selectedKey === "yearly" ? yearlyRevenue :
+      lifetimeRevenue;
+
+    if (!leadData?.length || !revenueData?.length) return null;
+
+    return {
+      categories: leadData.map((item) => item.label),
+      series1: {
+        name: "Lead",
+        data: leadData.map((item) => Number(item.count) || 0),
+      },
+      series2: {
+        name: "Revenue",
+        data: revenueData.map((item) => Number(item.count) || 0),
+      },
+    };
+  }, [selected, monthly, yearly, lifetime, monthlyRevenue, yearlyRevenue, lifetimeRevenue]);
 
 
   useEffect(() => {
-    
-    const selectedData = selected.value === "monthly" ? monthly : selected.value === "yearly" ? yearly :  lifetime;
+    setChartData(transformedChartData);
+  }, [transformedChartData]);
 
-    if (!selectedData || selectedData.length === 0) {
-      setChartData(null);
-      return;
-    }
-
-    const data = {
-      categories: selectedData.map((item) => item.label),
-      series: {
-        name: "Lead",
-        data: selectedData.map((item) => item.count),
-      },
-    };
-
-    setChartData(data);
-  }, [selected, monthly,yearly,lifetime]);
 
   const handleChange = (option: OptionItem) => {
     setSelected(option);
@@ -60,7 +87,7 @@ export default function StatisticsAreaChart() {
     chart: {
       fontFamily: "Outfit, sans-serif",
       height: 310,
-      type: "line", // Set the chart type to 'line'
+      type: "area", // Set the chart type to 'line'
       toolbar: {
         show: false, // Hide chart toolbar
       },
@@ -136,11 +163,9 @@ export default function StatisticsAreaChart() {
     },
   };
 
-  const series = [
-    {
-      ...chartData?.series,
-    },
-  ];
+    const series = useMemo(() => {
+    return chartData ? [chartData.series1, chartData.series2] : [];
+  }, [chartData]);
 
   return (
     <div className="w-full h-full rounded-2xl border border-gray-200 bg-white px-5 py-5 sm:px-6 dark:border-gray-800 dark:bg-white/[0.03]">
