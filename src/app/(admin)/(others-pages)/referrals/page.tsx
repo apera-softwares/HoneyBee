@@ -2,18 +2,18 @@
 import React, { useState } from "react";
 import CommonHeading from "@/components/common/CommonHeading";
 import { CiSearch } from "react-icons/ci";
-// import UserTable from "@/components/user/UserTable";
 import { Toaster } from "react-hot-toast";
 import ReferralTable from "@/components/referral/ReferralTable";
 import LeadCard from "@/components/LeadCard";
 import { useAppSelector } from "@/lib/redux/hooks";
 
 export default function Referrals() {
-    const [SearchInput, setSearchInput] = useState("")
-    const [status, setStatus] = useState("")
+
     const {
         pieChart: { lifetime, totalLeads },
     } = useAppSelector((state) => state.statistic);
+    const [searchInput, setSearchInput] = useState("")
+    const [status, setStatus] = useState("");
 
     const getCountByStatus = (label: string): number => {
         return lifetime.find(item => item?.label === label)?.count || 0;
@@ -42,8 +42,8 @@ export default function Referrals() {
                         <input
                             type="text"
                             placeholder="Search by name"
-                            name="SearchInput"
-                            value={SearchInput}
+                            name="searchInput"
+                            value={searchInput}
                             onChange={(e) => setSearchInput(e.target.value)}
                             className="pl-10 h-11 pr-4 py-2 border border-gray-300 rounded-md focus:outline-primary"
                         />
@@ -121,8 +121,7 @@ export default function Referrals() {
             </div>
             {/* Table */}
             <div className="w-full">
-                {/* <UserTable searchText={SearchInput} role="A_TEAM" order="" from="team-a" /> */}
-                <ReferralTable searchText={SearchInput} status={status} />
+                <ReferralTable searchText={searchInput} status={status} />
             </div>
         </div>
     );

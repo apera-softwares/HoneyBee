@@ -56,7 +56,7 @@ const UserTable: React.FC<UserTableProps> = ({
 
 
   const getUsers = async (page:number) => {
-        const payload = {
+        const params = {
         page:  page,
         limit: ITEM_PER_PAGE,
         name: searchText.trim(),
@@ -64,7 +64,7 @@ const UserTable: React.FC<UserTableProps> = ({
         order:order,
       }
         try {
-            const response = await dispatch(fetchUsers(payload)).unwrap();
+            const response = await dispatch(fetchUsers(params)).unwrap();
             setTotalPages(response?.lastPage||0);
 
         } catch (error: any) {
