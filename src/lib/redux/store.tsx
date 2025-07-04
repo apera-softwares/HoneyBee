@@ -18,7 +18,7 @@ export const makeStore = () => {
       user: userReducer,
       userManagement: userManagementReducer,
       productCatalog: productCatalogReducer,
-      TeamManagement: teamManagementReducer,
+      teamManagement: teamManagementReducer,
       userProfile: userProfileReducer,
       member: memberReducer,
       referral:referralReducer,

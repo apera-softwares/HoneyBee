@@ -7,8 +7,7 @@ import {
     TableRow,
 } from "../ui/table";
 import { RiDeleteBin6Line } from "react-icons/ri";
-import { useDispatch, useSelector } from "react-redux";
-import { AppDispatch, RootState } from "@/lib/redux/store";
+import { useAppDispatch,useAppSelector } from "@/lib/redux/hooks";
 import Spinner from "../common/Spinner";
 import Pagination from "../tables/Pagination";
 import toast, { Toaster } from "react-hot-toast";
@@ -25,11 +24,11 @@ interface TeamMembersTableProps {
 
 const TeamMembersTable: React.FC<TeamMembersTableProps> = ({ searchText, role, order, id }) => {
 
-    const dispatch = useDispatch<AppDispatch>();
+    const dispatch = useAppDispatch();
+    const { loading } = useAppSelector((state) => state.teamManagement);
     const [teamDataMembers, setTeamDataMembers] = useState<any[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
-    const { loading } = useSelector((state: RootState) => state.TeamManagement);
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [memberId, setMembeId] = useState<any>({});
     const [isAddModalOpen, setIsAddModalOpen] = useState(false)

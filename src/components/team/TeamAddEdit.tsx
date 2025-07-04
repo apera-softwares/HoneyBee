@@ -217,7 +217,7 @@ const TeamAddEdit: React.FC<TeamAddEditProps> = ({
                 {usersData &&
                   searchText.trim().length > 0 &&
                   !selectedMember && (
-                    <ul className=" w-full mt-1 py-1 bg-white border border-gray-300 rounded shadow max-h-36 overflow-auto">
+                    <ul className=" w-full mt-1 bg-white border border-gray-300 rounded shadow max-h-36 overflow-auto">
                       {usersData?.length > 0 ? (
                         usersData?.map((member) => (
                           <li
