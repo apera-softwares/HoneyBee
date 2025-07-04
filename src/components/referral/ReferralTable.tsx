@@ -68,7 +68,7 @@ const ReferralTable: React.FC<ReferralTableProps> = ({
         status: status,
       };
       const response = await dispatch(fetchReferrals(params)).unwrap();
-      setTotalPages(response?.lastPage);
+      setTotalPages(response?.lastPage||0);
     } catch (error: any) {
       console.log(error?.message || "Failed to fetch products");
     }

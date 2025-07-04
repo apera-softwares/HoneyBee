@@ -29,17 +29,16 @@ interface TeamTableProps {
 
 const TeamTable: React.FC<TeamTableProps> = ({ searchText, role, order,isCreateTeamModalOpen }) => {
     const ITEM_PER_PAGE = 5;
+    const router = useRouter();
     const dispatch = useDispatch<AppDispatch>();
+    const { loading } = useSelector((state: RootState) => state.TeamManagement);
+    const { userProfile } = useAppSelector((state) => state.userProfile);
     const [teamData, setTeamData] = useState<any[]>([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(0);
-    const { loading } = useSelector((state: RootState) => state.TeamManagement);
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [editTeamData, setEditTeamData] = useState<any>({});
-    const { userProfile } = useAppSelector((state) => state.userProfile);
-
-
-    const router = useRouter()
+    
 
     useEffect(() => {
 

@@ -31,6 +31,8 @@ const TeamAddEdit: React.FC<TeamAddEditProps> = ({
   type,
 }) => {
   const ITEM_PER_PAGE = 5;
+  const dispatch = useDispatch<AppDispatch>();
+  const { userProfile } = useAppSelector((state) => state.userProfile);
   const [usersData, setUsersData] = useState<any[]>([]);
   const [formData, setFormData] = useState({
     id: "",
@@ -41,12 +43,9 @@ const TeamAddEdit: React.FC<TeamAddEditProps> = ({
     name: "",
     member: "",
   });
-
   const [searchText, setSearchText] = useState("");
   const [selectedMember, setSelectedMember] = useState<any | null>(null);
-  const { userProfile } = useAppSelector((state) => state.userProfile);
 
-  const dispatch = useDispatch<AppDispatch>();
 
   useEffect(() => {
     if (teamData) {
