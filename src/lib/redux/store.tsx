@@ -16,7 +16,7 @@ export const makeStore = () => {
       app:appReducer,
       auth:authReducer,
       user: userReducer,
-      UserManagement: userManagementReducer,
+      userManagement: userManagementReducer,
       productCatalog: productCatalogReducer,
       TeamManagement: teamManagementReducer,
       userProfile: userProfileReducer,

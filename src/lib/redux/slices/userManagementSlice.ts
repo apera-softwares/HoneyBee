@@ -1,11 +1,10 @@
-// src/redux/slices/userManagementSlice.ts
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { BACKEND_API } from "@/api";
 
 export const fetchUsers = createAsyncThunk(
-    "user/fetchUsers",
+    "userManagement/fetchUsers",
     async (obj: any, thunkAPI) => {
       try {
         const state: any = thunkAPI.getState();
@@ -42,16 +41,16 @@ export const fetchUsers = createAsyncThunk(
     }
   );
 
-  export const CreateUser = createAsyncThunk(
-    "user/Create",
-    async (obj: any, thunkAPI) => {
+  export const createUser = createAsyncThunk(
+    "userManagement/createUser",
+    async (payload: any, thunkAPI) => {
       try {
         const state: any = thunkAPI.getState();
         const token = state.user?.user?.token;
   
         const response = await axios.post(
           `${BACKEND_API}admin/user`,
-          obj, 
+          payload, 
           {
             headers: { Authorization: `Bearer ${token}`, 
            'ngrok-skip-browser-warning': 'true',
@@ -68,17 +67,17 @@ export const fetchUsers = createAsyncThunk(
     }
   );
 
-  export const UpdateUser = createAsyncThunk(
-    "user/Update",
-    async (obj: any, thunkAPI) => {
+  export const updateUser = createAsyncThunk(
+    "userManagement/updateUser",
+    async (payload: any, thunkAPI) => {
       try {
         const state: any = thunkAPI.getState();
         const token = state.user?.user?.token;
-        const { id, ...rest } = obj; 
+        const { id, ...restData } = payload; 
   
         const response = await axios.put(
           `${BACKEND_API}admin/user/${id}`,
-          rest, 
+          restData, 
           {
             headers: { Authorization: `Bearer ${token}`, 
            'ngrok-skip-browser-warning': 'true',
@@ -123,7 +122,7 @@ const userManagementSlice = createSlice({
       })
       .addCase(fetchUsers.fulfilled, (state, action) => {
         state.loading = false;
-        state.users = action.payload;
+        state.users = action.payload?.data||[];
       })
       .addCase(fetchUsers.rejected, (state, action) => {
         state.loading = false;
@@ -133,32 +132,32 @@ const userManagementSlice = createSlice({
 
       //Create User
       builder
-      .addCase(CreateUser.pending, (state) => {
+      .addCase(createUser.pending, (state) => {
         state.loading = true;
         state.error = null;
         state.users = [];
       })
-      .addCase(CreateUser.fulfilled, (state, action) => {
+      .addCase(createUser.fulfilled, (state, action) => {
         state.loading = false;
         state.users = action.payload;
       })
-      .addCase(CreateUser.rejected, (state, action) => {
+      .addCase(createUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });
 
       //Update User
       builder
-      .addCase(UpdateUser.pending, (state) => {
+      .addCase(updateUser.pending, (state) => {
         state.loading = true;
         state.error = null;
         state.users = [];
       })
-      .addCase(UpdateUser.fulfilled, (state, action) => {
+      .addCase(updateUser.fulfilled, (state, action) => {
         state.loading = false;
         state.users = action.payload;
       })
-      .addCase(UpdateUser.rejected, (state, action) => {
+      .addCase(updateUser.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });
