@@ -14,8 +14,12 @@ import LeadCard from "@/components/LeadCard";
 import Spinner from "@/components/common/Spinner";
 
 function CreateAccountPage() {
+
+    const router = useRouter();
     const searchParams = useSearchParams();
-    const role = searchParams.get('role'); // "a"
+    const role = searchParams.get('role');
+    const dispatch = useAppDispatch();
+    const loggedInUser = useAppSelector((state) => state.user.user);
     const [formData, setFormData] = useState({
         firstName: "",
         lastName: "",
@@ -25,7 +29,6 @@ function CreateAccountPage() {
             role === "b" ? "B_TEAM" :
                 ""
     });
-
     const [loading, setLoading] = useState(false);
     const [errors, setErrors] = useState({
         firstName: "",
@@ -34,10 +37,6 @@ function CreateAccountPage() {
         password: "",
         role: ""
     })
-
-    const router = useRouter()
-    const dispatch = useAppDispatch()
-    const loggedInUser = useAppSelector((state) => state.user.user);
 
     useEffect(() => {
         if (loggedInUser) {
