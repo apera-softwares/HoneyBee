@@ -33,7 +33,7 @@ export default function StatisticsAreaChart() {
 
   const {
     lineChart: { monthly,yearly, lifetime },
-    revenue:{monthly:monthlyRevenue,yearly:yearlyRevenue, lifetime:lifetimeRevenue}
+    earnings:{monthly:monthlyRevenue,yearly:yearlyRevenue, lifetime:lifetimeRevenue}
   } = useAppSelector((state) => state.statistics);
   const [chartData, setChartData] = useState<ChartData | null>(null);
   const [selected, setSelected] = useState<OptionItem>(CHART_RANGES[0]);
@@ -60,8 +60,8 @@ export default function StatisticsAreaChart() {
         data: leadData.map((item) => Number(item.count) || 0),
       },
       series2: {
-        name: "Revenue",
-        data: revenueData.map((item) => Number(item.count) || 0),
+        name: "Total Earning",
+        data: revenueData.map((item) => ((parseFloat(item.count) / 1000)||0)),
       },
     };
   }, [selected, monthly, yearly, lifetime, monthlyRevenue, yearlyRevenue, lifetimeRevenue]);
@@ -127,12 +127,24 @@ export default function StatisticsAreaChart() {
     dataLabels: {
       enabled: false, // Disable data labels
     },
-    tooltip: {
-      enabled: true, // Enable tooltip
-      x: {
-        format: "dd MMM yyyy", // Format for x-axis tooltip
-      },
+    // tooltip: {
+    //   enabled: true, // Enable tooltip
+    //   x: {
+    //     format: "dd MMM yyyy", // Format for x-axis tooltip
+    //   },
+    // },
+
+  tooltip: {
+  shared: true,
+  y: {
+    formatter: (val, { seriesIndex }) => {
+      if (seriesIndex === 0) return `${val}`;        // Lead
+      // if (seriesIndex === 1) return `$${val.toFixed(1)}K`; // Revenue
+      if (seriesIndex === 1) return val < 1 ? `$${(val * 1000).toFixed(0)}` : `$${val.toFixed(2)}K`; // Revenue
+      return `${val}`;
     },
+  },
+},
     xaxis: {
       type: "category", // Category-based x-axis
       categories: chartData?.categories,
@@ -148,7 +160,8 @@ export default function StatisticsAreaChart() {
     },
     yaxis: {
       labels: {
-        formatter: (val) => (Number.isInteger(val) ? `${val}` : ""),
+        formatter: (val) => (Number.isInteger(val) ? `${val.toString()}` : `${val.toFixed(0)}`),
+        // formatter: (val) => (Number.isInteger(val) ? `${val}` : ""),
         style: {
           fontSize: "12px", // Adjust font size for y-axis labels
           colors: ["#6B7280"], // Color of the labels

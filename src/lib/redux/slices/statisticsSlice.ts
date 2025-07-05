@@ -62,7 +62,7 @@ interface StatisticsState {
     yearly:LineChartItem[];
     lifetime:LineChartItem[];
   },
-  revenue:{
+  earnings:{
     monthly:any[];
     yearly:any[];
     lifetime:any[];
@@ -83,7 +83,7 @@ const initialState: StatisticsState = {
     yearly:[],
     lifetime:[],
   },
-  revenue:{
+  earnings:{
     monthly:[],
     yearly:[],
     lifetime:[],
@@ -114,10 +114,13 @@ const statisticsSlice = createSlice({
         state.pieChart.yearly = data?.leadsByMonthWithStatus?.map((item:any)=>({label:item?.status,count:item?.count}))||[];
         state.pieChart.lifetime = data?.leadStatusNumbers?.map((item:any)=>({label:item?.status,count:item?._count?.status}))||[];
         state.pieChart.totalLeads = data?.totalLeads;
-        //revenue
-        state.revenue.monthly = data?.amountLeadsForMonthPerDay?.map((item:any)=>({count:item?.totalCommissionAmount}))||[];
-        state.revenue.yearly = data?.leadAmountInMonths?.map((item:any)=>({count:item?.totalEarnings}))||[];
-        state.revenue.lifetime = data?.leadAmountByYear?.map((item:any)=>({count:item?.totalCommissionAmount}))||[];
+        //earnings
+        state.earnings.monthly = data?.amountLeadsForMonthPerDay?.map((item:any)=>({count:item?.totalCommissionAmount}))||[];
+        state.earnings.yearly = data?.leadAmountInMonths?.map((item:any)=>({count:item?.totalEarnings}))||[];
+        state.earnings.lifetime = data?.leadAmountByYear?.map((item:any)=>({count:item?.totalCommissionAmount}))||[];
+        // state.earnings.monthly = [{count:100},{count:1200}];
+        // state.earnings.yearly = [{count:2300},{count:4500},{count:4400},{count:1200},{count:1000},{count:33000},{count:4000}]
+        // state.earnings.lifetime = [{count:5500},{count:4400}]
       })
       .addCase(fetchStatisticsNumbers.rejected, (state, action) => {
         state.loading = false;
