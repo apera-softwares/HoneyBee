@@ -15,16 +15,17 @@ const ReactApexChart = dynamic(() => import("react-apexcharts"), {
 
 export default function StatisticsPieChart() {
   const {
-    pieChart: { monthly, yearly,lifetime },
+    pieChartLeads: { monthly:monthlyLeads, yearly:yearlyLeads,lifetime:lifetimeLeads },
+    pieChartEarnings:{ monthly:monthlyEarning, yearly:yearlyEarning,lifetime:lifetimeEarning}
   } = useAppSelector((state) => state.statistics);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(CHART_RANGES[0]);
   const [chartData, setChartData] = useState<{
     labels: string[];
-    series: number[];
+    leadSeries: number[];
+    earningSeries:any[];
   } | null>(null);
-
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -42,7 +43,8 @@ export default function StatisticsPieChart() {
 
 
   useEffect(() => {
-    const selectedData = selected.value === "monthly" ? monthly : selected.value === "yearly" ? yearly :  lifetime;
+    const selectedData = selected.value === "monthly" ? monthlyLeads : selected.value === "yearly" ? yearlyLeads :  lifetimeLeads;
+    const selectedEarning = selected.value === "monthly" ? monthlyEarning : selected.value === "yearly" ? yearlyEarning :  lifetimeEarning;
 
     if (!selectedData || selectedData.length === 0) {
       setChartData(null);
@@ -50,16 +52,20 @@ export default function StatisticsPieChart() {
     }
 
     const labels = selectedData.map((item) => item.label);
-    const series = selectedData.map((item) => item.count);
-    setChartData({ labels, series });
-  }, [selected, monthly,yearly,lifetime]);
+    const leadSeries = selectedData.map((item) => item.count);
+    const earningSeries = labels.map(
+      (label) => selectedEarning.find((earn) => earn?.label === label)?.count || 0
+    );
+
+    setChartData({ labels, leadSeries,earningSeries });
+  }, [selected, monthlyLeads,yearlyLeads,lifetimeLeads,monthlyEarning,yearlyEarning,lifetimeEarning]);
 
   const handleSelect = (option: (typeof CHART_RANGES)[0]) => {
     setSelected(option);
     setIsOpen(false);
   };
 
-  const series = chartData?.series;
+  const series = chartData?.leadSeries;
   const options: ApexOptions = {
     colors: ["#fb6514", "#feb273", "#ffead5", "#fffaf5"],
     chart: {
@@ -131,6 +137,19 @@ export default function StatisticsPieChart() {
     marker: {
       show: false,
     },
+    custom: function ({ series, seriesIndex, w }) {
+  
+        const label = w.globals.labels[seriesIndex];
+        const count = series[seriesIndex];
+        const earnings = chartData?.earningSeries[seriesIndex];
+        return `
+          <div class="apex-tooltip">
+            Status : ${label}<br/>
+            Leads : ${count}<br/>
+            Total Earning : $${earnings.toLocaleString()}
+          </div>
+        `;
+      },
   },
     labels: chartData?.labels,
   };

@@ -10,7 +10,7 @@ import { useAppSelector } from "@/lib/redux/hooks";
 export default function Referrals() {
 
     const {
-        pieChart: { lifetime, totalLeads },
+        pieChartLeads: { lifetime, totalLeads },
     } = useAppSelector((state) => state.statistics);
     const [searchInput, setSearchInput] = useState("")
     const [status, setStatus] = useState("");
