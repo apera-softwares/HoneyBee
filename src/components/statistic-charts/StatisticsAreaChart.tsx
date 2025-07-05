@@ -32,8 +32,8 @@ interface ChartData {
 export default function StatisticsAreaChart() {
 
   const {
-    lineChart: { monthly,yearly, lifetime },
-    earnings:{monthly:monthlyRevenue,yearly:yearlyRevenue, lifetime:lifetimeRevenue}
+    lineChartLeads: { monthly:monthlyLeads,yearly:yearlyLeads, lifetime:lifetimeLeads },
+    lineChartEarnings:{monthly:monthlyEarning,yearly:yearlyRevenue, lifetime:lifetimeRevenue}
   } = useAppSelector((state) => state.statistics);
   const [chartData, setChartData] = useState<ChartData | null>(null);
   const [selected, setSelected] = useState<OptionItem>(CHART_RANGES[0]);
@@ -42,12 +42,12 @@ export default function StatisticsAreaChart() {
     const selectedKey = selected.value;
 
     const leadData =
-      selectedKey === "monthly" ? monthly :
-      selectedKey === "yearly" ? yearly :
-      lifetime;
+      selectedKey === "monthly" ? monthlyLeads :
+      selectedKey === "yearly" ? yearlyLeads :
+      lifetimeLeads;
 
     const revenueData =
-      selectedKey === "monthly" ? monthlyRevenue :
+      selectedKey === "monthly" ? monthlyEarning :
       selectedKey === "yearly" ? yearlyRevenue :
       lifetimeRevenue;
 
@@ -64,7 +64,7 @@ export default function StatisticsAreaChart() {
         data: revenueData.map((item) => ((parseFloat(item.count) / 1000)||0)),
       },
     };
-  }, [selected, monthly, yearly, lifetime, monthlyRevenue, yearlyRevenue, lifetimeRevenue]);
+  }, [selected, monthlyLeads, yearlyLeads, lifetimeLeads, monthlyEarning, yearlyRevenue, lifetimeRevenue]);
 
 
   useEffect(() => {

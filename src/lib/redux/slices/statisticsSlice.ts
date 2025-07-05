@@ -51,43 +51,53 @@ interface LineChartItem {
 }
 
 interface StatisticsState {
-  pieChart: {
+  pieChartLeads: {
     monthly:PieChartItem[];
     yearly:PieChartItem[];
     lifetime:PieChartItem[];
     totalLeads:any
   };
-  lineChart:{
+  lineChartLeads:{
     monthly:LineChartItem[];
     yearly:LineChartItem[];
     lifetime:LineChartItem[];
   },
-  earnings:{
+  lineChartEarnings:{
     monthly:any[];
     yearly:any[];
     lifetime:any[];
+  },
+  pieChartEarnings:{
+    monthly:PieChartItem[];
+    yearly:PieChartItem[];
+    lifetime:PieChartItem[];
   }
   loading: boolean;
   error: string | null;
 }
 
 const initialState: StatisticsState = {
-  pieChart: {
+  pieChartLeads: {
     monthly:[],
     yearly:[],
     lifetime:[],
     totalLeads:""
   },
-  lineChart:{
+  lineChartLeads:{
     monthly:[],
     yearly:[],
     lifetime:[],
   },
-  earnings:{
+  lineChartEarnings:{
     monthly:[],
     yearly:[],
     lifetime:[],
 
+  },
+  pieChartEarnings:{
+    monthly:[],
+    yearly:[],
+    lifetime:[],  
   },
   loading: false,
   error: null,
@@ -107,20 +117,20 @@ const statisticsSlice = createSlice({
       .addCase(fetchStatisticsNumbers.fulfilled, (state, action) => {
         const data = action.payload;
         state.loading = false;
-        state.lineChart.monthly = data?.leadsByDayMonth?.map((item:any)=>({label:item?.day_number,count:item?.count}))||[];
-        state.lineChart.yearly = data?.leadsByMonth?.map((item:any)=>({label:item?.month?.slice(0,3),count:item?.count}))||[];
-        state.lineChart.lifetime = data?.leadsByLifeTime?.map((item:any)=>({label:item?.year_number,count:item?.count}))||[];
-        state.pieChart.monthly = data?.leadsForMonthPerDayStatus?.map((item:any)=>({label:item?.status,count:item?.count}))||[];
-        state.pieChart.yearly = data?.leadsByMonthWithStatus?.map((item:any)=>({label:item?.status,count:item?.count}))||[];
-        state.pieChart.lifetime = data?.leadStatusNumbers?.map((item:any)=>({label:item?.status,count:item?._count?.status}))||[];
-        state.pieChart.totalLeads = data?.totalLeads;
-        //earnings
-        state.earnings.monthly = data?.amountLeadsForMonthPerDay?.map((item:any)=>({count:item?.totalCommissionAmount}))||[];
-        state.earnings.yearly = data?.leadAmountInMonths?.map((item:any)=>({count:item?.totalEarnings}))||[];
-        state.earnings.lifetime = data?.leadAmountByYear?.map((item:any)=>({count:item?.totalCommissionAmount}))||[];
-        // state.earnings.monthly = [{count:100},{count:1200}];
-        // state.earnings.yearly = [{count:2300},{count:4500},{count:4400},{count:1200},{count:1000},{count:33000},{count:4000}]
-        // state.earnings.lifetime = [{count:5500},{count:4400}]
+        state.lineChartLeads.monthly = data?.leadsByDayMonth?.map((item:any)=>({label:item?.day_number,count:item?.count}))||[];
+        state.lineChartLeads.yearly = data?.leadsByMonth?.map((item:any)=>({label:item?.month?.slice(0,3),count:item?.count}))||[];
+        state.lineChartLeads.lifetime = data?.leadsByLifeTime?.map((item:any)=>({label:item?.year_number,count:item?.count}))||[];
+        state.pieChartLeads.monthly = data?.leadsForMonthPerDayStatus?.map((item:any)=>({label:item?.status,count:item?.count}))||[];
+        state.pieChartLeads.yearly = data?.leadsByMonthWithStatus?.map((item:any)=>({label:item?.status,count:item?.count}))||[];
+        state.pieChartLeads.lifetime = data?.leadStatusNumbers?.map((item:any)=>({label:item?.status,count:item?._count?.status}))||[];
+        state.pieChartLeads.totalLeads = data?.totalLeads;
+        //lineChartEarnings
+        state.lineChartEarnings.monthly = data?.amountLeadsForMonthPerDay?.map((item:any)=>({count:item?.totalCommissionAmount}))||[];
+        state.lineChartEarnings.yearly = data?.leadAmountInMonths?.map((item:any)=>({count:item?.totalEarnings}))||[];
+        state.lineChartEarnings.lifetime = data?.leadAmountByYear?.map((item:any)=>({count:item?.totalCommissionAmount}))||[];
+        state.pieChartEarnings.monthly = data?.amountLeadsForMonthPerDayStatus?.map((item:any)=>({label:item?.status,count:item?.totalCommissionAmount}))||[];
+        state.pieChartEarnings.yearly = data?.leadAmountByYearByStatus?.map((item:any)=>({label:item?.status,count:item?.totalCommissionAmount}))||[];
+        state.pieChartEarnings.lifetime = data?.leadAmountByStatus?.map((item:any)=>({label:item?.status,count:item?.totalCommissionAmount}))||[];
       })
       .addCase(fetchStatisticsNumbers.rejected, (state, action) => {
         state.loading = false;
