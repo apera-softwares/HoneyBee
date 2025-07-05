@@ -32,9 +32,9 @@ export const login = createAsyncThunk(
      },
       });
 
-      console.log(response, "login response");
+      //console.log(response.data, "login response in thunk");
 
-      if( response?.data?.status === false )
+      if( response.data?.status === false )
       {
         return null;
       }else{
