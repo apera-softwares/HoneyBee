@@ -270,7 +270,7 @@ function CreateAccountPage() {
             <button
               type="submit"
               disabled={loading}
-              className="flex justify-center  items-center w-full h-14 text-white bg-gradient-to-r from-gradient-start to-gradient-end rounded-full shadow-lg font-bold hover:cursor-pointer"
+              className="flex justify-center  items-center w-full h-14 text-white bg-gradient-to-r from-gradient-start to-gradient-end rounded-full shadow-lg font-bold hover:cursor-pointer disabled:cursor-not-allowed"
             >
               {loading ? <Loader /> : "Create account"}
             </button>
