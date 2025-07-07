@@ -11,6 +11,7 @@ export default function Referrals() {
 
     const {
         pieChartLeads: { lifetime, totalLeads },
+        pieChartEarnings:{totalEarnings}
     } = useAppSelector((state) => state.statistics);
     const [searchInput, setSearchInput] = useState("")
     const [status, setStatus] = useState("");
@@ -18,7 +19,6 @@ export default function Referrals() {
     const getCountByStatus = (label: string): number => {
         return lifetime.find(item => item?.label === label)?.count || 0;
     }
-
     return (
         <div className="w-full">
             <Toaster />
@@ -90,33 +90,39 @@ export default function Referrals() {
                 <LeadCard
                     title="Total Referrals"
                     value={totalLeads}
-                    point="5+ Increased form last month"
+                    point=""
                     active={status === ""}
                     onClick={() => setStatus("")}
                 />
-                <LeadCard
+                {/* <LeadCard
                     title="Leads Pending"
                     value={getCountByStatus("Pending")}
-                    point="15+ Increased form last month"
+                    point=""
                     // active={false}
                     active={status === "Pending"}
                     onClick={() => setStatus("Pending")}
-                />
+                /> */}
 
                 <LeadCard
                     title="Leads Pitched"
                     value={getCountByStatus("Pitched")}
-                    point="5+ Increased form last month"
+                    point=""
                     active={status === "Pitched"}
                     onClick={() => setStatus("Pitched")}
                 />
                 <LeadCard
                     title="Leads Sold"
                     value={getCountByStatus("Sold")}
-                    point="10+ Increased form last month"
+                    point=""
                     active={status === "Sold"}
                     onClick={() => setStatus("Sold")}
-
+                />
+                <LeadCard
+                    title="Total Earned"
+                    value={`$${totalEarnings}`}
+                    point=""
+                    active={status === "Payout"}
+                    onClick={() => setStatus("Payout")}
                 />
             </div>
             {/* Table */}
