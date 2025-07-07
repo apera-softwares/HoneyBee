@@ -4,7 +4,7 @@ import CommonHeading from "@/components/common/CommonHeading";
 import { CiSearch } from "react-icons/ci";
 import { Toaster } from "react-hot-toast";
 import ReferralTable from "@/components/referral/ReferralTable";
-import LeadCard from "@/components/LeadCard";
+import LeadCard from "@/components/common/LeadCard";
 import { useAppSelector } from "@/lib/redux/hooks";
 
 export default function Referrals() {

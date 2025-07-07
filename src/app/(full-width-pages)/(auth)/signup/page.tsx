@@ -1,5 +1,5 @@
 "use client";
-import AuthRigthSidebar from "@/components/AuthRigthSidebar";
+import AuthRigthSidebar from "@/components/auth/AuthRigthSidebar";
 import {
   INPUT_CLASS,
   INPUT_REQUIRED_ERROR_CLASS,
@@ -13,7 +13,7 @@ import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { signup } from "@/lib/redux/slices/authSlice";
 import Loader from "@/components/ui/loader/Loader";
 // import Radio from "@/components/form/input/Radio";
-import LeadCard from "@/components/LeadCard";
+import LeadCard from "@/components/common/LeadCard";
 import Spinner from "@/components/common/Spinner";
 
 function CreateAccountPage() {
