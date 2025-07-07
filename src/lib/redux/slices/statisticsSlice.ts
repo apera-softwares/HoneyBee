@@ -71,6 +71,7 @@ interface StatisticsState {
     monthly:PieChartItem[];
     yearly:PieChartItem[];
     lifetime:PieChartItem[];
+    totalEarnings:any;
   }
   loading: boolean;
   error: string | null;
@@ -92,12 +93,12 @@ const initialState: StatisticsState = {
     monthly:[],
     yearly:[],
     lifetime:[],
-
   },
   pieChartEarnings:{
     monthly:[],
     yearly:[],
-    lifetime:[],  
+    lifetime:[],
+    totalEarnings:""
   },
   loading: false,
   error: null,
@@ -131,6 +132,7 @@ const statisticsSlice = createSlice({
         state.pieChartEarnings.monthly = data?.amountLeadsForMonthPerDayStatus?.map((item:any)=>({label:item?.status,count:item?.totalCommissionAmount}))||[];
         state.pieChartEarnings.yearly = data?.leadAmountByYearByStatus?.map((item:any)=>({label:item?.status,count:item?.totalCommissionAmount}))||[];
         state.pieChartEarnings.lifetime = data?.leadAmountByStatus?.map((item:any)=>({label:item?.status,count:item?.totalCommissionAmount}))||[];
+        state.pieChartEarnings.totalEarnings = data?.totalEarnings||0;
       })
       .addCase(fetchStatisticsNumbers.rejected, (state, action) => {
         state.loading = false;
