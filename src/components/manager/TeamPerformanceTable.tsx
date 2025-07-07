@@ -14,6 +14,7 @@ import { DEFAULT_PROFILE_IMAGE } from "@/constant/defaultImages";
 import { BACKEND_API } from "@/api";
 import { CHART_RANGES } from "@/data/chartRanges";
 import { IoChevronDownSharp } from "react-icons/io5";
+import { Team_PERFORMANCE } from "@/data/teamPerformance";
 
 const TeamPerformanceTable = () => {
   const ITEM_PER_PAGE = 5;
@@ -49,7 +50,7 @@ const TeamPerformanceTable = () => {
   };
 
   return (
-        <div className="w-full h-full overflow-hidden rounded-xl bg-white border border-gray-200 dark:bg-white/[0.03] shadow-md">
+        <div className="w-full h-full overflow-hidden rounded-xl bg-white border border-gray-200">
         <div className="w-full flex items-center justify-between gap-2 py-5 px-5 border-b">
             <div className="font-medium">Team Performance</div>
             <div className="">
@@ -119,11 +120,9 @@ const TeamPerformanceTable = () => {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {users.length > 0 ? (
-                  users.map((user: any, index: number) => {
-                    const imgSrc = user?.media?.[0]?.imageName
-                      ? `${BACKEND_API}uploads/${user?.media?.[0]?.imageName}`
-                      : DEFAULT_PROFILE_IMAGE;
+                {Team_PERFORMANCE.length > 0 ? (
+                  Team_PERFORMANCE.map((user: any, index: number) => {
+      
                     return (
                       <TableRow key={user?.id}>
                         <TableCell className="px-5 py-4 text-start">
@@ -132,28 +131,15 @@ const TeamPerformanceTable = () => {
                           </span>
                         </TableCell>
                         <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                          <div className="flex items-center gap-2">
-                          </div>
+                          {user?.name||""}
                         </TableCell>
                         <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                          {user?.email}
-                        </TableCell>
-                        <TableCell className="px-5 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                          {user?.role}
+                          {user?.progress||""}
                         </TableCell>
                         <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                          <Badge
-                            size="sm"
-                            color={
-                              user?.verified
-                                ? "success"
-                                : !user?.verified
-                                ? "warning"
-                                : "error"
-                            }
-                          >
-                            {user?.verified ? "Verified" : "Not verified"}
-                          </Badge>
+                          {
+                            user?.count||""
+                          }
                         </TableCell>
                       </TableRow>
                     );

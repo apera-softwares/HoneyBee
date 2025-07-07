@@ -49,7 +49,7 @@ const OverrideEarningsTable = () => {
   };
 
   return (
-        <div className="w-full overflow-hidden rounded-xl bg-white dark:bg-white/[0.03] shadow-md">
+        <div className="w-full overflow-hidden rounded-xl bg-white shadow-md">
         <div className="w-full flex items-center justify-between gap-2 py-5 px-5 border-b">
             <div className="font-medium">Override Earnings</div>
             <div className="">
@@ -120,7 +120,7 @@ const OverrideEarningsTable = () => {
                     isHeader
                     className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400"
                   >
-                    Override
+                    Override %
                   </TableCell>
                   <TableCell
                     isHeader
@@ -164,18 +164,7 @@ const OverrideEarningsTable = () => {
                           {user?.role}
                         </TableCell>
                         <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                          <Badge
-                            size="sm"
-                            color={
-                              user?.verified
-                                ? "success"
-                                : !user?.verified
-                                ? "warning"
-                                : "error"
-                            }
-                          >
-                            {user?.verified ? "Verified" : "Not verified"}
-                          </Badge>
+                          {user?.role}
                         </TableCell>
                       </TableRow>
                     );

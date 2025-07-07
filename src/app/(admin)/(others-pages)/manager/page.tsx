@@ -1,13 +1,13 @@
 "use client";
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState,useEffect } from "react";
 import CommonHeading from "@/components/common/CommonHeading";
 import { CiSearch } from "react-icons/ci";
 import { HiOutlinePlus } from "react-icons/hi";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import OverrideEarningsTable from "@/components/manager/OverrideEarningsTable";
-import LeadCard from "@/components/LeadCard";
 import TeamPerformanceTable from "@/components/manager/TeamPerformanceTable";
 import BenefitAllocationChart from "@/components/statistic-charts/BenefitAllocationChart";
+import LeadEarningsOverview from "@/components/manager/LeadEarningsOverview";
 
 const Manager = () => {
   const { userProfile } = useAppSelector((state) => state.userProfile);
@@ -25,7 +25,6 @@ const Manager = () => {
             description="Current rank : Level2 -> Next rank goal : Level3"
           />
         </div>
-
         {/* Right: Actions */}
         <div className="w-full lg:w-1/2 flex flex-wrap justify-start lg:justify-end items-center gap-3  ">
           {/* Search Input */}
@@ -42,7 +41,6 @@ const Manager = () => {
               className="pl-10 h-11 pr-4 py-2 border border-gray-300 rounded-md outline-primary "
             />
           </div>
-
           <button
             onClick={() => {}}
             className="h-11 bg-primary hover:bg-primary-hover text-white rounded-md text-md px-4 justify-center text-center outline-none flex items-center gap-1  "
@@ -52,36 +50,8 @@ const Manager = () => {
           </button>
         </div>
       </div>
-      <div className="w-full  grid grid-cols-1  lg:grid-cols-4 justify-center gap-6 mb-6 ">
-        <LeadCard
-          title="Monthly Leads"
-          value={`24`}
-          point=""
-          active={true}
-          onClick={() => {}}
-        />
-
-        <LeadCard
-          title="This Months Earnings"
-          value={`$1250`}
-          point=""
-          active={false}
-          onClick={() => {}}
-        />
-        <LeadCard
-          title="Team Members"
-          value={`16`}
-          point=""
-          active={false}
-          onClick={() => {}}
-        />
-        <LeadCard
-          title="Override Earnings"
-          value={`${470}`}
-          point=""
-          active={false}
-          onClick={() => {}}
-        />
+      <div className="w-full mb-6 ">
+       <LeadEarningsOverview/>
       </div>
       <div className="w-full mb-6">
         <OverrideEarningsTable />

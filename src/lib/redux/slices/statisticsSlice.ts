@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { BACKEND_API } from "@/api";
+import { BENIFIT_ALLOCATION } from "@/data/benifitAllocation";
 
 // Fetch stat numbers
 export const fetchStatisticsNumbers = createAsyncThunk(
@@ -73,6 +74,8 @@ interface StatisticsState {
     lifetime:PieChartItem[];
     totalEarnings:any;
   }
+  ,
+  benefitAllocation:any[]
   loading: boolean;
   error: string | null;
 }
@@ -100,6 +103,7 @@ const initialState: StatisticsState = {
     lifetime:[],
     totalEarnings:""
   },
+  benefitAllocation:BENIFIT_ALLOCATION,
   loading: false,
   error: null,
 };

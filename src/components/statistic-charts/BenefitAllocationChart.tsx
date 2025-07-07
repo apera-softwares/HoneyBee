@@ -8,6 +8,7 @@ import { CHART_RANGES } from "@/data/chartRanges";
 import NoChartData from "../common/NoChartData";
 
 import dynamic from "next/dynamic";
+import { BENIFIT_ALLOCATION } from "@/data/benifitAllocation";
 // Dynamically import the ReactApexChart component
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
@@ -15,8 +16,7 @@ const ReactApexChart = dynamic(() => import("react-apexcharts"), {
 
 export default function BenefitAllocationChart() {
   const {
-    pieChartLeads: { monthly:monthlyLeads, yearly:yearlyLeads,lifetime:lifetimeLeads },
-    pieChartEarnings:{ monthly:monthlyEarning, yearly:yearlyEarning,lifetime:lifetimeEarning}
+    benefitAllocation
   } = useAppSelector((state) => state.statistics);
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
@@ -24,7 +24,6 @@ export default function BenefitAllocationChart() {
   const [chartData, setChartData] = useState<{
     labels: string[];
     leadSeries: number[];
-    earningSeries:any[];
   } | null>(null);
 
   useEffect(() => {
@@ -43,8 +42,7 @@ export default function BenefitAllocationChart() {
 
 
   useEffect(() => {
-    const selectedData = selected.value === "monthly" ? monthlyLeads : selected.value === "yearly" ? yearlyLeads :  lifetimeLeads;
-    const selectedEarning = selected.value === "monthly" ? monthlyEarning : selected.value === "yearly" ? yearlyEarning :  lifetimeEarning;
+    const selectedData = selected.value === "monthly" ? BENIFIT_ALLOCATION: selected.value === "yearly" ? BENIFIT_ALLOCATION : BENIFIT_ALLOCATION;
 
     if (!selectedData || selectedData.length === 0) {
       setChartData(null);
@@ -53,12 +51,10 @@ export default function BenefitAllocationChart() {
 
     const labels = selectedData.map((item) => item.label);
     const leadSeries = selectedData.map((item) => item.count);
-    const earningSeries = labels.map(
-      (label) => selectedEarning.find((earn) => earn?.label === label)?.count || 0
-    );
 
-    setChartData({ labels, leadSeries,earningSeries });
-  }, [selected, monthlyLeads,yearlyLeads,lifetimeLeads,monthlyEarning,yearlyEarning,lifetimeEarning]);
+
+    setChartData({ labels, leadSeries });
+  }, [selected,benefitAllocation]);
 
   const handleSelect = (option: (typeof CHART_RANGES)[0]) => {
     setSelected(option);
@@ -67,7 +63,7 @@ export default function BenefitAllocationChart() {
 
   const series = chartData?.leadSeries;
   const options: ApexOptions = {
-    colors: ["#fb6514", "#feb273", "#ffead5", "#fffaf5"],
+    colors: ["#A700FF", "#EF4444","#3CD856", "#FF9912", "#FFCE67","#EBEBEB"],
     chart: {
       fontFamily: "Outfit, sans-serif",
       type: "donut",
@@ -99,7 +95,7 @@ export default function BenefitAllocationChart() {
     fill: {
       type: "solid",
       // colors: ["#fb6514", "#feb273", "#ffead5", "#fffaf5"],
-      colors: ["#FF9912", "#FF9912", "#FF9912", "#FF9912"],
+      colors: ["#A700FF", "#EF4444","#3CD856", "#FF9912", "#FFCE67","#EBEBEB"],
     },
     stroke: {
       lineCap: "round",
@@ -112,8 +108,10 @@ export default function BenefitAllocationChart() {
         vertical: 6,
       },
       formatter: function (seriesName, opts) {
-        const value = opts.w.globals.series[opts.seriesIndex];
-        return `${seriesName}: ${value}`;
+        // const value = opts.w.globals.series[opts.seriesIndex];
+        // return `${seriesName}: ${value}`;
+       
+        return `${seriesName}`;
       },
     },
     dataLabels: {
@@ -141,12 +139,12 @@ export default function BenefitAllocationChart() {
   
         const label = w.globals.labels[seriesIndex];
         const count = series[seriesIndex];
-        const earnings = chartData?.earningSeries[seriesIndex];
         return `
-          <div class="apex-tooltip">
-            Status : ${label}<br/>
-            Leads : ${count}<br/>
-            Total Earning : $${earnings.toLocaleString()}
+          <div class="apex-tooltip font-medium">
+          ${label}<br/>
+          ${count}
+
+
           </div>
         `;
       },
@@ -156,11 +154,11 @@ export default function BenefitAllocationChart() {
 
   return (
  
-      <div className="w-full h-full px-5 py-5 sm:px-6 bg-white border border-gray-200 shadow-default rounded-2xl pb-11 dark:border-gray-800 dark:bg-white/[0.03] ">
+      <div className="  w-full h-full px-5 py-5 sm:px-6 bg-white border border-gray-200 shadow-default rounded-2xl pb-11 ">
         <div className="flex  items-center justify-between  mb-6 sm:mb-8">
           <div className="">
             <p className="font-medium text-gray-700 dark:text-white/90">
-              Benifit allocation summary
+              Benefit allocation summary
             </p>
           </div>
           <div ref={dropdownRef} className="relative inline-block w-36 text-sm">
