@@ -11,12 +11,12 @@ const Manager = () => {
 
   return (
     <div className="w-full">
-        <div className=" w-full mb-6 ">
+      <div className=" w-full mb-6 ">
           <CommonHeading
             pageTitle={`Hello,${userProfile?.firstName || ""}`}
             description=""
           />
-        </div>
+      </div>
       <div className="w-full mb-6 ">
        <LeadEarningsOverview/>
       </div>

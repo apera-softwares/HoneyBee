@@ -19,7 +19,6 @@ import {
   Users,
   CoinHand,
   AudioSetting,
-  Settings,
 
 } from "../icons/index";
 import Logo from '../assets/logo/logo.png'
