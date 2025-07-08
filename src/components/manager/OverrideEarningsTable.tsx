@@ -158,21 +158,21 @@ const OverrideEarningsTable = () => {
                         </TableCell>
                         <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                           {
-                            item?.totalL1Override ? `$${item?.totalL1Override?.toFixed(2) || "NA"}`:`NA`
+                            item?.totalL1Override ? `$ ${item?.totalL1Override?.toFixed(2) || "NA"}`:`NA`
                           }
                         </TableCell>
                         <TableCell className="px-5 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                           {
-                            item?.totalL2Override ? `$${item?.totalL2Override?.toFixed(2) || "NA"}`:`NA`
+                            item?.totalL2Override ? `$ ${item?.totalL2Override?.toFixed(2) || "NA"}`:`NA`
                           }
                         </TableCell>
                         <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                           {
-                            item?.totalL3Override ? `$${item?.totalL3Override?.toFixed(2) || "NA"}`:`NA`
+                            item?.totalL3Override ? `$ ${item?.totalL3Override?.toFixed(2) || "NA"}`:`NA`
                           }
                         </TableCell>
                         <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                           {`$${item?.totalAllLevels?.toFixed(2) || ""}`}
+                           {`$ ${item?.totalAllLevels?.toFixed(2) || ""}`}
                         </TableCell>
                       </TableRow>
                     );

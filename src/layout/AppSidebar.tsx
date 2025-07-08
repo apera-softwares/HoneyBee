@@ -29,6 +29,8 @@ import { logout } from "@/lib/redux/slices/userSlice";
 import { resetUserProfile } from "@/lib/redux/slices/loginPersonProfile";
 import LogoutConfirmationModal from "@/components/common/LogoutConfirmationModal";
 import { MdOutlineFeedback } from "react-icons/md";
+import { IoSettingsOutline } from "react-icons/io5";
+
 
 import { setPageTitle } from "@/lib/redux/slices/appSlice";
 
@@ -60,8 +62,8 @@ const navItems: NavItem[] = [
     path: "/team",
   },
   {
-    icon: <Settings />,
-    name: "Manager",
+    icon: <IoSettingsOutline className="text-xl" />,
+    name: "Manager (L1-L3)",
     path: "/manager",
   },
   {
@@ -114,8 +116,8 @@ const team_A: NavItem[] = [
     path: "/members",
   },
     {
-    icon: <Settings />,
-    name: "Manager",
+    icon: <IoSettingsOutline className="text-xl" />,
+    name: "Manager (L1-L3)",
     path: "/manager",
   },
   {
@@ -146,8 +148,8 @@ const team_B: NavItem[] = [
     path: "/referral-form",
   },
     {
-    icon: <Settings />,
-    name: "Manager",
+    icon: <IoSettingsOutline className="text-xl" />,
+    name: "Manager (L1-L3)",
     path: "/manager",
   },
   {

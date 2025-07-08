@@ -51,13 +51,13 @@ const {pieChartEarnings:{monthly:monthlyEarnings},pieChartLeads:{monthly:monthly
         active={false}
         onClick={() => {}}
       /> */}
-      <LeadCard
+      {/* <LeadCard
         title="Override Earnings"
         value={`$${470}`}
         point=""
         active={false}
         onClick={() => {}}
-      />
+      /> */}
     </div>
   );
 };

@@ -13,9 +13,7 @@ const Manager = () => {
     <div className="w-full">
         <div className=" w-full mb-6 ">
           <CommonHeading
-            pageTitle={`Hello,${userProfile?.firstName || ""} ${
-              userProfile?.lastName || ""
-            }`}
+            pageTitle={`Hello,${userProfile?.firstName || ""}`}
             description=""
           />
         </div>
