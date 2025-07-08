@@ -64,6 +64,30 @@ export const fetchReferrals = createAsyncThunk(
   }
 );
 
+export const fetchOverrideEarnings = createAsyncThunk(
+  "referral/fetchOverrideEarnings",
+  async (_:void, thunkAPI) => {
+    try {
+      const state: any = thunkAPI.getState();
+      const token = state.user?.user?.token;
+      const response = await axios.get(
+        `${BACKEND_API}lead/OverRideEarning`,
+        {
+          headers: { Authorization: `Bearer ${token}`, 
+          'ngrok-skip-browser-warning': 'true', },
+          
+        }
+      );
+      return response.data?.data;
+
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to fetch override earnings"
+      );
+    }
+  }
+);
+
 // Update referral
 export const updateReferral = createAsyncThunk(
   "referral/updateReferral",
@@ -113,17 +137,19 @@ export const deleteReferral = createAsyncThunk(
 
 interface ReferralSliceState {
   referralList: any[];
+  overrideEarnings:any[];
   loading: boolean;
   error: string | null;
 }
 
 const initialState: ReferralSliceState = {
   referralList: [],
+  overrideEarnings:[],
   loading: false,
   error: null,
 };
 
-const productCatalogSlice = createSlice({
+const referralSlice = createSlice({
   name: "referral",
   initialState,
   reducers: {},
@@ -155,6 +181,22 @@ const productCatalogSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchReferrals.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      });
+
+    // Fetch
+    builder
+      .addCase(fetchOverrideEarnings.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchOverrideEarnings.fulfilled, (state, action) => {
+        state.loading = false;
+        state.overrideEarnings = action.payload?.combinedManagerOverrideData ||[];
+        state.error = null;
+      })
+      .addCase(fetchOverrideEarnings.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });
@@ -193,4 +235,4 @@ const productCatalogSlice = createSlice({
   },
 });
 
-export default productCatalogSlice.reducer;
+export default referralSlice.reducer;

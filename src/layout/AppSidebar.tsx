@@ -19,6 +19,8 @@ import {
   Users,
   CoinHand,
   AudioSetting,
+  Settings,
+
 } from "../icons/index";
 import Logo from '../assets/logo/logo.png'
 import { TbLogout2 } from "react-icons/tb";
@@ -57,7 +59,11 @@ const navItems: NavItem[] = [
     name: "Team",
     path: "/team",
   },
-
+  {
+    icon: <Settings />,
+    name: "Manager",
+    path: "/manager",
+  },
   {
     icon: <AudioSetting />,
     name: "User Management",
@@ -107,6 +113,11 @@ const team_A: NavItem[] = [
     name: "Member",
     path: "/members",
   },
+    {
+    icon: <Settings />,
+    name: "Manager",
+    path: "/manager",
+  },
   {
     icon: <CoinHand />,
     name: "Referrals",
@@ -134,7 +145,11 @@ const team_B: NavItem[] = [
     name: "Landing page and submit referral",
     path: "/referral-form",
   },
-
+    {
+    icon: <Settings />,
+    name: "Manager",
+    path: "/manager",
+  },
   {
     icon: <CoinHand />,
     name: "Referrals",

@@ -1,14 +1,12 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 // import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
-import { IoChevronDownSharp } from "react-icons/io5";
+// import { IoChevronDownSharp } from "react-icons/io5";
 import { useAppSelector } from "@/lib/redux/hooks";
-import { CHART_RANGES } from "@/data/chartRanges";
+// import { CHART_RANGES } from "@/data/chartRanges";
 import NoChartData from "../common/NoChartData";
-
 import dynamic from "next/dynamic";
-import { BENIFIT_ALLOCATION } from "@/data/benifitAllocation";
 // Dynamically import the ReactApexChart component
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
@@ -18,31 +16,31 @@ export default function BenefitAllocationChart() {
   const {
     benefitAllocation
   } = useAppSelector((state) => state.statistics);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState(CHART_RANGES[0]);
+  //const dropdownRef = useRef<HTMLDivElement>(null);
+  // const [isOpen, setIsOpen] = useState(false);
+  // const [selected, setSelected] = useState(CHART_RANGES[0]);
   const [chartData, setChartData] = useState<{
     labels: string[];
     leadSeries: number[];
   } | null>(null);
 
+  // useEffect(() => {
+  //   const handleClickOutside = (event: MouseEvent) => {
+  //     if (
+  //       dropdownRef.current &&
+  //       !dropdownRef.current.contains(event.target as Node)
+  //     ) {
+  //       setIsOpen(false);
+  //     }
+  //   };
+
+  //   document.addEventListener("mousedown", handleClickOutside);
+  //   return () => document.removeEventListener("mousedown", handleClickOutside);
+  // }, []);
+
+
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-
-  useEffect(() => {
-    const selectedData = selected.value === "monthly" ? BENIFIT_ALLOCATION: selected.value === "yearly" ? BENIFIT_ALLOCATION : BENIFIT_ALLOCATION;
+    const selectedData = benefitAllocation;
 
     if (!selectedData || selectedData.length === 0) {
       setChartData(null);
@@ -54,12 +52,12 @@ export default function BenefitAllocationChart() {
 
 
     setChartData({ labels, leadSeries });
-  }, [selected,benefitAllocation]);
+  }, [benefitAllocation]);
 
-  const handleSelect = (option: (typeof CHART_RANGES)[0]) => {
-    setSelected(option);
-    setIsOpen(false);
-  };
+  // const handleSelect = (option: (typeof CHART_RANGES)[0]) => {
+  //   setSelected(option);
+  //   setIsOpen(false);
+  // };
 
   const series = chartData?.leadSeries;
   const options: ApexOptions = {
@@ -83,9 +81,8 @@ export default function BenefitAllocationChart() {
               label: "Total",
               fontSize: "16px",
               formatter: function (w: any) {
-                return w.globals.seriesTotals
-                  .reduce((a: number, b: number) => a + b, 0)
-                  .toString();
+                return `$${w.globals.seriesTotals
+                  .reduce((a: number, b: number) => a + b, 0)?.toFixed(2)}`;
               },
             },
           },
@@ -107,7 +104,7 @@ export default function BenefitAllocationChart() {
       itemMargin: {
         vertical: 6,
       },
-      formatter: function (seriesName, opts) {
+      formatter: function (seriesName) {
         // const value = opts.w.globals.series[opts.seriesIndex];
         // return `${seriesName}: ${value}`;
        
@@ -142,9 +139,7 @@ export default function BenefitAllocationChart() {
         return `
           <div class="apex-tooltip font-medium">
           ${label}<br/>
-          ${count}
-
-
+          $${count}
           </div>
         `;
       },
@@ -161,7 +156,7 @@ export default function BenefitAllocationChart() {
               Benefit allocation summary
             </p>
           </div>
-          <div ref={dropdownRef} className="relative inline-block w-32 text-sm">
+          {/* <div ref={dropdownRef} className="relative inline-block w-32 text-sm">
             <button
               onClick={() => setIsOpen((prev) => !prev)}
               className="w-full flex items-center justify-between gap-2 px-4 py-2 text-sm bg-white border border-gray-600 hover:border-gray-700 rounded-md shadow-sm  focus:outline-none"
@@ -187,7 +182,7 @@ export default function BenefitAllocationChart() {
                 ))}
               </ul>
             )}
-          </div>
+          </div> */}
         </div>
         <div className="relative px-5">
           {!chartData ? (

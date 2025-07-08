@@ -7,7 +7,7 @@ import React, { useState, useEffect, useRef } from "react";
 import Logo from '../assets/logo/logo.png';
 //import { usePathname } from "next/navigation";
 import { useAppSelector,useAppDispatch } from "@/lib/redux/hooks";
-import { fetchStatisticsNumbers } from "@/lib/redux/slices/statisticsSlice";
+import { fetchBenefitAllocationSummary, fetchStatisticsNumbers } from "@/lib/redux/slices/statisticsSlice";
 
 const AppHeader: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -25,6 +25,7 @@ const AppHeader: React.FC = () => {
 
   useEffect(() => {
     getStatNumbers();
+    getBenifitAllocationSummary();
   }, []);
 
   useEffect(() => {
@@ -100,6 +101,13 @@ const AppHeader: React.FC = () => {
       await dispatch(fetchStatisticsNumbers()).unwrap();
     } catch (error: any) {
       console.log("error while getting statistics number", error);
+    }
+  };
+  const getBenifitAllocationSummary = async () => {
+    try {
+      await dispatch(fetchBenefitAllocationSummary()).unwrap();
+    } catch (error: any) {
+      console.log("error while getting benefit allocation summary", error);
     }
   };
 

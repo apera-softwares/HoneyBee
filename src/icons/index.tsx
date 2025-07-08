@@ -58,6 +58,7 @@ import Users1 from "./Users1.svg";
 import CoinHand from "./coin-hand.svg"
 import Substract from "./Subtract.svg"
 import AudioSetting from "./audio-settings.svg"
+import Settings from "./Settings.svg"
 
 export {
   DownloadIcon,
@@ -120,4 +121,5 @@ export {
   CoinHand,
   Substract,
   AudioSetting,
+  Settings
 };

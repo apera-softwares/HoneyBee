@@ -1,4 +1,4 @@
-import React, { useEffect, useState,useRef } from "react";
+import React, { useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -6,54 +6,66 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import Badge from "../ui/badge/Badge";
 import { useAppDispatch,useAppSelector } from "@/lib/redux/hooks";
 import Spinner from "../common/Spinner";
-import Pagination from "../tables/Pagination";
-import { DEFAULT_PROFILE_IMAGE } from "@/constant/defaultImages";
-import { BACKEND_API } from "@/api";
-import { CHART_RANGES } from "@/data/chartRanges";
-import { IoChevronDownSharp } from "react-icons/io5";
+// import Pagination from "../tables/Pagination";
+//import { CHART_RANGES } from "@/data/chartRanges";
+// import { IoChevronDownSharp } from "react-icons/io5";
+import { fetchOverrideEarnings } from "@/lib/redux/slices/referralSlice";
 
 const OverrideEarningsTable = () => {
-  const ITEM_PER_PAGE = 5;
+  // const ITEM_PER_PAGE = 5;
   const dispatch = useAppDispatch();
-  const dropdownRef = useRef<HTMLDivElement>(null);
-  const [isOpen, setIsOpen] = useState(false);
-  const [selected, setSelected] = useState(CHART_RANGES[0]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
-  const { loading, users } = useAppSelector((state) => state.userManagement);
+  const { loading,overrideEarnings } = useAppSelector((state) => state.referral);
+ // const dropdownRef = useRef<HTMLDivElement>(null);
+  // const [isOpen, setIsOpen] = useState(false);
+  // const [selected, setSelected] = useState(CHART_RANGES[0]);
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const [totalPages, setTotalPages] = useState(0);
 
     useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-      }
+        getOverrideEarnings();
+    }, []);
+
+
+    const getOverrideEarnings = async () => {
+        try {
+          await dispatch(fetchOverrideEarnings()).unwrap();
+            
+        } catch (error: any) {
+
+            console.log(error?.message || "Failed to fetch products");
+        }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
+  // useEffect(() => {
+  //   const handleClickOutside = (event: MouseEvent) => {
+  //     if (
+  //       dropdownRef.current &&
+  //       !dropdownRef.current.contains(event.target as Node)
+  //     ) {
+  //       setIsOpen(false);
+  //     }
+  //   };
 
-   const handleSelect = (option: (typeof CHART_RANGES)[0]) => {
-    setSelected(option);
-    setIsOpen(false);
-  };
+  //   document.addEventListener("mousedown", handleClickOutside);
+  //   return () => document.removeEventListener("mousedown", handleClickOutside);
+  // }, []);
 
-  const handlePageChange = (page: any) => {
-    setCurrentPage(page);
-  };
+  //  const handleSelect = (option: (typeof CHART_RANGES)[0]) => {
+  //   setSelected(option);
+  //   setIsOpen(false);
+  // };
+
+  // const handlePageChange = (page: any) => {
+  //   setCurrentPage(page);
+  // };
 
   return (
         <div className="w-full overflow-hidden rounded-xl bg-white shadow-md">
         <div className="w-full flex items-center justify-between gap-2 py-5 px-5 border-b">
             <div className="font-medium">Override Earnings</div>
-            <div className="">
-            <div ref={dropdownRef} className="relative inline-block w-32 text-sm">
+            {/* <div ref={dropdownRef} className="relative inline-block w-32 text-sm">
             <button
               onClick={() => setIsOpen((prev) => !prev)}
               className="w-full flex items-center justify-between gap-2 px-3 py-2 text-sm bg-white border border-gray-600 hover:border-gray-700 rounded-md shadow-sm  focus:outline-none"
@@ -79,8 +91,7 @@ const OverrideEarningsTable = () => {
                 ))}
               </ul>
             )}
-          </div>
-            </div>
+            </div> */}
         </div>
         <div className="w-full overflow-x-auto">
 
@@ -108,63 +119,60 @@ const OverrideEarningsTable = () => {
                     isHeader
                     className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400"
                   >
-                    Level
+                    L1 Earning
                   </TableCell>
                   <TableCell
                     isHeader
                     className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400"
                   >
-                    Lead Sold
+                     L2 Earning
                   </TableCell>
                   <TableCell
                     isHeader
                     className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400"
                   >
-                    Override %
+                    L3 Earning
                   </TableCell>
                   <TableCell
                     isHeader
                     className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400"
                   >
-                    Earnings
+                    Total Earning
                   </TableCell>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {users.length > 0 ? (
-                  users.map((user: any, index: number) => {
-                    const imgSrc = user?.media?.[0]?.imageName
-                      ? `${BACKEND_API}uploads/${user?.media?.[0]?.imageName}`
-                      : DEFAULT_PROFILE_IMAGE;
+                {overrideEarnings.length > 0 ? (
+                  overrideEarnings.map((item: any, index: number) => {
                     return (
-                      <TableRow key={user?.id}>
+                      <TableRow key={item?.id}>
                         <TableCell className="px-5 py-4 text-start">
                           <span className="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
-                            {(currentPage - 1) * ITEM_PER_PAGE + index + 1}
+                            { index + 1}
                           </span>
                         </TableCell>
                         <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                          <div className="flex items-center gap-2">
-                            <img
-                              alt="Profile Photo"
-                              src={imgSrc}
-                              className="w-8 h-8 object-cover object-center rounded-full border border-primary"
-                            />
-                            <span className="">
-                              {`${user?.firstName || ""} ${
-                                user?.lastName || ""
-                              }`}
-                            </span>
-                          </div>
+       
+                            {`${item?.managerName || ""}`}
+
                         </TableCell>
                         <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                          {user?.email}
+                          {
+                            item?.totalL1Override ? `$${item?.totalL1Override?.toFixed(2) || "NA"}`:`NA`
+                          }
                         </TableCell>
                         <TableCell className="px-5 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                          {user?.role}
+                          {
+                            item?.totalL2Override ? `$${item?.totalL2Override?.toFixed(2) || "NA"}`:`NA`
+                          }
                         </TableCell>
                         <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                          {user?.role}
+                          {
+                            item?.totalL3Override ? `$${item?.totalL3Override?.toFixed(2) || "NA"}`:`NA`
+                          }
+                        </TableCell>
+                        <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                           {`$${item?.totalAllLevels?.toFixed(2) || ""}`}
                         </TableCell>
                       </TableRow>
                     );
@@ -181,7 +189,7 @@ const OverrideEarningsTable = () => {
           )}
         </div>
          </div>
-        {totalPages > 0 && (
+        {/* {totalPages > 0 && (
         <div className=" w-full flex justify-end px-4 py-6">
           <Pagination
             currentPage={currentPage}
@@ -189,7 +197,7 @@ const OverrideEarningsTable = () => {
             onPageChange={handlePageChange}
           />
         </div>
-      )}
+      )} */}
 
     </div>
   )

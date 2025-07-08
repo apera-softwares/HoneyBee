@@ -6,25 +6,22 @@ import {
   TableHeader,
   TableRow,
 } from "../ui/table";
-import Badge from "../ui/badge/Badge";
-import { useAppDispatch,useAppSelector } from "@/lib/redux/hooks";
+//import { useAppDispatch,useAppSelector } from "@/lib/redux/hooks";
 import Spinner from "../common/Spinner";
 import Pagination from "../tables/Pagination";
-import { DEFAULT_PROFILE_IMAGE } from "@/constant/defaultImages";
-import { BACKEND_API } from "@/api";
 import { CHART_RANGES } from "@/data/chartRanges";
 import { IoChevronDownSharp } from "react-icons/io5";
 import { Team_PERFORMANCE } from "@/data/teamPerformance";
 
 const TeamPerformanceTable = () => {
   const ITEM_PER_PAGE = 5;
-  const dispatch = useAppDispatch();
+  //const dispatch = useAppDispatch();
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(CHART_RANGES[0]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0);
-  const { loading, users } = useAppSelector((state) => state.userManagement);
+  const [totalPages] = useState(0);
+  const [loading] = useState(false);
 
     useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
