@@ -1,5 +1,5 @@
 "use client";
-import AuthRigthSidebar from "@/components/AuthRigthSidebar";
+import AuthRigthSidebar from "@/components/auth/AuthRigthSidebar";
 import { INPUT_CLASS, INPUT_REQUIRED_ERROR_CLASS } from "@/constant/constantClassName";
 import Image from "next/image";
 import { useState, useEffect } from "react";

@@ -1,7 +1,7 @@
 import React from 'react';
-import GridImageTop from '../assets/authImages/authGridCirclesTop.png';
-import GridImageBottom from '../assets/authImages/authGridCirclesBottom.png';
-import MobileImage from '../assets/authImages/auth-image.png';
+import GridImageTop from '../../assets/authImages/authGridCirclesTop.png';
+import GridImageBottom from '../../assets/authImages/authGridCirclesBottom.png';
+import MobileImage from '../../assets/authImages/auth-image.png';
 import Image from 'next/image';
 
 const AuthRigthSidebar = () => {
