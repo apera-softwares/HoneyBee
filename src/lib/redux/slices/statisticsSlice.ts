@@ -41,6 +41,30 @@ export const fetchStatisticsNumbers = createAsyncThunk(
   }
 );
 
+export const fetchBenefitAllocationSummary = createAsyncThunk(
+  "statistics/fetchBenefitAllocationSummary",
+  async (_:void, thunkAPI) => {
+    try {
+      const state: any = thunkAPI.getState();
+      const token = state.user?.user?.token;
+      const response = await axios.get(
+        `${BACKEND_API}lead/OverRideEarning`,
+        {
+          headers: { Authorization: `Bearer ${token}`, 
+          'ngrok-skip-browser-warning': 'true', },
+          
+        }
+      );
+      return response.data?.data;
+
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to fetch override earnings"
+      );
+    }
+  }
+);
+
 interface PieChartItem {
   label: string;
   count: number;
@@ -61,18 +85,19 @@ interface StatisticsState {
     monthly:LineChartItem[];
     yearly:LineChartItem[];
     lifetime:LineChartItem[];
-  },
+  };
   lineChartEarnings:{
     monthly:any[];
     yearly:any[];
     lifetime:any[];
-  },
+  };
   pieChartEarnings:{
     monthly:PieChartItem[];
     yearly:PieChartItem[];
     lifetime:PieChartItem[];
     totalEarnings:any;
-  }
+  };
+  benefitAllocation:any[]
   loading: boolean;
   error: string | null;
 }
@@ -100,6 +125,7 @@ const initialState: StatisticsState = {
     lifetime:[],
     totalEarnings:""
   },
+  benefitAllocation:[],
   loading: false,
   error: null,
 };
@@ -135,6 +161,22 @@ const statisticsSlice = createSlice({
         state.pieChartEarnings.totalEarnings = data?.totalEarnings||0;
       })
       .addCase(fetchStatisticsNumbers.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      });
+
+    // Fetch  benifit allocation
+    builder
+      .addCase(fetchBenefitAllocationSummary.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchBenefitAllocationSummary.fulfilled, (state, action) => {
+        const data = action.payload;
+        state.loading = false;
+        state.benefitAllocation = data?.sumEntries?.map((item:any)=>({label:item?.name,count:item?.amount}))||[];
+      })
+      .addCase(fetchBenefitAllocationSummary.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });

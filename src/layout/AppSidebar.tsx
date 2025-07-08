@@ -19,6 +19,7 @@ import {
   Users,
   CoinHand,
   AudioSetting,
+
 } from "../icons/index";
 import Logo from '../assets/logo/logo.png'
 import { TbLogout2 } from "react-icons/tb";
@@ -27,6 +28,8 @@ import { logout } from "@/lib/redux/slices/userSlice";
 import { resetUserProfile } from "@/lib/redux/slices/loginPersonProfile";
 import LogoutConfirmationModal from "@/components/common/LogoutConfirmationModal";
 import { MdOutlineFeedback } from "react-icons/md";
+import { IoSettingsOutline } from "react-icons/io5";
+
 
 import { setPageTitle } from "@/lib/redux/slices/appSlice";
 
@@ -57,7 +60,11 @@ const navItems: NavItem[] = [
     name: "Team",
     path: "/team",
   },
-
+  {
+    icon: <IoSettingsOutline className="text-xl" />,
+    name: "Manager (L1-L3)",
+    path: "/manager",
+  },
   {
     icon: <AudioSetting />,
     name: "User Management",
@@ -107,6 +114,11 @@ const team_A: NavItem[] = [
     name: "Member",
     path: "/members",
   },
+    {
+    icon: <IoSettingsOutline className="text-xl" />,
+    name: "Manager (L1-L3)",
+    path: "/manager",
+  },
   {
     icon: <CoinHand />,
     name: "Referrals",
@@ -134,7 +146,11 @@ const team_B: NavItem[] = [
     name: "Landing page and submit referral",
     path: "/referral-form",
   },
-
+    {
+    icon: <IoSettingsOutline className="text-xl" />,
+    name: "Manager (L1-L3)",
+    path: "/manager",
+  },
   {
     icon: <CoinHand />,
     name: "Referrals",
