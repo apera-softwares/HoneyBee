@@ -154,14 +154,14 @@ export default function BenefitAllocationChart() {
 
   return (
  
-      <div className="  w-full h-full px-5 py-5 sm:px-6 bg-white border border-gray-200 shadow-default rounded-2xl pb-11 ">
-        <div className="flex  items-center justify-between  mb-6 sm:mb-8">
+      <div className="  w-full h-full bg-white border border-gray-200 shadow-default rounded-2xl pb-11 ">
+        <div className="flex  items-center justify-between gap-2 px-5 py-5 mb-6 lg:mb-8  border-b border-gray-200 ">
           <div className="">
             <p className="font-medium text-gray-700 dark:text-white/90">
               Benefit allocation summary
             </p>
           </div>
-          <div ref={dropdownRef} className="relative inline-block w-36 text-sm">
+          <div ref={dropdownRef} className="relative inline-block w-32 text-sm">
             <button
               onClick={() => setIsOpen((prev) => !prev)}
               className="w-full flex items-center justify-between gap-2 px-4 py-2 text-sm bg-white border border-gray-600 hover:border-gray-700 rounded-md shadow-sm  focus:outline-none"
@@ -189,7 +189,7 @@ export default function BenefitAllocationChart() {
             )}
           </div>
         </div>
-        <div className="relative p-[1px]  ">
+        <div className="relative px-5">
           {!chartData ? (
           <NoChartData message="No data available"/>
           ) : (

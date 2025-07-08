@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import LeadCard from "@/components/LeadCard";
+import LeadCard from "../common/LeadCard";
 
 const LeadEarningsOverview = () => {
   return (
