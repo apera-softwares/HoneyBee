@@ -17,7 +17,7 @@ import ViewMemberModal from "./ViewMemberModal";
 import { FiEdit } from "react-icons/fi";
 import { BACKEND_API } from "@/api";
 import { DEFAULT_PROFILE_IMAGE } from "@/constant/defaultImages";
-import { capitalizeWord } from "@/utils/stringUtils";
+import { capitalizeWord,capitalizeWords } from "@/utils/stringUtils";
 
 interface TeamTableProps {
   searchText: string;
@@ -168,8 +168,8 @@ const AssignedMembersTable: React.FC<TeamTableProps> = ({
                         </TableCell>
                         <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                           {user?.product?.name?.length > 32
-                            ? `${user?.product?.name?.slice(0, 32)}...`
-                            : `${user?.product?.name}`}
+                            ? `${capitalizeWords(user?.product?.name?.slice(0, 32))}...`
+                            : `${capitalizeWords(user?.product?.name)}`}
                         </TableCell>
                         <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                           <button

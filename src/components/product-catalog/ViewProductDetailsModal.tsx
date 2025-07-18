@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { Modal } from "../ui/modal";
 import { GridIcon } from "../../icons/index";
 import { TbArrowNarrowLeft, TbArrowNarrowRight } from "react-icons/tb";
+import { capitalizeWords } from "@/utils/stringUtils";
 
 interface ViewProductDetailsModalProps {
   isOpen: boolean;
@@ -106,7 +107,11 @@ const ViewProductDetailsModal: React.FC<ViewProductDetailsModalProps> = ({
                 <p className=" font-semibold text-sm text-gray-800 mb-1">
                   Name
                 </p>
-                <h2 className="">{selectedProduct?.name || ""}</h2>
+                <h2 className="">
+                  {
+                    capitalizeWords(selectedProduct?.name)
+                  }
+                  </h2>
               </div>
 
               <div className="w-full border-b pb-1 ">

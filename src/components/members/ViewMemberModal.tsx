@@ -6,7 +6,7 @@ import { BiSolidEditAlt } from "react-icons/bi";
 //import Image from "next/image";
 import { TbArrowNarrowLeft, TbArrowNarrowRight } from "react-icons/tb";
 import { BACKEND_API } from "@/api";
-import { capitalizeWord } from "@/utils/stringUtils";
+import { capitalizeWord, capitalizeWords } from "@/utils/stringUtils";
 
 interface ViewMemberModalProps {
   isOpen: boolean;
@@ -133,7 +133,7 @@ const ViewMemberModal: React.FC<ViewMemberModalProps> = ({
               {/* Product Info */}
               <div className="w-full sm:w-1/2 flex flex-col justify-center">
                 <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-2">
-                  {user.product.name}
+                  {capitalizeWords(user?.product?.name)}
                 </h2>
                 <ul className="space-y-1 max-h-32 overflow-y-auto pr-1 text-sm text-gray-600">
                   {bulletPoints.map((point: string, idx: number) => (

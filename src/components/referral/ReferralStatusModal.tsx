@@ -4,7 +4,7 @@ import { Modal } from "../ui/modal";
 import Button from "../ui/button/Button";
 import { BiSolidEditAlt } from "react-icons/bi";
 import toast from "react-hot-toast";
-import { capitalizeWord } from "@/utils/stringUtils";
+import { capitalizeWord,capitalizeWords } from "@/utils/stringUtils";
 
 interface ReferralStatusModalProps {
   isOpen: boolean;
@@ -58,7 +58,11 @@ const ReferralStatusModal: React.FC<ReferralStatusModalProps> = ({
                 ` Name: ${capitalizeWord(referral?.firstName)} ${capitalizeWord(referral?.lastName)}`
               }
             </p>
-            <p className="text-sm text-gray-500">Product: {referral?.product?.name}</p>
+            <p className="text-sm text-gray-500">
+              {
+                `Product: ${capitalizeWords(referral?.product?.name)}`
+              }
+              </p>
           </div>
         
         </div>

@@ -17,6 +17,7 @@ import { fetchProductCatalogs } from "@/lib/redux/slices/productCatalogSlice";
 import Spinner from "../common/Spinner";
 import Pagination from "../tables/Pagination";
 import { Toaster } from "react-hot-toast";
+import { capitalizeWords } from "@/utils/stringUtils";
 
 interface FiltersState {
     searchQuery:string,
@@ -99,7 +100,9 @@ const ProductCatalogTable: React.FC<ProductCatalogTableProps> = ({ filters,pagin
                                     productCatalogs.map((product:any)=>( 
                                     <TableRow key={product?.id} >
                                             <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                           {product?.name||""}
+                                                {
+                                                    capitalizeWords(product?.name)
+                                                }
                                             </TableCell>
                                             <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                                                 {

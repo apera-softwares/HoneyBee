@@ -1,6 +1,7 @@
 import { BACKEND_API } from "@/api";
 import React, { useState, useRef, useEffect } from "react";
 import { DEFAULT_PRODUCT_IMAGE } from "@/constant/defaultImages";
+import { capitalizeWords } from "@/utils/stringUtils";
 
 
 type Props = {
@@ -100,7 +101,7 @@ const ProductDropdown: React.FC<Props> = ({
                       alt={product.name}
                       className="w-8 h-8 object-cover object-center rounded border border-[#E0E0E0] "
                     />
-                    <span className="truncate">{product.name}</span>
+                    <span className="truncate">{capitalizeWords(product.name)}</span>
                   </div>
                 );
               })}
