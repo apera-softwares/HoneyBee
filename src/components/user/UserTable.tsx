@@ -16,6 +16,7 @@ import UserAddEditModal from "./UserAddEditModal";
 import { Toaster } from "react-hot-toast";
 import { DEFAULT_PROFILE_IMAGE } from "@/constant/defaultImages";
 import { BACKEND_API } from "@/api";
+import { formatRoleName } from "@/utils/stringUtils";
 
 interface UserTableProps {
   searchText: string;
@@ -164,7 +165,9 @@ const UserTable: React.FC<UserTableProps> = ({
                           {user?.email}
                         </TableCell>
                         <TableCell className="px-5 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                          {user?.role}
+                          <span className=" text-nowrap ">
+                            {formatRoleName(user?.role)}
+                          </span>
                         </TableCell>
                         <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                           <Badge

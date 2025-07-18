@@ -24,6 +24,7 @@ import Pagination from "@/components/tables/Pagination";
 import Spinner from "@/components/common/Spinner";
 import { DEFAULT_PROFILE_IMAGE } from "@/constant/defaultImages";
 import { BACKEND_API } from "@/api";
+import { formatRoleName } from "@/utils/stringUtils";
 
 export default function UserManagement() {
   const ITEM_PER_PAGE = 5;
@@ -235,7 +236,7 @@ export default function UserManagement() {
                               {member?.user?.email}
                             </TableCell>
                             <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                              {member?.user?.role}
+                              <span className="text-nowrap">{formatRoleName(member?.user?.role)}</span>
                             </TableCell>
 
                             <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">

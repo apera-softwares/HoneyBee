@@ -13,6 +13,7 @@ import LogoutConfirmationModal from "@/components/common/LogoutConfirmationModal
 import { setPageTitle } from "@/lib/redux/slices/appSlice";
 import { BACKEND_API } from "@/api";
 import { DEFAULT_PROFILE_IMAGE } from "@/constant/defaultImages";
+import { formatRoleName } from "@/utils/stringUtils";
 
 export default function UserDropdown() {
 
@@ -100,7 +101,7 @@ const getUserProfile = async () => {
                 strokeLinejoin="round" />
             </svg>
           </div>
-          <span className="text-theme-xs text-start  w-full flex justify-start">{userProfile?.role}</span>
+          <span className="text-theme-xs text-start text-nowrap  w-full flex justify-start">{formatRoleName(userProfile?.role)}</span>
         </div>
 
       </button>
