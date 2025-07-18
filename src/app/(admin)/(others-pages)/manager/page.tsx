@@ -5,6 +5,7 @@ import {  useAppSelector } from "@/lib/redux/hooks";
 import OverrideEarningsTable from "@/components/manager/OverrideEarningsTable";
 import BenefitAllocationChart from "@/components/statistic-charts/BenefitAllocationChart";
 import LeadEarningsOverview from "@/components/manager/LeadEarningsOverview";
+import { capitalizeWord } from "@/utils/stringUtils";
 
 const Manager = () => {
   const { userProfile } = useAppSelector((state) => state.userProfile);
@@ -13,7 +14,7 @@ const Manager = () => {
     <div className="w-full">
       <div className=" w-full mb-6 ">
           <CommonHeading
-            pageTitle={`Hello,${userProfile?.firstName || ""}`}
+            pageTitle={`Hello, ${capitalizeWord(userProfile?.firstName)}`}
             description=""
           />
       </div>

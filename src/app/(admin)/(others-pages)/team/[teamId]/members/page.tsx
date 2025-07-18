@@ -24,7 +24,7 @@ import Pagination from "@/components/tables/Pagination";
 import Spinner from "@/components/common/Spinner";
 import { DEFAULT_PROFILE_IMAGE } from "@/constant/defaultImages";
 import { BACKEND_API } from "@/api";
-import { formatRoleName } from "@/utils/stringUtils";
+import { formatRoleName ,capitalizeWord} from "@/utils/stringUtils";
 
 export default function UserManagement() {
   const ITEM_PER_PAGE = 5;
@@ -226,8 +226,8 @@ export default function UserManagement() {
                                   className="w-8 h-8 object-cover object-center rounded-full border border-primary"
                                 />
                                 <span className="">
-                                  {`${member?.user?.firstName || ""}  ${
-                                    member?.user?.lastName || ""
+                                  {`${capitalizeWord(member?.user?.firstName)}  ${
+                                    capitalizeWord(member?.user?.lastName)
                                   }`}
                                 </span>
                               </div>

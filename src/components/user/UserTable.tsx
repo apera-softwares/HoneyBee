@@ -16,7 +16,7 @@ import UserAddEditModal from "./UserAddEditModal";
 import { Toaster } from "react-hot-toast";
 import { DEFAULT_PROFILE_IMAGE } from "@/constant/defaultImages";
 import { BACKEND_API } from "@/api";
-import { formatRoleName } from "@/utils/stringUtils";
+import { formatRoleName,capitalizeWord } from "@/utils/stringUtils";
 
 interface UserTableProps {
   searchText: string;
@@ -155,9 +155,8 @@ const UserTable: React.FC<UserTableProps> = ({
                               className="w-8 h-8 object-cover object-center rounded-full border border-primary"
                             />
                             <span className="">
-                              {`${user?.firstName || ""} ${
-                                user?.lastName || ""
-                              }`}
+
+                              {`${capitalizeWord(user?.firstName)} ${capitalizeWord(user?.lastName)}`}
                             </span>
                           </div>
                         </TableCell>

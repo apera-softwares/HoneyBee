@@ -6,6 +6,7 @@ import { BiSolidEditAlt } from "react-icons/bi";
 //import Image from "next/image";
 import { TbArrowNarrowLeft, TbArrowNarrowRight } from "react-icons/tb";
 import { BACKEND_API } from "@/api";
+import { capitalizeWord } from "@/utils/stringUtils";
 
 interface ViewMemberModalProps {
   isOpen: boolean;
@@ -59,8 +60,8 @@ const ViewMemberModal: React.FC<ViewMemberModalProps> = ({
           {/* Team Member Info */}
           <div className="px-4 py-3 border rounded-md bg-gray-50 mb-6">
             <p className="font-semibold text-gray-800">
-              Name: {user?.teamMember?.user?.firstName}{" "}
-              {user?.teamMember?.user?.lastName}
+              {` Name: ${capitalizeWord(user?.teamMember?.user?.firstName)} 
+              ${capitalizeWord(user?.teamMember?.user?.lastName)}`}
             </p>
             <p className="text-sm text-gray-600 mt-1">
               Email: {user?.teamMember?.user?.email || "N/A"}

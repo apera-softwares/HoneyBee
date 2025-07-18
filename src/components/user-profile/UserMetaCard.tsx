@@ -9,7 +9,7 @@ import { fetchUserProfile, uploadProfileImage } from "@/lib/redux/slices/loginPe
 import { useAppDispatch,useAppSelector } from "@/lib/redux/hooks";
 import { BACKEND_API } from "@/api";
 import { DEFAULT_PROFILE_IMAGE } from "@/constant/defaultImages";
-import { formatRoleName } from "@/utils/stringUtils";
+import { formatRoleName,capitalizeWord } from "@/utils/stringUtils";
 
 export default function UserMetaCard() {
   const { isOpen, closeModal, openModal } = useModal();
@@ -84,7 +84,9 @@ export default function UserMetaCard() {
 
             <div className="order-3 xl:order-2">
               <h4 className="mb-2 text-lg font-semibold text-center text-gray-800 dark:text-white/90 xl:text-left">
-                {userProfile?.firstName} {userProfile?.lastName}
+              {
+                `${capitalizeWord(userProfile?.firstName)} ${capitalizeWord(userProfile?.lastName)}`
+              }
               </h4>
               <div className="flex flex-col items-center gap-1 text-center xl:flex-row xl:gap-3 xl:text-left">
                 <p className="text-sm text-gray-500 dark:text-gray-400">

@@ -13,7 +13,7 @@ import LogoutConfirmationModal from "@/components/common/LogoutConfirmationModal
 import { setPageTitle } from "@/lib/redux/slices/appSlice";
 import { BACKEND_API } from "@/api";
 import { DEFAULT_PROFILE_IMAGE } from "@/constant/defaultImages";
-import { formatRoleName } from "@/utils/stringUtils";
+import { formatRoleName,capitalizeWord } from "@/utils/stringUtils";
 
 export default function UserDropdown() {
 
@@ -84,7 +84,7 @@ const getUserProfile = async () => {
         </span>
         <div className="">
           <div className="flex items-center w-full">
-            <span className="block mr-1 font-medium text-theme-sm">{userProfile?.firstName?.length > 6 ? userProfile?.firstName?.slice(0,6) :userProfile?.firstName||""}</span>
+            <span className="block mr-1 font-medium text-theme-sm">{userProfile?.firstName?.length > 6 ? capitalizeWord(userProfile?.firstName?.slice(0,6)) :capitalizeWord(userProfile?.firstName)}</span>
             <svg
               className={`stroke-gray-500 dark:stroke-gray-400 transition-transform duration-200 ${isOpen ? "rotate-180" : ""
                 }`}
@@ -113,7 +113,10 @@ const getUserProfile = async () => {
       >
         <div>
           <span className="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">
-            {userProfile?.firstName} {userProfile?.lastName}        </span>
+            {
+              `${capitalizeWord(userProfile?.firstName)} ${capitalizeWord(userProfile?.lastName)} `
+            }
+         </span>
           <span className="mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-400">
             {userProfile?.email}
           </span>

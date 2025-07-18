@@ -6,7 +6,7 @@ import Button from "../ui/button/Button";
 import Input from "../form/input/InputField";
 import Label from "../form/Label";
 import { useAppSelector } from "@/lib/redux/hooks";
-import { formatRoleName } from "@/utils/stringUtils";
+import { formatRoleName,capitalizeWord } from "@/utils/stringUtils";
 
 export default function UserInfoCard() {
   const { isOpen, closeModal } = useModal();
@@ -31,7 +31,7 @@ export default function UserInfoCard() {
                 First Name
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                {userProfile?.firstName}
+                {capitalizeWord(userProfile?.firstName)}
               </p>
             </div>
 
@@ -40,7 +40,7 @@ export default function UserInfoCard() {
                 Last Name
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                {userProfile?.lastName}
+                {capitalizeWord(userProfile?.lastName)}
               </p>
             </div>
 
