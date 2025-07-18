@@ -241,7 +241,7 @@ const ReferralForm = () => {
     if (formData.postalCode.trim() === "") {
       tempErrors.postalCode = "Postal code  is required";
       isValidData = false;
-    } else if (formData.postalCode.length < 6) {
+    } else if (formData.postalCode.length !==5 ) {
       tempErrors.postalCode = "Please enter valid postal code";
       isValidData = false;
 
@@ -261,12 +261,12 @@ const ReferralForm = () => {
     }
 
     // Validate notes
-    if (formData.notes.trim() === "") {
-      tempErrors.notes = "Notes is required";
-      isValidData = false;
-    } else {
-      tempErrors.notes = "";
-    }
+    // if (formData.notes.trim() === "") {
+    //   tempErrors.notes = "Notes is required";
+    //   isValidData = false;
+    // } else {
+    //   tempErrors.notes = "";
+    // }
 
     setErrors(tempErrors);
     return isValidData;

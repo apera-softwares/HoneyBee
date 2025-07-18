@@ -3,20 +3,19 @@ import React, { useState } from "react";
 import { useModal } from "../../hooks/useModal";
 import { Modal } from "../ui/modal";
 import Button from "../ui/button/Button";
-import { useSelector } from "react-redux";
-import { RootState } from "@/lib/redux/store";
 import ImageUploading, { ImageListType } from "react-images-uploading";
 import toast,{Toaster} from "react-hot-toast";
 import { fetchUserProfile, uploadProfileImage } from "@/lib/redux/slices/loginPersonProfile";
-import { useAppDispatch } from "@/lib/redux/hooks";
+import { useAppDispatch,useAppSelector } from "@/lib/redux/hooks";
 import { BACKEND_API } from "@/api";
 import { DEFAULT_PROFILE_IMAGE } from "@/constant/defaultImages";
+import { formatRoleName,capitalizeWord } from "@/utils/stringUtils";
 
 export default function UserMetaCard() {
   const { isOpen, closeModal, openModal } = useModal();
   const [loading, setLoading] = useState(false)
   const dispatch = useAppDispatch();
-  const { userProfile } = useSelector((state: RootState) => state.userProfile);
+  const { userProfile } = useAppSelector((state) => state.userProfile);
   const [image, setImage] = useState<ImageListType>([]);
   const maxNumber = 1;
 
@@ -85,11 +84,13 @@ export default function UserMetaCard() {
 
             <div className="order-3 xl:order-2">
               <h4 className="mb-2 text-lg font-semibold text-center text-gray-800 dark:text-white/90 xl:text-left">
-                {userProfile?.firstName} {userProfile?.lastName}
+              {
+                `${capitalizeWord(userProfile?.firstName)} ${capitalizeWord(userProfile?.lastName)}`
+              }
               </h4>
               <div className="flex flex-col items-center gap-1 text-center xl:flex-row xl:gap-3 xl:text-left">
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  {userProfile?.role}
+                  {formatRoleName(userProfile?.role)}
                 </p>
               </div>
             </div>

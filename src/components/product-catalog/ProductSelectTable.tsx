@@ -16,6 +16,7 @@ import { TbLoader2 } from "react-icons/tb";
 import { FaRegEye } from "react-icons/fa";
 import { FaCheck } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
+import { capitalizeWords } from "@/utils/stringUtils";
 
 interface FiltersState {
   searchQuery: string;
@@ -143,7 +144,7 @@ const ProductSelectTable: React.FC<ProductSelectTableProps> = ({
                     return (
                       <TableRow key={product?.id}>
                         <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                          {product?.name || ""}
+                          {capitalizeWords(product?.name)}
                         </TableCell>
                         <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                          {

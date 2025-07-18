@@ -17,6 +17,7 @@ import { Toaster } from "react-hot-toast";
 import ViewProductDetailsModal from "./ViewProductDetailsModal";
 import { BACKEND_API } from "@/api";
 import { FaRegEye } from "react-icons/fa";
+import { capitalizeWords } from "@/utils/stringUtils";
 
 const DashboardProductsTable = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -123,7 +124,9 @@ const DashboardProductsTable = () => {
                          {(currentPage - 1) * ITEM_PER_PAGE + index + 1}
                       </TableCell>
                       <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                        {product?.name || ""}
+                        {
+                          capitalizeWords(product?.name)
+                        }
                       </TableCell>
                       <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                         {

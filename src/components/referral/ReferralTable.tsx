@@ -19,6 +19,7 @@ import { FiEdit } from "react-icons/fi";
 import ReferralStatusModal from "./ReferralStatusModal";
 import { DEFAULT_PROFILE_IMAGE } from "@/constant/defaultImages";
 import { BACKEND_API } from "@/api";
+import { capitalizeWord,capitalizeWords } from "@/utils/stringUtils";
 
 interface ReferralTableProps {
   searchText: string;
@@ -186,10 +187,12 @@ const ReferralTable: React.FC<ReferralTableProps> = ({
                           </span>
                         </TableCell>
                         <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                          {`${item?.firstName || ""} ${item?.lastName || ""}`}
+                          {`${capitalizeWord(item?.firstName)} ${capitalizeWord(item?.lastName)}`}
                         </TableCell>
                         <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                          {item?.product?.name || ""}
+                          {
+                            capitalizeWords(item?.product?.name)
+                          }
                         </TableCell>
                         <TableCell className="px-5 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                           <div className="flex items-center gap-2">
@@ -199,9 +202,8 @@ const ReferralTable: React.FC<ReferralTableProps> = ({
                               className="w-8 h-8 object-cover object-center rounded-full border border-primary"
                             />
                             <span className="">
-                              {`${item?.referredBy?.user?.firstName || ""} ${
-                                item?.referredBy?.user?.lastName || ""
-                              }`}
+
+                               {`${capitalizeWord(item?.referredBy?.user?.firstName)} ${capitalizeWord(item?.referredBy?.user?.lastName)}`}
                             </span>
                           </div>
                         </TableCell>

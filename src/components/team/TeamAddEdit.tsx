@@ -16,6 +16,7 @@ import { fetchUsers } from "@/lib/redux/slices/userManagementSlice";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { RxCross2 } from "react-icons/rx";
 import { UserRole } from "@/constant/userRoles";
+import { capitalizeWord } from "@/utils/stringUtils";
 
 interface TeamAddEditProps {
   isOpen: boolean;
@@ -229,8 +230,7 @@ const TeamAddEdit: React.FC<TeamAddEditProps> = ({
                             }}
                             className="px-3 py-1.5 hover:bg-gray-100 cursor-pointer"
                           >
-                            {member?.firstName} {member?.lastName} (
-                            {member?.email})
+                            {`${capitalizeWord(member?.firstName)} ${capitalizeWord(member?.lastName)} ${member?.email}`}
                           </li>
                         ))
                       ) : (

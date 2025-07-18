@@ -5,12 +5,12 @@ import { Modal } from "../ui/modal";
 import Button from "../ui/button/Button";
 import Input from "../form/input/InputField";
 import Label from "../form/Label";
-import { useSelector } from "react-redux";
-import { RootState } from "@/lib/redux/store";
+import { useAppSelector } from "@/lib/redux/hooks";
+import { formatRoleName,capitalizeWord } from "@/utils/stringUtils";
 
 export default function UserInfoCard() {
   const { isOpen, closeModal } = useModal();
-      const { userProfile } = useSelector((state: RootState) => state.userProfile);
+      const { userProfile } = useAppSelector((state) => state.userProfile);
 
   const handleSave = () => {
     // Handle save logic here
@@ -31,7 +31,7 @@ export default function UserInfoCard() {
                 First Name
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                {userProfile?.firstName}
+                {capitalizeWord(userProfile?.firstName)}
               </p>
             </div>
 
@@ -40,7 +40,7 @@ export default function UserInfoCard() {
                 Last Name
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                {userProfile?.lastName}
+                {capitalizeWord(userProfile?.lastName)}
               </p>
             </div>
 
@@ -67,7 +67,7 @@ export default function UserInfoCard() {
                 Role
               </p>
               <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-                {userProfile?.role}
+                {formatRoleName(userProfile?.role)}
               </p>
             </div>
           </div>
