@@ -36,8 +36,8 @@ interface ProductSelectTableProps {
   selectedProductId: string | null;
   selectedProducts: any[];
   onProductSelect: (productId: string) => void;
-  onProductUnselect:(productId:string)=>void;
-  onView:(product:any)=>void;
+  onProductUnselect: (productId: string) => void;
+  onView: (product: any) => void;
 }
 
 const ProductSelectTable: React.FC<ProductSelectTableProps> = ({
@@ -48,14 +48,19 @@ const ProductSelectTable: React.FC<ProductSelectTableProps> = ({
   selectedProducts,
   onProductSelect,
   onProductUnselect,
-  onView
+  onView,
 }) => {
   const dispatch = useAppDispatch();
   const LIMIT = 5;
-  const { productCatalogs, loading } = useAppSelector((state) => state.productCatalog);
-       const [showAppointmentCompletedConfirmationModal,setShowAppointmentCompletedConfirmationModal]=useState<boolean>(false);
-     const [selectedProduct,setSelectedProduct] = useState<any>(null);
-  
+  const { productCatalogs, loading } = useAppSelector(
+    (state) => state.productCatalog
+  );
+  const [
+    showAppointmentCompletedConfirmationModal,
+    setShowAppointmentCompletedConfirmationModal,
+  ] = useState<boolean>(false);
+  const [selectedProduct, setSelectedProduct] = useState<any>(null);
+
   useEffect(() => {
     getProductCatalogs();
   }, [filters, paginationData.currentPage]);
@@ -90,19 +95,15 @@ const ProductSelectTable: React.FC<ProductSelectTableProps> = ({
     }));
   };
 
-
-      const handleAppointmentCompletedClick = (product:any)=>{
-
-        if(product)
-        {
-            setSelectedProduct(product);
-            setShowAppointmentCompletedConfirmationModal(true);
-            return;
-        }
-        setSelectedProduct(null);
-        setShowAppointmentCompletedConfirmationModal(false);
-
+  const handleAppointmentCompletedClick = (product: any) => {
+    if (product) {
+      setSelectedProduct(product);
+      setShowAppointmentCompletedConfirmationModal(true);
+      return;
     }
+    setSelectedProduct(null);
+    setShowAppointmentCompletedConfirmationModal(false);
+  };
 
   return (
     <div className="w-full overflow-hidden rounded-xl bg-white dark:bg-white/[0.03] shadow-md">
@@ -138,7 +139,12 @@ const ProductSelectTable: React.FC<ProductSelectTableProps> = ({
                   >
                     Status
                   </TableCell>
-                   <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Appointment Completed</TableCell>
+                  <TableCell
+                    isHeader
+                    className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400"
+                  >
+                    Appointment Completed
+                  </TableCell>
                   {/* <TableCell
                     isHeader
                     className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400"
@@ -165,14 +171,12 @@ const ProductSelectTable: React.FC<ProductSelectTableProps> = ({
                           {capitalizeWords(product?.name)}
                         </TableCell>
                         <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                         {
-                          product?.estimatedPrice ? `$${product?.estimatedPrice}`:`NA`
-                         }
+                          {product?.estimatedPrice
+                            ? `$${product?.estimatedPrice}`
+                            : `NA`}
                         </TableCell>
                         <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                         {
-                          product?.price ? `$${product?.price}`:`NA`
-                         }
+                          {product?.price ? `$${product?.price}` : `NA`}
                         </TableCell>
                         <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                           <Badge
@@ -190,56 +194,56 @@ const ProductSelectTable: React.FC<ProductSelectTableProps> = ({
                               : product.elevatorPitch)}
                         </TableCell> */}
 
-                               <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-
-                                                {
-                                                    product?.AppointmentCompleted ? ( <Badge
-                                                    size="md"
-                                                    color={"success"}
-                                                >
-                                                    Completed
-                                                </Badge>):( <button className="w-28 flex justify-center items-center font-medium text-primary bg-primary/10 px-4 py-1 rounded-full gap-2 disabled:cursor-not-allowed cursor-pointer" onClick={() =>{
-                                                        handleAppointmentCompletedClick(product);
-                                                    }}>
-                                                 <FaRegEye className="h-5 w-5 text-primary cursor-pointer "  />
-                                                    Mark As Completed
-                                               </button>)
-                                                }
-                                                   
-                                            </TableCell>
-                        <TableCell className="px-5 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                        <div className="flex flex-col items-start gap-1">
-                                                    {isSelected ? (
-                            <button
-                              className="w-24 flex justify-center items-center font-medium text-red-500 bg-red-500/10 px-3 py-1 rounded-full gap-1.5 disabled:cursor-not-allowed cursor-pointer"
-                              disabled={Boolean(selectedProductId)}
-                              onClick={() => onProductUnselect(product.id)}
-                            >
-                              <ImCross className="w-2 h-2 shrink-0"/>
-                               Unselect
-                            </button>
-                          ) : selectedProductId === product.id ? (
-                            <span className="flex items-center  text-primary">
-                              <TbLoader2 className="text-xl animate-spin ml-5" />
-                            </span>
+                        <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+                          {product?.AppointmentCompleted ? (
+                            <Badge size="md" color={"success"}>
+                              Completed
+                            </Badge>
                           ) : (
                             <button
-                              className="w-24 flex justify-center items-center font-medium text-primary bg-primary/10 px-4 py-1 rounded-full gap-2 disabled:cursor-not-allowed cursor-pointer"
-                              disabled={Boolean(selectedProductId)}
-                              onClick={() => onProductSelect(product.id)}
+                              className="w-28 flex justify-center items-center font-medium text-primary bg-primary/10 px-4 py-1 rounded-full gap-2 disabled:cursor-not-allowed cursor-pointer"
+                              onClick={() => {
+                                handleAppointmentCompletedClick(product);
+                              }}
                             >
-                              <FaCheck className="w-5 h-5"/>
-                              Select
+                              <FaRegEye className="h-5 w-5 text-primary cursor-pointer " />
+                              Mark As Completed
                             </button>
                           )}
+                        </TableCell>
+                        <TableCell className="px-5 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                          <div className="flex flex-col items-start gap-1">
+                            {isSelected ? (
+                              <button
+                                className="w-24 flex justify-center items-center font-medium text-red-500 bg-red-500/10 px-3 py-1 rounded-full gap-1.5 disabled:cursor-not-allowed cursor-pointer"
+                                disabled={Boolean(selectedProductId)}
+                                onClick={() => onProductUnselect(product.id)}
+                              >
+                                <ImCross className="w-2 h-2 shrink-0" />
+                                Unselect
+                              </button>
+                            ) : selectedProductId === product.id ? (
+                              <span className="flex items-center  text-primary">
+                                <TbLoader2 className="text-xl animate-spin ml-5" />
+                              </span>
+                            ) : (
+                              <button
+                                className="w-24 flex justify-center items-center font-medium text-primary bg-primary/10 px-4 py-1 rounded-full gap-2 disabled:cursor-not-allowed cursor-pointer"
+                                disabled={Boolean(selectedProductId)}
+                                onClick={() => onProductSelect(product.id)}
+                              >
+                                <FaCheck className="w-5 h-5" />
+                                Select
+                              </button>
+                            )}
 
                             <button
                               className="w-24 flex justify-center items-center font-medium text-primary bg-primary/10 px-4 py-1 rounded-full gap-2 disabled:cursor-not-allowed cursor-pointer"
                               onClick={() => onView(product)}
                             >
-                             <FaRegEye className="w-5 h-5"/> View
+                              <FaRegEye className="w-5 h-5" /> View
                             </button>
-                        </div>
+                          </div>
                         </TableCell>
                       </TableRow>
                     );
@@ -267,12 +271,12 @@ const ProductSelectTable: React.FC<ProductSelectTableProps> = ({
         </div>
       )}
 
-          <AppointmentCompletedConfirmationModal 
-            isOpen={showAppointmentCompletedConfirmationModal}
-            closeModal={()=>handleAppointmentCompletedClick(null)}
-            product={selectedProduct}
-            onAppointmentCompleted={getProductCatalogs}
-            />    
+      <AppointmentCompletedConfirmationModal
+        isOpen={showAppointmentCompletedConfirmationModal}
+        closeModal={() => handleAppointmentCompletedClick(null)}
+        product={selectedProduct}
+        onAppointmentCompleted={getProductCatalogs}
+      />
     </div>
   );
 };
