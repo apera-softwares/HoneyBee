@@ -134,6 +134,31 @@ export const deleteReferral = createAsyncThunk(
   }
 );
 
+export const fetchPayout = createAsyncThunk(
+  "referral/fetchPayout",
+  async (_:void, thunkAPI) => {
+    try {
+      const state: any = thunkAPI.getState();
+      const token = state.user?.user?.token;
+
+    
+
+      const response = await axios.get(
+        `${BACKEND_API}lead/payout`,
+        {
+          headers: { Authorization: `Bearer ${token}`,   'ngrok-skip-browser-warning': 'true', },
+          
+        }
+      );
+      return response.data;
+    } catch (error: any) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to fetch product catalogs"
+      );
+    }
+  }
+);
+
 
 interface ReferralSliceState {
   referralList: any[];
@@ -197,6 +222,20 @@ const referralSlice = createSlice({
         state.error = null;
       })
       .addCase(fetchOverrideEarnings.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      });
+    // Fetch
+    builder
+      .addCase(fetchPayout.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(fetchPayout.fulfilled, (state) => {
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(fetchPayout.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });
