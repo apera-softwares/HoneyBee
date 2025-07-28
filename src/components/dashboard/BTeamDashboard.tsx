@@ -6,7 +6,7 @@ import StatisticsPieChart from "../statistic-charts/StatisticsPieChart";
 import axios from "axios";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { BACKEND_API } from "@/api";
-import DashboardProductsTable from "../product-catalog/DashboardProductsTable";
+//import DashboardProductsTable from "../product-catalog/DashboardProductsTable";
 
 const BTeamDashboard = () => {
   const [team, setTeam] = useState<any>(null);
@@ -101,9 +101,9 @@ const BTeamDashboard = () => {
         </div>
       )}
 
-      <div className="w-full mt-5">
+      {/* <div className="w-full mt-5">
         <DashboardProductsTable />
-      </div>
+      </div> */}
     </div>
   );
 };

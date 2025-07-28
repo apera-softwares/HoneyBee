@@ -2,7 +2,7 @@
 import React from "react";
 import StatisticsAreaChart from "../statistic-charts/StatisticsAreaChart";
 import StatisticsPieChart from "../statistic-charts/StatisticsPieChart";
-import DashboardProductsTable from "../product-catalog/DashboardProductsTable";
+//import DashboardProductsTable from "../product-catalog/DashboardProductsTable";
 
 const ATeamDashboard = () => {
   return (
@@ -16,9 +16,9 @@ const ATeamDashboard = () => {
         </div>
       </div>
 
-      <div className="w-full mt-5">
+      {/* <div className="w-full mt-5">
         <DashboardProductsTable />
-      </div>
+      </div> */}
     </div>
   );
 };
