@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect } from "react";
+import React, {useState,useEffect } from "react";
 import {
     Table,
     TableBody,
@@ -18,6 +18,7 @@ import Spinner from "../common/Spinner";
 import Pagination from "../tables/Pagination";
 import { Toaster } from "react-hot-toast";
 import { capitalizeWords } from "@/utils/stringUtils";
+import AppointmentCompletedConfirmationModal from "./AppointmentCompletedConfirmationModal";
 
 interface FiltersState {
     searchQuery:string,
@@ -42,6 +43,8 @@ const ProductCatalogTable: React.FC<ProductCatalogTableProps> = ({ filters,pagin
 
     const dispatch = useDispatch<AppDispatch>();
     const {productCatalogs, loading } = useSelector((state: RootState) => state.productCatalog);
+     const [showAppointmentCompletedConfirmationModal,setShowAppointmentCompletedConfirmationModal]=useState<boolean>(false);
+     const [selectedProduct,setSelectedProduct] = useState<any>(null);
 
     useEffect(() => {
 
@@ -73,6 +76,21 @@ const ProductCatalogTable: React.FC<ProductCatalogTableProps> = ({ filters,pagin
         setPaginationData((prev:PaginationState)=>({...prev,currentPage:page}));
     };
 
+    const handleAppointmentCompletedClick = (product:any)=>{
+
+        if(product)
+        {
+            setSelectedProduct(product);
+            setShowAppointmentCompletedConfirmationModal(true);
+            return;
+        }
+        setSelectedProduct(null);
+        setShowAppointmentCompletedConfirmationModal(false);
+
+    }
+
+    
+
 
 
     return (
@@ -91,6 +109,7 @@ const ProductCatalogTable: React.FC<ProductCatalogTableProps> = ({ filters,pagin
                                     <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Estimated Price</TableCell>
                                     <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Sold Price</TableCell>
                                     <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Status</TableCell>
+                                    <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Appointment Completed</TableCell>
                                     {/* <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Elevator Pitch</TableCell> */}
                                     <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Actions</TableCell>
                                 </TableRow>
@@ -132,6 +151,23 @@ const ProductCatalogTable: React.FC<ProductCatalogTableProps> = ({ filters,pagin
                                             )}
 
                                             </TableCell> */}
+                                             <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+
+                                                {
+                                                    product?.AppointmentCompleted ? ( <Badge
+                                                    size="md"
+                                                    color={"success"}
+                                                >
+                                                    Completed
+                                                </Badge>):( <button className="w-28 flex justify-center items-center font-medium text-primary bg-primary/10 px-4 py-1 rounded-full gap-2 disabled:cursor-not-allowed cursor-pointer" onClick={() =>{
+                                                        handleAppointmentCompletedClick(product);
+                                                    }}>
+                                                 <FaRegEye className="h-5 w-5 text-primary cursor-pointer "  />
+                                                    Mark As Completed
+                                               </button>)
+                                                }
+                                                   
+                                            </TableCell>
                                             <TableCell className="px-5 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                                               <div className="flex flex-col items-start gap-1">
                                                 <button className="w-24 flex justify-center items-center font-medium text-primary bg-primary/10 px-4 py-1 rounded-full gap-2 disabled:cursor-not-allowed cursor-pointer" onClick={() =>onEdit(product)}>
@@ -167,6 +203,13 @@ const ProductCatalogTable: React.FC<ProductCatalogTableProps> = ({ filters,pagin
                 <Pagination currentPage={paginationData.currentPage} totalPages={paginationData.totalPages } onPageChange={handlePageChange} />
 
             </div>)}
+
+            <AppointmentCompletedConfirmationModal 
+            isOpen={showAppointmentCompletedConfirmationModal}
+            closeModal={()=>handleAppointmentCompletedClick(null)}
+            product={selectedProduct}
+            onAppointmentCompleted={getProductCatalogs}
+            />        
             
         
           

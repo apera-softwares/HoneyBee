@@ -1,5 +1,5 @@
 "use client";
-import React, {  useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Table,
   TableBody,
@@ -17,6 +17,7 @@ import { FaRegEye } from "react-icons/fa";
 import { FaCheck } from "react-icons/fa";
 import { ImCross } from "react-icons/im";
 import { capitalizeWords } from "@/utils/stringUtils";
+import AppointmentCompletedConfirmationModal from "./AppointmentCompletedConfirmationModal";
 
 interface FiltersState {
   searchQuery: string;
@@ -52,6 +53,8 @@ const ProductSelectTable: React.FC<ProductSelectTableProps> = ({
   const dispatch = useAppDispatch();
   const LIMIT = 5;
   const { productCatalogs, loading } = useAppSelector((state) => state.productCatalog);
+       const [showAppointmentCompletedConfirmationModal,setShowAppointmentCompletedConfirmationModal]=useState<boolean>(false);
+     const [selectedProduct,setSelectedProduct] = useState<any>(null);
   
   useEffect(() => {
     getProductCatalogs();
@@ -87,6 +90,20 @@ const ProductSelectTable: React.FC<ProductSelectTableProps> = ({
     }));
   };
 
+
+      const handleAppointmentCompletedClick = (product:any)=>{
+
+        if(product)
+        {
+            setSelectedProduct(product);
+            setShowAppointmentCompletedConfirmationModal(true);
+            return;
+        }
+        setSelectedProduct(null);
+        setShowAppointmentCompletedConfirmationModal(false);
+
+    }
+
   return (
     <div className="w-full overflow-hidden rounded-xl bg-white dark:bg-white/[0.03] shadow-md">
       <div className="w-full overflow-x-auto">
@@ -121,6 +138,7 @@ const ProductSelectTable: React.FC<ProductSelectTableProps> = ({
                   >
                     Status
                   </TableCell>
+                   <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Appointment Completed</TableCell>
                   {/* <TableCell
                     isHeader
                     className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400"
@@ -171,6 +189,24 @@ const ProductSelectTable: React.FC<ProductSelectTableProps> = ({
                               ? `${product.elevatorPitch.slice(0, 40)}...`
                               : product.elevatorPitch)}
                         </TableCell> */}
+
+                               <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
+
+                                                {
+                                                    product?.AppointmentCompleted ? ( <Badge
+                                                    size="md"
+                                                    color={"success"}
+                                                >
+                                                    Completed
+                                                </Badge>):( <button className="w-28 flex justify-center items-center font-medium text-primary bg-primary/10 px-4 py-1 rounded-full gap-2 disabled:cursor-not-allowed cursor-pointer" onClick={() =>{
+                                                        handleAppointmentCompletedClick(product);
+                                                    }}>
+                                                 <FaRegEye className="h-5 w-5 text-primary cursor-pointer "  />
+                                                    Mark As Completed
+                                               </button>)
+                                                }
+                                                   
+                                            </TableCell>
                         <TableCell className="px-5 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                         <div className="flex flex-col items-start gap-1">
                                                     {isSelected ? (
@@ -230,6 +266,13 @@ const ProductSelectTable: React.FC<ProductSelectTableProps> = ({
           />
         </div>
       )}
+
+          <AppointmentCompletedConfirmationModal 
+            isOpen={showAppointmentCompletedConfirmationModal}
+            closeModal={()=>handleAppointmentCompletedClick(null)}
+            product={selectedProduct}
+            onAppointmentCompleted={getProductCatalogs}
+            />    
     </div>
   );
 };
