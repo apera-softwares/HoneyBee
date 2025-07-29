@@ -14,18 +14,10 @@ export default function TeamManagement() {
   const [searchInput,setSearchInput] = useState("");
   const [order] = useState("");
   const { user: loggedUser } = useAppSelector((state) => state.user);
-  const {  loading } = useAppSelector((state) => state.teamManagement);
+  const {  loading,teams } = useAppSelector((state) => state.teamManagement);
 
-  const showCreateTeamButton =
-    loggedUser?.role === UserRole.ADMIN  ||
-    loading;
-    /**
- * NOTE:
- * B_TEAM users are currently **not allowed to create teams**,
- * However, in the future we may allow B_TEAM members to create a team
- * To prepare for this, you may keep the below logic saved for future use:
- * (loggedUser?.role === UserRole.B_TEAM && teams.length === 0)
- */
+  const showCreateTeamButton = loggedUser?.role === UserRole.ADMIN ||(loggedUser?.role === UserRole.B_TEAM && teams.length === 0) || loading;
+
   return (
     <div className="w-full">
       <Toaster />
