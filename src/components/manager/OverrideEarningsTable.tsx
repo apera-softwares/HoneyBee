@@ -12,6 +12,7 @@ import Spinner from "../common/Spinner";
 //import { CHART_RANGES } from "@/data/chartRanges";
 // import { IoChevronDownSharp } from "react-icons/io5";
 import { fetchOverrideEarnings } from "@/lib/redux/slices/referralSlice";
+import { capitalizeWord } from "@/utils/stringUtils";
 
 const OverrideEarningsTable = () => {
   // const ITEM_PER_PAGE = 5;
@@ -145,7 +146,7 @@ const OverrideEarningsTable = () => {
                 {overrideEarnings.length > 0 ? (
                   overrideEarnings.map((item: any, index: number) => {
                     return (
-                      <TableRow key={item?.id}>
+                      <TableRow key={index}>
                         <TableCell className="px-5 py-4 text-start">
                           <span className="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
                             { index + 1}
@@ -153,7 +154,7 @@ const OverrideEarningsTable = () => {
                         </TableCell>
                         <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
        
-                            {`${item?.managerName || ""}`}
+                            {`${capitalizeWord(item?.managerName)}`}
 
                         </TableCell>
                         <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">

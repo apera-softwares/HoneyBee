@@ -5,6 +5,7 @@ import { UserRole } from "@/constant/userRoles";
 import AdminDashboard from "@/components/dashboard/AdminDashboard";
 import ATeamDashboard from "@/components/dashboard/ATeamDashboard";
 import BTeamDashboard from "@/components/dashboard/BTeamDashboard";
+import ReferralTable from "@/components/referral/ReferralTable";
 
 export default function Dashboard() {
   const { user: loggedInUser } = useAppSelector((state) => state.user);
@@ -18,6 +19,10 @@ export default function Dashboard() {
       ) : (
         <BTeamDashboard />
       )}
+
+      <div className="py-6">
+        <ReferralTable searchText="" status=""/>
+      </div>
     </div>
   );
 }

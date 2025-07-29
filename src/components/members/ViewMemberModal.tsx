@@ -6,6 +6,7 @@ import { BiSolidEditAlt } from "react-icons/bi";
 //import Image from "next/image";
 import { TbArrowNarrowLeft, TbArrowNarrowRight } from "react-icons/tb";
 import { BACKEND_API } from "@/api";
+import { capitalizeWord, capitalizeWords } from "@/utils/stringUtils";
 
 interface ViewMemberModalProps {
   isOpen: boolean;
@@ -59,14 +60,14 @@ const ViewMemberModal: React.FC<ViewMemberModalProps> = ({
           {/* Team Member Info */}
           <div className="px-4 py-3 border rounded-md bg-gray-50 mb-6">
             <p className="font-semibold text-gray-800">
-              Name: {user?.teamMember?.user?.firstName}{" "}
-              {user?.teamMember?.user?.lastName}
+              {`Name: ${capitalizeWord(user?.teamMember?.user?.firstName)} 
+              ${capitalizeWord(user?.teamMember?.user?.lastName)}`}
             </p>
             <p className="text-sm text-gray-600 mt-1">
               Email: {user?.teamMember?.user?.email || "N/A"}
             </p>
             <p className="text-sm text-gray-600 mt-1">
-              Team: {user?.teamMember?.team?.name}
+              Team: {capitalizeWords(user?.teamMember?.team?.name)}
             </p>
           </div>
           {user?.product && (
@@ -132,7 +133,7 @@ const ViewMemberModal: React.FC<ViewMemberModalProps> = ({
               {/* Product Info */}
               <div className="w-full sm:w-1/2 flex flex-col justify-center">
                 <h2 className="text-lg sm:text-xl font-bold text-gray-800 mb-2">
-                  {user.product.name}
+                  {capitalizeWords(user?.product?.name)}
                 </h2>
                 <ul className="space-y-1 max-h-32 overflow-y-auto pr-1 text-sm text-gray-600">
                   {bulletPoints.map((point: string, idx: number) => (

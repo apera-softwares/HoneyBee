@@ -14,12 +14,9 @@ export default function TeamManagement() {
   const [searchInput,setSearchInput] = useState("");
   const [order] = useState("");
   const { user: loggedUser } = useAppSelector((state) => state.user);
-  const { teams, loading } = useAppSelector((state) => state.teamManagement);
+  const {  loading,teams } = useAppSelector((state) => state.teamManagement);
 
-  const showCreateTeamButton =
-    loggedUser?.role === UserRole.ADMIN ||
-    (loggedUser?.role === UserRole.B_TEAM && teams.length === 0) ||
-    loading;
+  const showCreateTeamButton = loggedUser?.role === UserRole.ADMIN ||(loggedUser?.role === UserRole.B_TEAM && teams.length === 0) || loading;
 
   return (
     <div className="w-full">

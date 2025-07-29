@@ -4,11 +4,13 @@ import StatisticsAreaChart from "../statistic-charts/StatisticsAreaChart";
 import TeamAndMemberListing from "@/components/team/TeamAndMemberListing";
 import StatisticsPieChart from "../statistic-charts/StatisticsPieChart";
 import axios from "axios";
-import { useAppSelector } from "@/lib/redux/hooks";
+import {useAppSelector } from "@/lib/redux/hooks";
 import { BACKEND_API } from "@/api";
-import DashboardProductsTable from "../product-catalog/DashboardProductsTable";
+//import DashboardProductsTable from "../product-catalog/DashboardProductsTable";
+import PayoutTable from "../referral/PayoutTable";
 
 const BTeamDashboard = () => {
+
   const [team, setTeam] = useState<any>(null);
   const [teamMembers, setTeamMembers] = useState<any>([]);
   const { user: loggedInUser } = useAppSelector((state) => state.user);
@@ -65,7 +67,6 @@ const BTeamDashboard = () => {
           "ngrok-skip-browser-warning": "true",
         },
       });
-
       const teamsMembersData = response.data?.data || [];
       setTeamMembers(teamsMembersData);
     } catch (error: any) {
@@ -94,16 +95,19 @@ const BTeamDashboard = () => {
           <StatisticsAreaChart />
         </div>
       </div>
+      <div className="mb-5">
+        <PayoutTable/>
+      </div>
 
       {team?.teamId && (
-        <div className="w-full ">
+        <div className="w-full mb-5">
           <TeamAndMemberListing team={team} teamMembers={teamMembers} />
         </div>
       )}
 
-      <div className="w-full mt-5">
+      {/* <div className="w-full">
         <DashboardProductsTable />
-      </div>
+      </div> */}
     </div>
   );
 };

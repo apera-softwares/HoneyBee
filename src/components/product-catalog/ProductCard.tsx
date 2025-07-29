@@ -2,6 +2,7 @@
 //import Image from "next/image";
 import React, { useState } from "react";
 import { TbArrowNarrowLeft, TbArrowNarrowRight } from "react-icons/tb";
+import { capitalizeWords } from "@/utils/stringUtils";
 
 interface ProductCardProps {
   title: string;
@@ -76,7 +77,7 @@ const ProductCard: React.FC<ProductCardProps> = ({
 
       {/* Right: Content */}
       <div className="w-[50%] flex flex-col justify-center">
-        <h2 className=" h-16 text-xl font-bold text-gray-800 mb-2 ">{title?.length > 20 ? `${title?.slice(0,20)}...`: title||""}</h2>
+        <h2 className=" h-16 text-xl font-bold text-gray-800 mb-2 ">{title?.length > 20 ? `${capitalizeWords(title?.slice(0,20))}...`: `${capitalizeWords(title)}`}</h2>
         <ul className=" mb-4  h-20 overflow-y-auto no-scrollbar ">
           {points.map((point, idx) => (
             <li key={idx} className="text-gray-600 text-sm leading-relaxed">

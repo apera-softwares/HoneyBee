@@ -4,6 +4,7 @@ import ChangeTeamModal from "./ChangeTeamModal";
 import { FiEdit } from "react-icons/fi";
 import { BACKEND_API } from "@/api";
 import { DEFAULT_PROFILE_IMAGE } from "@/constant/defaultImages";
+import { capitalizeWord, capitalizeWords } from "@/utils/stringUtils";
 interface TeamAndMemberListing {
   team: any;
   teamMembers: any[];
@@ -25,7 +26,7 @@ const TeamAndMemberListing: React.FC<TeamAndMemberListing> = ({ team, teamMember
 
       <div className="w-full ">
         <h2 className=" text-lg font-medium mb-6 pb-2  border-b border-gray-100">
-          {team?.team?.name || ""}
+          {capitalizeWords(team?.team?.name)}
         </h2>
         <div className="w-full">
           <h2 className=" mb-2 text-sm font-medium ">Members</h2>
@@ -42,8 +43,7 @@ const TeamAndMemberListing: React.FC<TeamAndMemberListing> = ({ team, teamMember
                       className=" flex items-center gap-2 text-sm px-2 py-1.5  rounded-md"
                     >
                       <img src={imgSrc} alt="Profile" className="w-6 h-6 object-cover object-center border border-primary rounded-full" />
-                     <span className="">{`${member?.user?.firstName || ""} ${member?.user?.lastName || ""
-                      }`}</span>
+                     <span className="">{`${capitalizeWord(member?.user?.firstName)} ${capitalizeWord(member?.user?.lastName)}`}</span>
                     </li>
                   )
                 })

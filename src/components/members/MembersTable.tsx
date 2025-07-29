@@ -17,6 +17,7 @@ import ViewMemberModal from "./ViewMemberModal";
 import { FiEdit } from "react-icons/fi";
 import { BACKEND_API } from "@/api";
 import { DEFAULT_PROFILE_IMAGE } from "@/constant/defaultImages";
+import { capitalizeWord,capitalizeWords } from "@/utils/stringUtils";
 
 interface TeamTableProps {
   searchText: string;
@@ -155,7 +156,7 @@ const AssignedMembersTable: React.FC<TeamTableProps> = ({
                               className="w-8 h-8  object-cover object-center rounded-full border border-primary"
                             />
                             <span className="">
-                            {`${user?.teamMember?.user?.firstName||""} ${user?.teamMember?.user?.lastName||""}`}
+                            {`${capitalizeWord(user?.teamMember?.user?.firstName)} ${capitalizeWord(user?.teamMember?.user?.lastName)} `}
                             </span>
                           </div>
                         </TableCell>
@@ -163,12 +164,12 @@ const AssignedMembersTable: React.FC<TeamTableProps> = ({
                           {user?.teamMember?.user?.email}
                         </TableCell>
                         <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                          {user?.teamMember?.team?.name}
+                          {capitalizeWords(user?.teamMember?.team?.name)}
                         </TableCell>
                         <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                           {user?.product?.name?.length > 32
-                            ? `${user?.product?.name?.slice(0, 32)}...`
-                            : `${user?.product?.name}`}
+                            ? `${capitalizeWords(user?.product?.name?.slice(0, 32))}...`
+                            : `${capitalizeWords(user?.product?.name)}`}
                         </TableCell>
                         <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                           <button
