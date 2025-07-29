@@ -180,7 +180,7 @@ const ReferralTable: React.FC<ReferralTableProps> = ({
                       ? `${BACKEND_API}uploads/${item?.referredBy?.user?.media?.[0]?.imageName}`
                       : DEFAULT_PROFILE_IMAGE;
                     return (
-                      <TableRow key={item?.id}>
+                      <TableRow key={item.id}>
                         <TableCell className="px-5 py-4 text-start">
                           <span className="block font-medium text-gray-800 text-theme-sm dark:text-white/90">
                             {(currentPage - 1) * ITEM_PER_PAGE + index + 1}

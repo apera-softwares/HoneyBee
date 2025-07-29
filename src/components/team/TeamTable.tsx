@@ -16,6 +16,7 @@ import { MdRemoveRedEye } from "react-icons/md";
 import { useRouter } from "next/navigation";
 import { useAppSelector,useAppDispatch } from "@/lib/redux/hooks";
 import { UserRole } from "@/constant/userRoles";
+import { capitalizeWords } from "@/utils/stringUtils";
 
 
 interface TeamTableProps {
@@ -121,7 +122,7 @@ const TeamTable: React.FC<TeamTableProps> = ({ searchText, role, order,isCreateT
                                                 </span>
                                             </TableCell>
                                             <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                                                {user?.name}
+                                                {capitalizeWords(user?.name)}
                                             </TableCell>
                                             {/*                                          
                                             <TableCell className="px-4 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">

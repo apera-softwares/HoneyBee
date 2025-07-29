@@ -164,7 +164,7 @@ const AssignedMembersTable: React.FC<TeamTableProps> = ({
                           {user?.teamMember?.user?.email}
                         </TableCell>
                         <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                          {user?.teamMember?.team?.name}
+                          {capitalizeWords(user?.teamMember?.team?.name)}
                         </TableCell>
                         <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                           {user?.product?.name?.length > 32

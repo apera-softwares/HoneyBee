@@ -60,14 +60,14 @@ const ViewMemberModal: React.FC<ViewMemberModalProps> = ({
           {/* Team Member Info */}
           <div className="px-4 py-3 border rounded-md bg-gray-50 mb-6">
             <p className="font-semibold text-gray-800">
-              {` Name: ${capitalizeWord(user?.teamMember?.user?.firstName)} 
+              {`Name: ${capitalizeWord(user?.teamMember?.user?.firstName)} 
               ${capitalizeWord(user?.teamMember?.user?.lastName)}`}
             </p>
             <p className="text-sm text-gray-600 mt-1">
               Email: {user?.teamMember?.user?.email || "N/A"}
             </p>
             <p className="text-sm text-gray-600 mt-1">
-              Team: {user?.teamMember?.team?.name}
+              Team: {capitalizeWords(user?.teamMember?.team?.name)}
             </p>
           </div>
           {user?.product && (

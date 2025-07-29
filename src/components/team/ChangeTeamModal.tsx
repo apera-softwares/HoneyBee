@@ -45,9 +45,8 @@ const ChangeTeamModal: React.FC<ChangeTeamModalProps> = ({
         page: 1,
         limit: ITEM_PER_PAGE,
       };
-      const res = await dispatch(fetchTeams(payload)).unwrap();
+      await dispatch(fetchTeams(payload)).unwrap();
 
-      console.log("response of get teams", res);
     } catch (error: any) {
       console.log(error?.message || "Failed to fetch products");
     }
