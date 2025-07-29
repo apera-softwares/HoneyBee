@@ -7,7 +7,7 @@ import axios from "axios";
 import {useAppSelector } from "@/lib/redux/hooks";
 import { BACKEND_API } from "@/api";
 //import DashboardProductsTable from "../product-catalog/DashboardProductsTable";
-import PayoutTable from "./PayoutTable";
+import PayoutTable from "../referral/PayoutTable";
 
 const BTeamDashboard = () => {
 

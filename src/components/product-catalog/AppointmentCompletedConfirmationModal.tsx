@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { Modal } from "../ui/modal";
 import Button from "../ui/button/Button";
-import { BiSolidEditAlt } from "react-icons/bi";
+import { BsBookmarkCheckFill } from "react-icons/bs";
 import toast, { Toaster } from "react-hot-toast";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import { updateProductCatalog } from "@/lib/redux/slices/productCatalogSlice";
@@ -34,7 +34,7 @@ const AppointmentCompletedConfirmationModal: React.FC<
       onAppointmentCompleted();
     } catch (error: any) {
       console.error("Error while appointment completed:", error);
-      const message = "Failed to mark as Appointment Completed";
+      const message = "Failed to mark as appointment completed";
       const errorMessage =
         typeof error === "string" ? error : error?.message || message;
       toast.error(errorMessage);
@@ -58,11 +58,11 @@ const AppointmentCompletedConfirmationModal: React.FC<
       <Toaster />
       <div className="w-full">
         {/* Header */}
-        <div className="w-full flex items-center mb-5">
-          <span className="bg-primary p-2 flex justify-center items-center rounded-full">
-            <BiSolidEditAlt className="text-white" size={20} />
+        <div className="w-full flex items-start gap-4 mb-5">
+          <span className="bg-primary p-2 flex justify-center items-center rounded-full mt-1">
+            <BsBookmarkCheckFill className="text-white text-xl shrink-0" />  
           </span>
-          <div className="ml-4">
+          <div className="">
             <h5 className="font-semibold text-gray-800 text-2xl  dark:text-white/90">
               Appointment Completed Confirmation
             </h5>
@@ -71,20 +71,19 @@ const AppointmentCompletedConfirmationModal: React.FC<
 
         {/* Status Dropdown */}
 
-        <div className="px-2 rounded-md bg-gray-50 flex justify-between items-center mb-5">
+        <div className="px-2 mb-5">
           <div>
-            <p className="font-semibold text-center">
+            <p className="font-medium text-center">
               Are you sure you want to mark as appointment completed ?
             </p>
             <p className="text-sm text-gray-500"></p>
           </div>
         </div>
-        <div className="my-6"></div>
 
         {/* Buttons */}
         <div className="flex items-center justify-end w-full gap-3 mt-4 ">
           <Button size="sm" disabled={loading} onClick={handleSubmit}>
-            Yes,Sure
+            Yes, Sure
           </Button>
           <Button
             size="sm"
@@ -92,7 +91,7 @@ const AppointmentCompletedConfirmationModal: React.FC<
             disabled={loading}
             onClick={closeModal}
           >
-            No,Cancel
+            No, Cancel
           </Button>
         </div>
       </div>

@@ -140,9 +140,6 @@ export const fetchPayout = createAsyncThunk(
     try {
       const state: any = thunkAPI.getState();
       const token = state.user?.user?.token;
-
-    
-
       const response = await axios.get(
         `${BACKEND_API}lead/payout`,
         {

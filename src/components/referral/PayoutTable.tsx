@@ -28,7 +28,6 @@ const PayoutTable= () => {
     setLoading(true);
     try {
       const response = await dispatch(fetchPayout()).unwrap();
-      console.log("response of fetch payoutin compoenn", response);
       setPayout(response);
     } catch (error: any) {
       console.log(error?.message || "Failed to fetch payout");
@@ -38,7 +37,7 @@ const PayoutTable= () => {
   };
 
   return (
-    <div className="w-full overflow-hidden  rounded-xl bg-white dark:bg-white/[0.03] shadow-md">
+    <div className="w-full overflow-hidden  rounded-xl bg-white border border-gray-200 shadow-md">
     <Toaster />
     <div className="px-5 mt-5 mb-2 "><h2 className="font-medium text-[#1F1C3B]">Payout</h2></div>
       <div className="w-full overflow-x-auto">
@@ -78,16 +77,16 @@ const PayoutTable= () => {
               <TableBody>
                 <TableRow>
                   <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {payout?.selfEarningAsTeamMembe?._sum?.submittingMemberAmount ? `$${payout?.selfEarningAsTeamMembe?._sum?.submittingMemberAmount}`:"NA"}
+                    {payout?.selfEarningAsTeamMember?._sum?.submittingMemberAmount ? `$ ${payout?.selfEarningAsTeamMember?._sum?.submittingMemberAmount}`:"NA"}
                   </TableCell>
                   <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                    {payout?.selfEarningAsL1Manager?.[0]?._sum?.managerOverridesL1Amount ? `$${payout?.selfEarningAsL1Manager?.[0]?._sum?.managerOverridesL1Amount}`:"NA"}
+                    {payout?.selfEarningAsL1Manager?.[0]?._sum?.managerOverridesL1Amount ? `$ ${payout?.selfEarningAsL1Manager?.[0]?._sum?.managerOverridesL1Amount}`:"NA"}
                   </TableCell>
                   <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                       {payout?.selfEarningAsL2Manager?.[0]?._sum?.managerOverridesL2Amount ? `$${payout?.selfEarningAsL2Manager?.[0]?._sum?.managerOverridesL2Amount}`:"NA"}
+                       {payout?.selfEarningAsL2Manager?.[0]?._sum?.managerOverridesL2Amount ? `$ ${payout?.selfEarningAsL2Manager?.[0]?._sum?.managerOverridesL2Amount}`:"NA"}
                   </TableCell>
                   <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
-                     {payout?.selfEarningAsL3Manager?.[0]?._sum?.managerOverridesL3Amount ? `$${payout?.selfEarningAsL3Manager?.[0]?._sum?.managerOverridesL3Amount}`:"NA"}
+                     {payout?.selfEarningAsL3Manager?.[0]?._sum?.managerOverridesL3Amount ? `$ ${payout?.selfEarningAsL3Manager?.[0]?._sum?.managerOverridesL3Amount}`:"NA"}
                   </TableCell>
                 </TableRow>
               </TableBody>
