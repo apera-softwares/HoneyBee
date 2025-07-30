@@ -76,23 +76,31 @@ interface LineChartItem {
 
 interface StatisticsState {
   pieChartLeads: {
+    weekly:PieChartItem[];
     monthly:PieChartItem[];
+    querterly:PieChartItem[];
     yearly:PieChartItem[];
     lifetime:PieChartItem[];
     totalLeads:any
   };
   lineChartLeads:{
+    weekly:LineChartItem[];
     monthly:LineChartItem[];
+    quarterly:LineChartItem[];
     yearly:LineChartItem[];
     lifetime:LineChartItem[];
   };
   lineChartEarnings:{
+    weekly:any[];
     monthly:any[];
+    quarterly:any[];
     yearly:any[];
     lifetime:any[];
   };
   pieChartEarnings:{
+    weekly:PieChartItem[];
     monthly:PieChartItem[];
+    quarterly:PieChartItem[];
     yearly:PieChartItem[];
     lifetime:PieChartItem[];
     totalEarnings:any;
@@ -104,23 +112,31 @@ interface StatisticsState {
 
 const initialState: StatisticsState = {
   pieChartLeads: {
+    weekly:[],
     monthly:[],
+    querterly:[],
     yearly:[],
     lifetime:[],
     totalLeads:""
   },
   lineChartLeads:{
+    weekly:[],
     monthly:[],
+    quarterly:[],
     yearly:[],
     lifetime:[],
   },
   lineChartEarnings:{
+    weekly:[],
     monthly:[],
+    quarterly:[],
     yearly:[],
     lifetime:[],
   },
   pieChartEarnings:{
+    weekly:[],
     monthly:[],
+    quarterly:[],
     yearly:[],
     lifetime:[],
     totalEarnings:""
@@ -144,7 +160,9 @@ const statisticsSlice = createSlice({
       .addCase(fetchStatisticsNumbers.fulfilled, (state, action) => {
         const data = action.payload;
         state.loading = false;
+        state.lineChartLeads.weekly = data?.leadByThisWeek?.map((item:any)=>({label:item?.week,count:item?.count}))||[];
         state.lineChartLeads.monthly = data?.leadsByDayMonth?.map((item:any)=>({label:item?.day_number,count:item?.count}))||[];
+        state.lineChartLeads.quarterly = data?.leadByQuarter?.map((item:any)=>({label:item?.quarter,count:item?.count}))||[];
         state.lineChartLeads.yearly = data?.leadsByMonth?.map((item:any)=>({label:item?.month?.slice(0,3),count:item?.count}))||[];
         state.lineChartLeads.lifetime = data?.leadsByLifeTime?.map((item:any)=>({label:item?.year_number,count:item?.count}))||[];
         state.pieChartLeads.monthly = data?.leadsForMonthPerDayStatus?.map((item:any)=>({label:item?.status,count:item?.count}))||[];
@@ -152,7 +170,9 @@ const statisticsSlice = createSlice({
         state.pieChartLeads.lifetime = data?.leadStatusNumbers?.map((item:any)=>({label:item?.status,count:item?._count?.status}))||[];
         state.pieChartLeads.totalLeads = data?.totalLeads;
         //lineChartEarnings
+        state.lineChartEarnings.weekly = data?.leadAmountByWeek?.map((item:any)=>({count:item?.totalCommissionAmount}))||[];
         state.lineChartEarnings.monthly = data?.amountLeadsForMonthPerDay?.map((item:any)=>({count:item?.totalCommissionAmount}))||[];
+        state.lineChartEarnings.quarterly = data?.leadAmountByQuarter?.map((item:any)=>({count:item?.totalCommissionAmount}))||[];
         state.lineChartEarnings.yearly = data?.leadAmountInMonths?.map((item:any)=>({count:item?.totalEarnings}))||[];
         state.lineChartEarnings.lifetime = data?.leadAmountByYear?.map((item:any)=>({count:item?.totalCommissionAmount}))||[];
         state.pieChartEarnings.monthly = data?.amountLeadsForMonthPerDayStatus?.map((item:any)=>({label:item?.status,count:item?.totalCommissionAmount}))||[];

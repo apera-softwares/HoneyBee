@@ -166,7 +166,7 @@ export default function StatisticsPieChart() {
           <div ref={dropdownRef} className="relative inline-block w-36 text-sm">
             <button
               onClick={() => setIsOpen((prev) => !prev)}
-              className="w-full flex items-center justify-between gap-2 px-4 py-2 text-sm bg-white border border-gray-600 hover:border-gray-700 rounded-md shadow-sm  focus:outline-none"
+              className="w-full flex items-center justify-between gap-2 px-4 py-2 text-sm bg-white border border-gray-600 hover:border-gray-700 rounded-md   focus:outline-none"
             >
               <span className="text-nowrap">{selected.label}</span>{" "}
               <IoChevronDownSharp className="" />
