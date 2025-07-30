@@ -14,7 +14,7 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const { isExpanded, isHovered, isMobileOpen } = useSidebar();
-
+[]
   // Dynamic class for main content margin based on sidebar state
   const mainContentMargin = isMobileOpen
     ? "ml-0"
@@ -32,7 +32,7 @@ export default function AdminLayout({
           />
         </div>
         {/* Sidebar and Backdrop */}
-        <AppSidebar />
+        <AppSidebar /> 
         <Backdrop />
         {/* Main Content Area */}
         <div
