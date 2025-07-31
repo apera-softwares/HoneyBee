@@ -50,7 +50,6 @@ export default function MemberManagement() {
                         <option value="asc">asc to des</option>
                         <option value="desc">des to asc</option>
                     </select>
-
                 </div>
             </div>
 

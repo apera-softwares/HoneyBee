@@ -1,12 +1,12 @@
 "use client";
-import React, { useState, useEffect,useMemo } from "react";
+import React, { useState, useEffect,useMemo,useRef } from "react";
 // import Chart from "react-apexcharts";
 import { ApexOptions } from "apexcharts";
-import ChartTab from "../common/ChartTab";
 import dynamic from "next/dynamic";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { CHART_RANGES } from "@/data/chartRanges";
 import NoChartData from "../common/NoChartData";
+import { IoChevronDownSharp } from "react-icons/io5";
 // Dynamically import the ReactApexChart component
 const ReactApexChart = dynamic(() => import("react-apexcharts"), {
   ssr: false,
@@ -32,22 +32,37 @@ interface ChartData {
 export default function StatisticsAreaChart() {
 
   const {
-    lineChartLeads: { monthly:monthlyLeads,yearly:yearlyLeads, lifetime:lifetimeLeads },
-    lineChartEarnings:{monthly:monthlyEarning,yearly:yearlyRevenue, lifetime:lifetimeRevenue}
+    lineChartLeads: {weekly:weeklyLeads, monthly:monthlyLeads,quarterly:quarterlyLeads,yearly:yearlyLeads, lifetime:lifetimeLeads },
+    lineChartEarnings:{weekly:weeklyEarnings,monthly:monthlyEarning,quarterly:quarterlyEarnings,yearly:yearlyRevenue, lifetime:lifetimeRevenue}
   } = useAppSelector((state) => state.statistics);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+  const [isOpen, setIsOpen] = useState(false);
   const [chartData, setChartData] = useState<ChartData | null>(null);
   const [selected, setSelected] = useState<OptionItem>(CHART_RANGES[0]);
+
+    useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
   
   const transformedChartData = useMemo(() => {
     const selectedKey = selected.value;
 
     const leadData =
-      selectedKey === "monthly" ? monthlyLeads :
+      selectedKey === "weekly" ? weeklyLeads : selectedKey === "monthly" ? monthlyLeads : selectedKey === "quarterly" ? quarterlyLeads :
       selectedKey === "yearly" ? yearlyLeads :
       lifetimeLeads;
 
     const revenueData =
-      selectedKey === "monthly" ? monthlyEarning :
+      selectedKey === "weekly" ? weeklyEarnings : selectedKey === "monthly" ? monthlyEarning : selectedKey === "quarterly" ? quarterlyEarnings :
       selectedKey === "yearly" ? yearlyRevenue :
       lifetimeRevenue;
 
@@ -72,8 +87,13 @@ export default function StatisticsAreaChart() {
   }, [transformedChartData]);
 
 
-  const handleChange = (option: OptionItem) => {
+  // const handleChange = (option: OptionItem) => {
+  //   setSelected(option);
+  // };
+
+  const handleSelect = (option: (typeof CHART_RANGES)[0]) => {
     setSelected(option);
+    setIsOpen(false);
   };
 
 
@@ -182,21 +202,40 @@ export default function StatisticsAreaChart() {
 
   return (
     <div className="w-full h-full rounded-2xl border border-gray-200 bg-white px-5 py-5 sm:px-6 dark:border-gray-800 dark:bg-white/[0.03]">
-      <div className="flex flex-col  gap-3 sm:gap-5 mb-6  sm:flex-row items-start sm:items-center sm:justify-between">
-        <div className="w-full">
-          <p className="text-lg text-gray-700 dark:text-white/90">
-            Total leads submitted
-          </p>
-        </div>
-        <div className="flex items-start w-full gap-3 sm:justify-end">
-          <ChartTab
-            options={CHART_RANGES}
-            selected={selected}
-            onSelect={handleChange}
-          />
-        </div>
-      </div>
+      <div className="flex  items-center justify-between  mb-6 sm:mb-8">
+          <div className="">
+            <p className="text-lg text-gray-700 dark:text-white/90">
+              Total leads submitted
+            </p>
+          </div>
+          <div ref={dropdownRef} className="relative inline-block w-36 text-sm">
+            <button
+              onClick={() => setIsOpen((prev) => !prev)}
+              className="w-full flex items-center justify-between gap-2 px-4 py-2 text-sm bg-primary text-white border border-gray-200 hover:border-grray-300 rounded-md  focus:outline-none"
+            >
+              <span className="text-nowrap">{selected.label}</span>{" "}
+              <IoChevronDownSharp className="" />
+            </button>
 
+            {isOpen && (
+              <ul className="absolute z-10 mt-1 w-full bg-white border border-gray-200 rounded-md shadow-lg">
+                {CHART_RANGES.map((option) => (
+                  <li
+                    key={option.value}
+                    onClick={() => handleSelect(option)}
+                    className={`text-sm px-4 py-2 cursor-pointer hover:bg-gray-100 ${
+                      selected.value === option.value
+                        ? "bg-gray-100 font-medium"
+                        : ""
+                    }`}
+                  >
+                    {option.label}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </div>
+      </div>
       <div className="max-w-full overflow-x-auto custom-scrollbar">
         {!chartData ? (
             <NoChartData message="No data available"/>

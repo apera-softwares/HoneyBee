@@ -43,8 +43,8 @@ export default function StatisticsPieChart() {
 
 
   useEffect(() => {
-    const selectedData = selected.value === "monthly" ? monthlyLeads : selected.value === "yearly" ? yearlyLeads :  lifetimeLeads;
-    const selectedEarning = selected.value === "monthly" ? monthlyEarning : selected.value === "yearly" ? yearlyEarning :  lifetimeEarning;
+    const selectedData = selected.value === "weekly" ? yearlyLeads : selected.value === "monthly" ? monthlyLeads : selected.value === "quarterly" ? yearlyLeads : selected.value === "yearly" ? yearlyLeads :  lifetimeLeads;
+    const selectedEarning = selected.value === "weekly" ? yearlyEarning : selected.value === "monthly" ? monthlyEarning : selected.value === "quarterly" ? yearlyEarning : selected.value === "yearly" ? yearlyEarning :  lifetimeEarning;
 
     if (!selectedData || selectedData.length === 0) {
       setChartData(null);
@@ -166,7 +166,7 @@ export default function StatisticsPieChart() {
           <div ref={dropdownRef} className="relative inline-block w-36 text-sm">
             <button
               onClick={() => setIsOpen((prev) => !prev)}
-              className="w-full flex items-center justify-between gap-2 px-4 py-2 text-sm bg-white border border-gray-600 hover:border-gray-700 rounded-md shadow-sm  focus:outline-none"
+              className="w-full flex items-center justify-between gap-2 px-4 py-2 text-sm bg-white border border-gray-600 hover:border-gray-700 rounded-md   focus:outline-none"
             >
               <span className="text-nowrap">{selected.label}</span>{" "}
               <IoChevronDownSharp className="" />
