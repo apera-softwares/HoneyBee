@@ -43,8 +43,8 @@ export default function StatisticsPieChart() {
 
 
   useEffect(() => {
-    const selectedData = selected.value === "monthly" ? monthlyLeads : selected.value === "yearly" ? yearlyLeads :  lifetimeLeads;
-    const selectedEarning = selected.value === "monthly" ? monthlyEarning : selected.value === "yearly" ? yearlyEarning :  lifetimeEarning;
+    const selectedData = selected.value === "weekly" ? yearlyLeads : selected.value === "monthly" ? monthlyLeads : selected.value === "quarterly" ? yearlyLeads : selected.value === "yearly" ? yearlyLeads :  lifetimeLeads;
+    const selectedEarning = selected.value === "weekly" ? yearlyEarning : selected.value === "monthly" ? monthlyEarning : selected.value === "quarterly" ? yearlyEarning : selected.value === "yearly" ? yearlyEarning :  lifetimeEarning;
 
     if (!selectedData || selectedData.length === 0) {
       setChartData(null);
