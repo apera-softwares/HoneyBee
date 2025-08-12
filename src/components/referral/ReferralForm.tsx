@@ -571,6 +571,7 @@ const ReferralForm = () => {
                 type="text"
                 placeholder="City"
                 name="city"
+                readOnly
                 className={`${FORM_INPUT_CLASS}`}
                 value={formData.city}
                 onChange={handleChange}
@@ -646,6 +647,7 @@ const ReferralForm = () => {
                 type="text"
                 placeholder="State"
                 name="state"
+                readOnly
                 className={`${FORM_INPUT_CLASS}`}
                 value={formData.state}
                 onChange={handleChange}
