@@ -6,7 +6,7 @@ import { FORM_INPUT_CLASS, REQUIRED_ERROR } from "@/constant/constantClassName";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { createReferral } from "@/lib/redux/slices/referralSlice";
 import { fetchStatisticsNumbers } from "@/lib/redux/slices/statisticsSlice";
-import { fetchStateAndCity } from "@/lib/redux/slices/appSlice";
+import {  fetchAddress } from "@/lib/redux/slices/appSlice";
 import toast, { Toaster } from "react-hot-toast";
 import ProductDropdown from "../product-catalog/ProductDropdown";
 
@@ -22,29 +22,29 @@ interface FormDataState {
   teamMemberId: string;
   cityId?: string;
   stateId?: string;
+  city?: string;
+  state?: string;
 }
 
-type ParsedLocation = | {
-  type: "city";
-  cityId: number;
-  cityName: string;
-  stateName: string;
-  stateId: number;
-}
-  | {
-    type: "state";
-    stateId: number;
-    stateName: string;
-  };
+// type ParsedLocation =
+//   | {
+//       type: "city";
+//       cityId: number;
+//       cityName: string;
+//       stateName: string;
+//       stateId: number;
+//     }
+//   | {
+//       type: "state";
+//       stateId: number;
+//       stateName: string;
+//     };
 
-type LocationData = {
-  [key: string]: [number, "city", string, number] | [number, "state"];
-};
-
+// type LocationData = {
+//   [key: string]: [number, "city", string, number] | [number, "state"];
+// };
 
 const ReferralForm = () => {
-
-
   const dispatch = useAppDispatch();
   const [formData, setFormData] = useState<FormDataState>({
     firstName: "",
@@ -56,9 +56,9 @@ const ReferralForm = () => {
     notes: "",
     productId: "",
     teamMemberId: "",
-    cityId: "",
-    stateId: "",
-  })
+    city: "",
+    state: "",
+  });
   const [errors, setErrors] = useState<FormDataState>({
     firstName: "",
     lastName: "",
@@ -69,72 +69,148 @@ const ReferralForm = () => {
     notes: "",
     productId: "",
     teamMemberId: "",
-    cityId: "",
-    stateId: "",
-  })
+    city: "",
+    state: "",
+  });
   const [loading, setLoading] = useState<boolean>(false);
-  const [stateCityList, setStateCityList] = useState<any[]>([])
-  const [isStateCityDropdownOpen, setIsStateCityDropdownOpen] = useState(false);
-  const [stateCityName, setStateCityName] = useState('');
-  const [selectedStateCity, setSelectedStateCity] = useState<ParsedLocation | null>(null);
-  const stateCityDropdownRef = useRef<HTMLDivElement | null>(null);
-   const { selectedProducts } = useAppSelector((state) => state.productCatalog);
-  const {user:loggedInUser} = useAppSelector((state)=>state.user);
+  // const [stateCityList, setStateCityList] = useState<any[]>([])
+  // const [isStateCityDropdownOpen, setIsStateCityDropdownOpen] = useState(false);
+  // const [stateCityName, setStateCityName] = useState('');
+  // const [selectedStateCity, setSelectedStateCity] = useState<ParsedLocation | null>(null);
+  // const stateCityDropdownRef = useRef<HTMLDivElement | null>(null);
+  const { selectedProducts } = useAppSelector((state) => state.productCatalog);
+  const { user: loggedInUser } = useAppSelector((state) => state.user);
+
+  const [addressSearchQuery, setAddressSearchQuery] = useState<string>("");
+  const [addresses, setAddresses] = useState<any[]>([]);
+  const [selectedAddress, setSelectedAddress] = useState<any>(null);
+  const [addressLoading, setAddressLoading] = useState<boolean>(false);
+  const [showAddressDropdown, setShowAddressDropdown] =
+    useState<boolean>(false);
+  const addressDropdownRef = useRef<HTMLDivElement | null>(null);
+
+  // useEffect(() => {
+  //   document.addEventListener('mousedown', handleClickOutside);
+  //   return () => document.removeEventListener('mousedown', handleClickOutside);
+  // }, []);
+
+  // useEffect(() => {
+  //   const timeoutId = setTimeout(() => {
+  //     getStateAndCity();
+  //   }, 300);
+  //   return () => clearTimeout(timeoutId);
+  // }, [stateCityName]);
 
   useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutsideAddress);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutsideAddress);
+    };
   }, []);
 
-
   useEffect(() => {
-
     const timeoutId = setTimeout(() => {
-      getStateAndCity();
-    }, 300);
+      const trimmedAddressSearchQuery = addressSearchQuery.trim();
+      if (!trimmedAddressSearchQuery) return;
+      getAddress();
+    }, 800);
 
     return () => clearTimeout(timeoutId);
-  }, [stateCityName]);
+  }, [addressSearchQuery]);
 
+  const getAddress = async () => {
+    const trimmedAddressSearchQuery = addressSearchQuery.trim();
+    if (!trimmedAddressSearchQuery) return;
+    const payload = {
+      address: trimmedAddressSearchQuery,
+    };
 
-
-  const getStateAndCity = async () => {
-    const query = stateCityName.trim();
-
-    if (!query) {
-      setStateCityList([]);
-      return;
-    }
+    setAddressLoading(true);
     try {
-      const response = await dispatch(fetchStateAndCity(query)).unwrap();
-      const locationData = response?.data as LocationData;
-      const parsedLocations: ParsedLocation[] = Object.entries(locationData)?.map(([key, value]) => {
-        if (value[1] === "city") {
-          const [cityId, , stateName, stateId] = value;
-          return {
-            type: "city",
-            cityId,
-            cityName: key,
-            stateName,
-            stateId,
-          };
-        } else {
-          const [stateId] = value;
-          return {
-            type: "state",
-            stateId,
-            stateName: key,
-          };
-        }
-      });
-      setStateCityList(parsedLocations || []);
+      const response = await dispatch(fetchAddress(payload)).unwrap();
+      setAddresses(response?.results || []);
     } catch (error: any) {
-      setStateCityList([]);
-      console.log("error while fetching state and city", error);
-    } 
+      setAddresses([]);
+      console.log("error while fetching address", error);
+    } finally {
+      setAddressLoading(false);
+    }
   };
 
-   const getStatNumbers = async () => {
+  const handleClickOutsideAddress = (event: MouseEvent) => {
+    if (
+      addressDropdownRef.current &&
+      !addressDropdownRef.current.contains(event.target as Node)
+    ) {
+      setShowAddressDropdown(false);
+      setAddressSearchQuery("");
+      setAddresses([]);
+    }
+  };
+
+  const handleSelectAddress = (address: any) => {
+    setFormData((prev: FormDataState) => ({
+      ...prev,
+      address: address.formatted_address || "",
+      city: address.city || "",
+      state: address.state || "",
+      postalCode: address.postalCode || formData.postalCode,
+    }));
+    setSelectedAddress(address);
+    setAddresses([]);
+    setShowAddressDropdown(false);
+    setAddressSearchQuery("");
+  };
+
+  const handleRemoveSelectedAddress = () => {
+    setSelectedAddress(null);
+    setShowAddressDropdown(false);
+    setFormData((prev: FormDataState) => ({
+      ...prev,
+      address: "",
+      city: "",
+      state: "",
+      postalCode: "",
+    }));
+  };
+
+  // const getStateAndCity = async () => {
+  //   const query = stateCityName.trim();
+
+  //   if (!query) {
+  //     setStateCityList([]);
+  //     return;
+  //   }
+  //   try {
+  //     const response = await dispatch(fetchStateAndCity(query)).unwrap();
+  //     const locationData = response?.data as LocationData;
+  //     const parsedLocations: ParsedLocation[] = Object.entries(locationData)?.map(([key, value]) => {
+  //       if (value[1] === "city") {
+  //         const [cityId, , stateName, stateId] = value;
+  //         return {
+  //           type: "city",
+  //           cityId,
+  //           cityName: key,
+  //           stateName,
+  //           stateId,
+  //         };
+  //       } else {
+  //         const [stateId] = value;
+  //         return {
+  //           type: "state",
+  //           stateId,
+  //           stateName: key,
+  //         };
+  //       }
+  //     });
+  //     setStateCityList(parsedLocations || []);
+  //   } catch (error: any) {
+  //     setStateCityList([]);
+  //     console.log("error while fetching state and city", error);
+  //   }
+  // };
+
+  const getStatNumbers = async () => {
     try {
       await dispatch(fetchStatisticsNumbers()).unwrap();
     } catch (error: any) {
@@ -142,20 +218,16 @@ const ReferralForm = () => {
     }
   };
 
-
   const handleSubmitReferrals = async () => {
-    
     if (!validateFormData()) return;
     setLoading(true);
-    
-    try {
 
-      const payload = {...formData,teamMemberId:loggedInUser?.userId}; 
+    try {
+      const payload = { ...formData, teamMemberId: loggedInUser?.userId };
       await dispatch(createReferral(payload)).unwrap();
       toast.success("Referral created successfully");
       handleClearFormData();
       getStatNumbers();
-
     } catch (error: any) {
       console.error("Error while creating referral:", error);
       const errorMessage =
@@ -164,18 +236,16 @@ const ReferralForm = () => {
           : error?.message || "Failed to create referral.";
 
       toast.error(errorMessage);
-    }
-    finally {
+    } finally {
       setLoading(false);
     }
   };
-
 
   const validateFormData = () => {
     let isValidData = true;
     const tempErrors = { ...errors };
 
-    const nameRegex = /^[A-Za-z]+(-[A-Za-z]+)*$/;;
+    const nameRegex = /^[A-Za-z]+(-[A-Za-z]+)*$/;
     // Validate firstName
     if (formData.firstName.trim() === "") {
       tempErrors.firstName = "First name is required";
@@ -197,7 +267,6 @@ const ReferralForm = () => {
     } else {
       tempErrors.lastName = "";
     }
-
 
     // Validate phone number
     //const phoneRegex = /^\d{10}$/;
@@ -223,8 +292,6 @@ const ReferralForm = () => {
       tempErrors.email = "";
     }
 
-
-
     // Validate address
     if (formData?.address.trim() === "") {
       tempErrors.address = "Address is required";
@@ -233,31 +300,22 @@ const ReferralForm = () => {
       tempErrors.address = "";
     }
 
-
-
-
-
     // Validate postal code
     if (formData.postalCode.trim() === "") {
       tempErrors.postalCode = "Postal code  is required";
       isValidData = false;
-    } else if (formData.postalCode.length !==5 ) {
+    } else if (formData.postalCode.length !== 5) {
       tempErrors.postalCode = "Please enter valid postal code";
       isValidData = false;
-
-    }
-    else {
+    } else {
       tempErrors.postalCode = "";
     }
 
-
-    if (formData.productId.trim()==="") {
+    if (formData.productId.trim() === "") {
       tempErrors.productId = "Product is required";
       isValidData = false;
     } else {
-
       tempErrors.productId = "";
-
     }
 
     // Validate notes
@@ -270,54 +328,52 @@ const ReferralForm = () => {
 
     setErrors(tempErrors);
     return isValidData;
-
   };
 
-  const handleClickOutside = (e: MouseEvent) => {
-    if (stateCityDropdownRef.current && !stateCityDropdownRef.current.contains(e.target as Node)) {
-      setIsStateCityDropdownOpen(false);
-      setStateCityName("");
-      setStateCityList([]);
-    }
-  };
+  // const handleClickOutside = (e: MouseEvent) => {
+  //   if (stateCityDropdownRef.current && !stateCityDropdownRef.current.contains(e.target as Node)) {
+  //     setIsStateCityDropdownOpen(false);
+  //     setStateCityName("");
+  //     setStateCityList([]);
+  //   }
+  // };
 
+  // const handleOpenStateCityDropdown = () => {
+  //   setIsStateCityDropdownOpen(true);
+  // };
 
+  // const handleSelectStateCity = (value: any) => {
 
-  const handleOpenStateCityDropdown = () => {
-    setIsStateCityDropdownOpen(true);
-  };
+  //   if (value) {
+  //     setSelectedStateCity(value);
+  //     setIsStateCityDropdownOpen(false);
+  //     setFormData((prev: FormDataState) => ({
+  //       ...prev,
+  //       stateId: `${value?.stateId}`,
+  //       cityId: value?.type === "city" ? `${value?.cityId}` : "",
+  //     }));
+  //     setStateCityList([]);
+  //     setStateCityName("");
+  //     return;
+  //   }
 
-  const handleSelectStateCity = (value: any) => {
+  //   setSelectedStateCity(null);
+  //   setFormData((prev: FormDataState) => ({
+  //     ...prev,
+  //     stateId: "",
+  //     cityId: "",
+  //   }));
 
-    if (value) {
-      setSelectedStateCity(value);
-      setIsStateCityDropdownOpen(false);
-      setFormData((prev: FormDataState) => ({
-        ...prev,
-        stateId: `${value?.stateId}`,
-        cityId: value?.type === "city" ? `${value?.cityId}` : "",
-      }));
-      setStateCityList([]);
-      setStateCityName("");
-      return;
-    }
+  // };
 
-    setSelectedStateCity(null);
-    setFormData((prev: FormDataState) => ({
-      ...prev,
-      stateId: "",
-      cityId: "",
-    }));
-
-  };
-
-
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
+  ) => {
     const { name, value } = e.target;
     setFormData((prev: FormDataState) => ({ ...prev, [name]: value }));
-
-  }
+  };
 
   const handleClearFormData = () => {
     setFormData({
@@ -330,8 +386,8 @@ const ReferralForm = () => {
       notes: "",
       productId: "",
       teamMemberId: "",
-      cityId: "",
-      stateId: "",
+      city: "",
+      state: "",
     });
     setErrors({
       firstName: "",
@@ -343,14 +399,17 @@ const ReferralForm = () => {
       notes: "",
       productId: "",
       teamMemberId: "",
-      cityId: "",
-      stateId: "",
+      city: "",
+      state: "",
     });
-    setSelectedStateCity(null);
-    setStateCityList([]);
-    setStateCityName("");
-  }
-  
+    // setSelectedStateCity(null);
+    // setStateCityList([]);
+    // setStateCityName("");
+    setSelectedAddress(null);
+    setAddresses([]);
+    setAddressSearchQuery("");
+  };
+
   return (
     <div className="w-full max-w-[1500px] bg-white p-6 lg:p-8 rounded-xl">
       <Toaster />
@@ -366,7 +425,9 @@ const ReferralForm = () => {
                 value={formData.firstName}
                 onChange={handleChange}
               />
-              <span className={`${REQUIRED_ERROR}`}>{errors.firstName || ""}</span>
+              <span className={`${REQUIRED_ERROR}`}>
+                {errors.firstName || ""}
+              </span>
             </div>
             <div className="w-full">
               <input
@@ -377,7 +438,9 @@ const ReferralForm = () => {
                 value={formData.lastName}
                 onChange={handleChange}
               />
-              <span className={`${REQUIRED_ERROR}`}>{errors.lastName || ""}</span>
+              <span className={`${REQUIRED_ERROR}`}>
+                {errors.lastName || ""}
+              </span>
             </div>
             <div className="w-full">
               <input
@@ -390,12 +453,16 @@ const ReferralForm = () => {
                   const value = e.target.value;
                   // Allow only numbers and max 10 digits
                   if (/^\d{0,10}$/.test(value)) {
-
-                    setFormData((prev: FormDataState) => ({ ...prev, phoneNumber: value }))
+                    setFormData((prev: FormDataState) => ({
+                      ...prev,
+                      phoneNumber: value,
+                    }));
                   }
                 }}
               />
-              <span className={`${REQUIRED_ERROR}`}>{errors.phoneNumber || ""}</span>
+              <span className={`${REQUIRED_ERROR}`}>
+                {errors.phoneNumber || ""}
+              </span>
             </div>
           </div>
 
@@ -411,7 +478,7 @@ const ReferralForm = () => {
               />
               <span className={`${REQUIRED_ERROR}`}>{errors.email || ""}</span>
             </div>
-            <div className="w-full">
+            <div className="w-full relative" ref={addressDropdownRef}>
               <input
                 type="text"
                 placeholder="Address"
@@ -419,10 +486,99 @@ const ReferralForm = () => {
                 className={`${FORM_INPUT_CLASS}`}
                 value={formData.address}
                 onChange={handleChange}
+                onFocus={() => setShowAddressDropdown(true)}
               />
-              <span className={`${REQUIRED_ERROR}`}>{errors.address || ""}</span>
+              <span className={`${REQUIRED_ERROR}`}>
+                {errors.address || ""}
+              </span>
+              {showAddressDropdown && (
+                <div className="absolute z-50 top-full left-0 w-full bg-white border border-gray-200 rounded-md shadow-lg mt-1 px-3 py-2">
+                  <input
+                    type="text"
+                    placeholder="search address here"
+                    value={addressSearchQuery}
+                    onChange={(e) => setAddressSearchQuery(e.target.value)}
+                    className="w-full px-3 py-2 rounded-md outline-none border border-gray-200 mb-1 "
+                    autoFocus
+                  />
+                  {selectedAddress && (
+                    <div className="flex justify-between items-start border border-gray-200 rounded-lg p-2 mb-3">
+                      <div className="px-1 text-sm">
+                        <p className="font-medium mb-1">Selected Address</p>
+                        <p>
+                          <span className="font-medium">Address:</span>{" "}
+                          {selectedAddress?.formatted_address}
+                        </p>
+                        <p>
+                          <span className="font-medium">City:</span>{" "}
+                          {selectedAddress?.city}
+                        </p>
+                        <p>
+                          <span className="font-medium">State:</span>{" "}
+                          {selectedAddress?.state}
+                        </p>
+                      </div>
+                      <button
+                        onClick={handleRemoveSelectedAddress}
+                        className=" w-6 h-6 flex items-center justify-center  "
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  )}
+                  {addressLoading ? (
+                    <p className="text-gray-500 text-sm">Loading...</p>
+                  ) : addresses && addresses.length > 0 ? (
+                    <ul
+                      className="max-h-48 overflow-y-auto scro space-y-2"
+                      style={{
+                        scrollbarWidth: "thin",
+                      }}
+                    >
+                      {addresses.map((address, index) => (
+                        <li
+                          key={index}
+                          onClick={() => handleSelectAddress(address)}
+                          className="cursor-pointer"
+                        >
+                          <div className="text-sm p-2 border border-gray-200 hover:bg-gray-100 rounded-lg cursor-pointer transition-all duration-300 ">
+                            <p>
+                              <span className="font-medium">Address:</span>{" "}
+                              {address?.formatted_address || "NA"}
+                            </p>
+                            <p>
+                              <span className="font-medium">City:</span>{" "}
+                              {address?.city || "NA"}
+                            </p>
+                            <p>
+                              <span className="font-medium">State:</span>{" "}
+                              {address?.state || "NA"}
+                            </p>
+                          </div>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    addressSearchQuery.length > 0 && (
+                      <p className="text-gray-500 text-sm">No address found</p>
+                    )
+                  )}
+                </div>
+              )}
             </div>
-            <div className="relative w-full" ref={stateCityDropdownRef}>
+            <div className="w-full">
+              <input
+                type="text"
+                placeholder="City"
+                name="city"
+                className={`${FORM_INPUT_CLASS}`}
+                value={formData.city}
+                onChange={handleChange}
+              />
+              <span className={`${REQUIRED_ERROR}`}>{errors.city || ""}</span>
+            </div>
+
+            {/* <div className="relative w-full" ref={stateCityDropdownRef}>
               <input
                 type="text"
                 readOnly
@@ -481,11 +637,21 @@ const ReferralForm = () => {
                   </ul>
                 </div>
               )}
-            </div>
+            </div> */}
           </div>
 
           <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-8 lg:gap-14 ">
-
+            <div className="w-full">
+              <input
+                type="text"
+                placeholder="State"
+                name="state"
+                className={`${FORM_INPUT_CLASS}`}
+                value={formData.state}
+                onChange={handleChange}
+              />
+              <span className={`${REQUIRED_ERROR}`}>{errors.state || ""}</span>
+            </div>
             <div className="w-full">
               <input
                 type="text"
@@ -495,12 +661,18 @@ const ReferralForm = () => {
                 value={formData.postalCode}
                 onChange={(e) => {
                   const value = e.target.value;
-                  if (/^\d{0,6}$/.test(value)) { // Only allow up to 6 digits
-                    setFormData((prev: FormDataState) => ({ ...prev, postalCode: value }));
+                  if (/^\d{0,6}$/.test(value)) {
+                    // Only allow up to 6 digits
+                    setFormData((prev: FormDataState) => ({
+                      ...prev,
+                      postalCode: value,
+                    }));
                   }
                 }}
               />
-              <span className={`${REQUIRED_ERROR}`}>{errors.postalCode || ""}</span>
+              <span className={`${REQUIRED_ERROR}`}>
+                {errors.postalCode || ""}
+              </span>
             </div>
             {/* <div className="w-full">
               <select
@@ -518,8 +690,19 @@ const ReferralForm = () => {
               <span className={`${REQUIRED_ERROR}`}>{errors.productId || ""}</span>
             </div> */}
             <div className="w-full">
-              <ProductDropdown products={selectedProducts||[]} selectedProductId={formData.productId} onChange={(value)=>setFormData((prev:FormDataState)=>({...prev,productId:value}))}  />
-              <span className={`${REQUIRED_ERROR}`}>{errors.productId || ""}</span>
+              <ProductDropdown
+                products={selectedProducts || []}
+                selectedProductId={formData.productId}
+                onChange={(value) =>
+                  setFormData((prev: FormDataState) => ({
+                    ...prev,
+                    productId: value,
+                  }))
+                }
+              />
+              <span className={`${REQUIRED_ERROR}`}>
+                {errors.productId || ""}
+              </span>
             </div>
           </div>
           <div className="w-full grid grid-cols-1 ">
@@ -543,18 +726,24 @@ const ReferralForm = () => {
             Message & data rates may apply. You can reply STOP to unsubscribe at
             any time.
           </div> */}
-          <Button size="md" variant="primary" disabled={loading} onClick={handleSubmitReferrals} >
+          <Button
+            size="md"
+            variant="primary"
+            disabled={loading}
+            onClick={handleSubmitReferrals}
+          >
             Send Referral
           </Button>
-          <Button size="md" variant="outline" disabled={loading} onClick={handleClearFormData}>
+          <Button
+            size="md"
+            variant="outline"
+            disabled={loading}
+            onClick={handleClearFormData}
+          >
             Clear
           </Button>
-
         </div>
-
       </div>
-
-
     </div>
   );
 };
