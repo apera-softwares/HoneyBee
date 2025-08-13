@@ -53,8 +53,8 @@ function CreateAccountPage() {
     setLoading(true);
     try {
       await dispatch(signup(formData)).unwrap();
-      toast.success(
-        "Successfull! Verification email sent. Please verify before logging in."
+         toast.success(
+        "Signup Successfull!. Please check your email to verify your account"
       );
       clearData();
       router.push("/signin");
@@ -62,7 +62,7 @@ function CreateAccountPage() {
       const errorMessage =
         typeof error === "string"
           ? error
-          : error?.message || "Account Creation failed. Please try again.";
+          : error?.message || "Failed to signup. Please try again.";
       toast.error(errorMessage);
     } finally {
       setLoading(false);

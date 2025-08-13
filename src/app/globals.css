@@ -755,3 +755,24 @@ span.flatpickr-weekday,
 .apexcharts-datalabel-value {
   font-size: 14px !important;
 }
+
+
+
+/* Ripple Animation */
+@keyframes ripple {
+  0% {
+    transform: scale(0.8);
+    opacity: 0.6;
+  }
+  70% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+.ripple {
+  animation: ripple 1.5s linear infinite;
+}

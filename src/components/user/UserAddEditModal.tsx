@@ -278,8 +278,8 @@ const UserAddEditModal: React.FC<UserAddEditModalProps> = ({ isOpen, closeModal,
                             />
                             <span className={REQUIRED_ERROR}></span>
                         </div> */}
-
-                        <div className="flex flex-wrap items-center gap-8 text-[#717171] ">
+                        {
+                            type === "add" &&    <div className="flex flex-wrap items-center gap-8 text-[#717171] ">
                             <div className="w-20">Verified:</div>
                             <Radio
                                 id="radio3"
@@ -298,6 +298,8 @@ const UserAddEditModal: React.FC<UserAddEditModalProps> = ({ isOpen, closeModal,
                                 label="No"
                             />
                         </div>
+                        }
+                     
 
 
 
