@@ -16,7 +16,7 @@ export const signup = createAsyncThunk(
       return response.data;
     } catch (error: any) {
       console.log(error, "signup error");
-      return thunkAPI.rejectWithValue(error?.response?.data?.message || "Account Creation failed. Please try again.");
+      return thunkAPI.rejectWithValue(error?.response?.data?.message || "Failed to signup. Please try again..");
     }
   }
 );
@@ -83,6 +83,24 @@ export const resetPassword = createAsyncThunk(
       return thunkAPI.rejectWithValue(
         error.response?.data?.message || "Failed to reset password"
       );
+    }
+  }
+);
+
+
+export const verifyAccount = createAsyncThunk(
+  "auth/verifyAccount",
+  async (payload: any, thunkAPI) => {
+    try {  
+      const response = await axios.post(`${BACKEND_API}user/verify`, payload,  {
+        headers: { 
+       'ngrok-skip-browser-warning': 'true',
+     },
+      });
+      return response.data;
+    } catch (error: any) {
+      console.log(error, "error while verifying account");
+      return thunkAPI.rejectWithValue(error.response?.data?.message || "Something went wrong while verifying account. Please try again.");
     }
   }
 );
@@ -174,6 +192,22 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = action.payload as string;
       });
+
+    // verify account
+    builder
+      .addCase(verifyAccount.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(verifyAccount.fulfilled, (state) => {
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(verifyAccount.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      });
+    
 
   },
 });

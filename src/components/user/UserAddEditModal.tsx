@@ -143,8 +143,15 @@ const UserAddEditModal: React.FC<UserAddEditModalProps> = ({ isOpen, closeModal,
 
     const handleSubmit = async () => {
     if (!validateFormData()) return;
-    const payload = {...formData};
+    let payload:any={};
     setLoading(true);
+    if(userData){
+        const {verified,...restFormData}=formData;
+        console.log("verified",verified);
+        payload = {...restFormData}
+    }else{
+        payload = {...formData};
+    }
     try {
       if (userData) {
         await dispatch(updateUser(payload)).unwrap();
@@ -278,8 +285,8 @@ const UserAddEditModal: React.FC<UserAddEditModalProps> = ({ isOpen, closeModal,
                             />
                             <span className={REQUIRED_ERROR}></span>
                         </div> */}
-
-                        <div className="flex flex-wrap items-center gap-8 text-[#717171] ">
+                        {
+                            type === "add" &&    <div className="flex flex-wrap items-center gap-8 text-[#717171] ">
                             <div className="w-20">Verified:</div>
                             <Radio
                                 id="radio3"
@@ -298,6 +305,8 @@ const UserAddEditModal: React.FC<UserAddEditModalProps> = ({ isOpen, closeModal,
                                 label="No"
                             />
                         </div>
+                        }
+                     
 
 
 
