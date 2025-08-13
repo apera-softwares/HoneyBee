@@ -143,8 +143,15 @@ const UserAddEditModal: React.FC<UserAddEditModalProps> = ({ isOpen, closeModal,
 
     const handleSubmit = async () => {
     if (!validateFormData()) return;
-    const payload = {...formData};
+    let payload:any={};
     setLoading(true);
+    if(userData){
+        const {verified,...restFormData}=formData;
+        console.log("verified",verified);
+        payload = {...restFormData}
+    }else{
+        payload = {...formData};
+    }
     try {
       if (userData) {
         await dispatch(updateUser(payload)).unwrap();
