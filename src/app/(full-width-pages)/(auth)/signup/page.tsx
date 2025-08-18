@@ -285,7 +285,7 @@ function CreateAccountPage() {
             </div>
             <div>
               <label className=" flex items-center flex-wrap">
-                 <Checkbox  checked={formData.agree} onChange={handleAgreeToTermsAndContions}  /> &nbsp; I read and  agree to  &nbsp; <Link href={"/terms-and-conditions"} className="text-primary hover:text-primary-hover transition-all duration-500">terms and conditions</Link>
+                 <Checkbox  checked={formData.agree} onChange={handleAgreeToTermsAndContions}  /> &nbsp; I read and  agree to  &nbsp; <Link href={"/terms-and-conditions"} target="_blank" className="text-primary hover:text-primary-hover transition-all duration-500">terms and conditions</Link>
               </label>
                 <span className={`${INPUT_REQUIRED_ERROR_CLASS}`}>
                 {errors.agree || ""}
