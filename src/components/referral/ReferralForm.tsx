@@ -118,6 +118,14 @@ const ReferralForm = () => {
     return () => clearTimeout(timeoutId);
   }, [addressSearchQuery]);
 
+  useEffect(()=>{
+    if(formData.address.trim().length>0)
+    {
+      setErrors((prev)=>({...prev,city:"",state:""}));
+    }
+
+  },[formData.address])
+
   const getAddress = async () => {
     const trimmedAddressSearchQuery = addressSearchQuery.trim();
     if (!trimmedAddressSearchQuery) return;
@@ -410,6 +418,31 @@ const ReferralForm = () => {
     setAddressSearchQuery("");
   };
 
+
+  const handleCityClick = ()=>{
+
+    if(!formData.address.trim())
+    {
+      setErrors((prev)=>({...prev,city:"Fill address first"}));
+
+    }else{
+       setErrors((prev)=>({...prev,city:""}))
+
+    }
+
+  }
+  const handleStateClick = ()=>{
+    if(!formData.address.trim())
+    {
+      setErrors((prev)=>({...prev,state:"Fill address first"}));
+
+    }else{
+       setErrors((prev)=>({...prev,state:""}))
+
+    }
+
+  }
+
   return (
     <div className="w-full max-w-[1500px] bg-white p-6 lg:p-8 rounded-xl">
       <Toaster />
@@ -575,6 +608,7 @@ const ReferralForm = () => {
                 className={`${FORM_INPUT_CLASS}`}
                 value={formData.city}
                 onChange={handleChange}
+                onClick={handleCityClick}
               />
               <span className={`${REQUIRED_ERROR}`}>{errors.city || ""}</span>
             </div>
@@ -651,6 +685,7 @@ const ReferralForm = () => {
                 className={`${FORM_INPUT_CLASS}`}
                 value={formData.state}
                 onChange={handleChange}
+                onClick={handleStateClick}
               />
               <span className={`${REQUIRED_ERROR}`}>{errors.state || ""}</span>
             </div>
@@ -711,7 +746,7 @@ const ReferralForm = () => {
             <div className="w-full">
               <textarea
                 name="notes"
-                placeholder="Additional Info and Notes"
+                placeholder="Additional Info and Notes E.g., best time to contact, preferred communication, urgency, special requirements…"
                 className={`h-24 md:h-32 ${FORM_INPUT_CLASS}`}
                 value={formData.notes}
                 onChange={handleChange}
