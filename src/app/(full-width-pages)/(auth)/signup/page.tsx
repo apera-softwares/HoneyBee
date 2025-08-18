@@ -15,6 +15,8 @@ import Loader from "@/components/ui/loader/Loader";
 // import Radio from "@/components/form/input/Radio";
 import LeadCard from "@/components/common/LeadCard";
 import Spinner from "@/components/common/Spinner";
+import Checkbox from "@/components/form/input/Checkbox";
+import Link from "next/link";
 
 function CreateAccountPage() {
   const router = useRouter();
@@ -28,6 +30,7 @@ function CreateAccountPage() {
     email: "",
     password: "",
     role: role === "a" ? "A_TEAM" : role === "b" ? "B_TEAM" : "",
+    agree:false,
   });
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({
@@ -36,6 +39,7 @@ function CreateAccountPage() {
     email: "",
     password: "",
     role: "",
+    agree:"",
   });
 
   useEffect(() => {
@@ -47,6 +51,7 @@ function CreateAccountPage() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+  const handleAgreeToTermsAndContions = (value:boolean)=>{setFormData((prev)=>({...prev,agree:value}))};
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateFormData()) return;
@@ -131,6 +136,15 @@ function CreateAccountPage() {
       tempErrors.role = "";
     }
 
+    if(!formData.agree)
+    {
+      tempErrors.agree = "You must agree to the terms and conditions";
+      isValidData = false;
+    }else{
+      tempErrors.agree = "";
+    }
+
+
     setErrors(tempErrors);
     return isValidData;
   };
@@ -142,6 +156,7 @@ function CreateAccountPage() {
       email: "",
       password: "",
       role: "",
+      agree:false
     });
 
     setErrors({
@@ -150,6 +165,7 @@ function CreateAccountPage() {
       email: "",
       password: "",
       role: "",
+      agree:"",
     });
   };
 
@@ -165,8 +181,9 @@ function CreateAccountPage() {
             Create an account
           </h2>
           <p className=" text-base  sm:text-lg md:text-start text-slate-800 mb-8">
-            Your account will be activated by an Admin. Fill out the info below
-            to request access to Honeybee Harry.
+            {/* Your account will be activated by an Admin. Fill out the info below
+            to request access to Honeybee Harry. */}
+            {` Check your email for a verification link to activate your Honeybee Harry's Referral Club account.`}
           </p>
           <form onSubmit={handleSubmit} className="space-y-6">
             <div>
@@ -265,6 +282,17 @@ function CreateAccountPage() {
               <span className={`${INPUT_REQUIRED_ERROR_CLASS}`}>
                 {errors.role || ""}
               </span>
+            </div>
+            <div>
+              <label className=" flex items-center flex-wrap">
+                 <Checkbox  checked={formData.agree} onChange={handleAgreeToTermsAndContions}  /> &nbsp; I read and  agree to  &nbsp; <Link href={"/terms-and-conditions"} target="_blank" className="text-primary hover:text-primary-hover transition-all duration-500">terms and conditions</Link>
+              </label>
+                <span className={`${INPUT_REQUIRED_ERROR_CLASS}`}>
+                {errors.agree || ""}
+              </span>
+
+        
+  
             </div>
 
             <button
