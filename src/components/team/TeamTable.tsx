@@ -36,6 +36,9 @@ const TeamTable: React.FC<TeamTableProps> = ({ searchText, role, order,isCreateT
     const [totalPages, setTotalPages] = useState(0);
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [editTeamData, setEditTeamData] = useState<any>({});
+   
+    //check wheather to show or not actions column for diffrent role
+   const shouldShowActionsColumn = loggedInUser?.role === UserRole.ADMIN;
     
 
     useEffect(() => {
@@ -109,7 +112,10 @@ const TeamTable: React.FC<TeamTableProps> = ({ searchText, role, order,isCreateT
                                     <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">S.No</TableCell>
                                     <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Name</TableCell>
                                     <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Members</TableCell>
-                                    <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Actions</TableCell>
+                                    {
+                                         shouldShowActionsColumn && ( <TableCell isHeader className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400">Actions</TableCell>)
+                                    }
+                                   
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
@@ -146,14 +152,18 @@ const TeamTable: React.FC<TeamTableProps> = ({ searchText, role, order,isCreateT
                                                     <MdRemoveRedEye className="h-5 w-5 text-primary cursor-pointer" />Members
                                                 </div>
                                             </TableCell>
-                                            <TableCell className="px-4 py-3 text-primary text-theme-sm dark:text-gray-400">
+
+                                            {
+                                                shouldShowActionsColumn && ( <TableCell className="px-4 py-3 text-primary text-theme-sm dark:text-gray-400">
                                                 <div className="flex items-center gap-1 cursor-pointer" onClick={() => {
                                                     setEditTeamData(user)
                                                     setIsModalOpen(true)
                                                 }}>
                                                     <FiEdit className="h-5 w-5 text-primary" />Edit
                                                 </div>
-                                            </TableCell>
+                                            </TableCell>)
+                                            }
+                                 
 
                                         </TableRow>
                                     ))

@@ -58,12 +58,13 @@ export const fetchTeamsByUserId = createAsyncThunk(
 
       const allTeams = response.data?.data || [];
 
-      // Filter only teams where l1ManagerId === userId
-      const filteredTeams = allTeams.filter(
-        (team: any) => team.l1ManagerId === id
-      );
+      //Filter only teams where l1ManagerId !== userId
+      // const filteredTeams = allTeams.filter(
+      //   (team: any) => team.l1ManagerId !== id
+      // );
 
-      return filteredTeams;
+      // return filteredTeams;
+      return allTeams
     } catch (error: any) {
       return thunkAPI.rejectWithValue(
         error.response?.data?.message || "Failed to fetch Teams"

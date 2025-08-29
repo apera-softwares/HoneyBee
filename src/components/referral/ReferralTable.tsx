@@ -114,6 +114,7 @@ const ReferralTable: React.FC<ReferralTableProps> = ({
           <ReferralStatusModal
             isOpen={isStatusModalOpen}
             closeModal={() => setIsStatusModalOpen(false)}
+            role={loggedInUser?.role}
             referral={selectedReferral}
             onUpdateStatus={handleStatusUpdate}
           />
@@ -130,7 +131,7 @@ const ReferralTable: React.FC<ReferralTableProps> = ({
                     isHeader
                     className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400"
                   >
-                    S.No
+                    No.
                   </TableCell>
                   <TableCell
                     isHeader
@@ -170,7 +171,7 @@ const ReferralTable: React.FC<ReferralTableProps> = ({
                       >
                         Actions
                       </TableCell>
-                    )}{" "}
+                    )}
                 </TableRow>
               </TableHeader>
               <TableBody>
