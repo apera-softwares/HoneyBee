@@ -25,18 +25,23 @@ import Spinner from "@/components/common/Spinner";
 import { DEFAULT_PROFILE_IMAGE } from "@/constant/defaultImages";
 import { BACKEND_API } from "@/api";
 import { formatRoleName ,capitalizeWord} from "@/utils/stringUtils";
+import { UserRole } from "@/constant/userRoles";
 
 export default function UserManagement() {
   const ITEM_PER_PAGE = 5;
   const { teamId } = useParams();
   const dispatch = useAppDispatch();
-   const { loading } = useAppSelector((state) => state.teamManagement);
+  const { loading } = useAppSelector((state) => state.teamManagement);
+  const { user: loggedInUser } = useAppSelector((state) => state.user);
   const [teamDataMembers, setTeamDataMembers] = useState<any[]>([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [memberId, setMembeId] = useState<any>({});
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+
+  //check wheather to show or not actions column for diffrent role
+   const shouldShowActionsColumn = loggedInUser?.role === UserRole.ADMIN;
 
   useEffect(() => {
     getTeamMembers();
@@ -196,13 +201,15 @@ export default function UserManagement() {
                       >
                         Designation
                       </TableCell>
-
-                      <TableCell
+                      {
+                        shouldShowActionsColumn && (<TableCell
                         isHeader
                         className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400"
                       >
                         Actions
-                      </TableCell>
+                      </TableCell>)
+                      }
+                  
                     </TableRow>
                   </TableHeader>
                   <TableBody>
@@ -277,8 +284,8 @@ export default function UserManagement() {
                                 </span>
                               )}
                             </TableCell>
-
-                            <TableCell className="px-4 py-3 text-theme-sm text-start">
+                            {
+                              shouldShowActionsColumn && (      <TableCell className="px-4 py-3 text-theme-sm text-start">
                               {!member?.isMemberOnly ? (
                                 <div className="flex items-center gap-1 text-gray-400 cursor-not-allowed">
                                   <RiDeleteBin6Line className="h-5 w-5" />
@@ -296,7 +303,9 @@ export default function UserManagement() {
                                   Remove
                                 </div>
                               )}
-                            </TableCell>
+                            </TableCell>)
+                            }
+                      
                           </TableRow>
                         );
                       })

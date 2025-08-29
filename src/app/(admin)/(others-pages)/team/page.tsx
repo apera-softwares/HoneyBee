@@ -14,9 +14,9 @@ export default function TeamManagement() {
   const [searchInput,setSearchInput] = useState("");
   const [order] = useState("");
   const { user: loggedUser } = useAppSelector((state) => state.user);
-  const {  loading,teams } = useAppSelector((state) => state.teamManagement);
+  // const {  loading,teams } = useAppSelector((state) => state.teamManagement);
 
-  const showCreateTeamButton = loggedUser?.role === UserRole.ADMIN ||(loggedUser?.role === UserRole.B_TEAM && teams.length === 0) || loading;
+  const shouldShowCreateTeamButton = loggedUser?.role === UserRole.ADMIN;
 
   return (
     <div className="w-full">
@@ -52,7 +52,7 @@ export default function TeamManagement() {
 
           {/* Create User Button */}
 
-          {showCreateTeamButton && (
+          {shouldShowCreateTeamButton && (
             <button
               onClick={() => setIsModalOpen(true)}
               className="h-11 bg-primary hover:bg-primary-hover text-white rounded-md text-md px-4 justify-center text-center outline-none flex items-center gap-1"

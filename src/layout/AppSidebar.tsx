@@ -146,11 +146,11 @@ const team_B: NavItem[] = [
     name: "Landing page and submit referral",
     path: "/referral-form",
   },
-    {
-    icon: <IoSettingsOutline className="text-xl" />,
-    name: "Manager (L1-L3)",
-    path: "/manager",
-  },
+  //   {
+  //   icon: <IoSettingsOutline className="text-xl" />,
+  //   name: "Manager (L1-L3)",
+  //   path: "/manager",
+  // },
   {
     icon: <CoinHand />,
     name: "Referrals",
