@@ -1,23 +1,21 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { Modal } from "../ui/modal";
 import Button from "../ui/button/Button";
 import Input from "../form/input/InputField";
 import Label from "../form/Label";
-import { GridIcon } from "../../icons/index";
-import { TbArrowNarrowLeft, TbArrowNarrowRight } from "react-icons/tb";
-import { capitalizeWords } from "@/utils/stringUtils";
+// import { GridIcon } from "../../icons/index";
+// import { TbArrowNarrowLeft, TbArrowNarrowRight } from "react-icons/tb";
+// import { capitalizeWords } from "@/utils/stringUtils";
 
 interface UserInfoEditModalProps {
   isOpen: boolean;
   closeModal: () => void;
-  selectedProduct: any;
 }
 
 const UserInfoEditModal: React.FC<UserInfoEditModalProps> = ({
   isOpen,
   closeModal,
-  selectedProduct,
 }) => {
 
 

@@ -1,19 +1,12 @@
 "use client";
 import React from "react";
-import { useModal } from "../../hooks/useModal";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { formatRoleName, capitalizeWord } from "@/utils/stringUtils";
-import { FiEdit } from "react-icons/fi";
+// import { FiEdit } from "react-icons/fi";
 
 export default function UserInfoCard() {
-  const { isOpen, openModal, closeModal } = useModal();
   const { userProfile } = useAppSelector((state) => state.userProfile);
 
-  const handleSave = () => {
-    // Handle save logic here
-    console.log("Saving changes...");
-    closeModal();
-  };
   return (
     <div className="w-full  p-5 lg:p-6 border border-gray-200 rounded-2xl">
       <div className="w-full flex items-start lg:items-center justify-between gap-4 mb-6">
