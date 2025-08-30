@@ -94,17 +94,17 @@ const ReferralTable: React.FC<ReferralTableProps> = ({
     }
   };
 
-  const handleStatusUpdate = async (id: string, status: string) => {
-    const payload = { id, status };
-    try {
-      await dispatch(updateReferral(payload));
-      toast.success("Status updated successfully!");
-      getReferrals(currentPage);
-    } catch (error) {
-      console.log(error, "error white status update");
-      toast.error("Failed to update status. Please try again.");
+  const handleOpenCloseStatusUpdateModal=(referral:any)=>{
+    if(referral)
+    {
+      setIsStatusModalOpen(true);
+      setSelectedReferral(referral);
+      return;
     }
-  };
+    setIsStatusModalOpen(false);
+    setSelectedReferral(null);
+  }
+
 
   return (
     <div className="w-full overflow-hidden rounded-xl bg-white dark:bg-white/[0.03] shadow-md">
@@ -113,10 +113,12 @@ const ReferralTable: React.FC<ReferralTableProps> = ({
         {selectedReferral && (
           <ReferralStatusModal
             isOpen={isStatusModalOpen}
-            closeModal={() => setIsStatusModalOpen(false)}
+            closeModal={()=>handleOpenCloseStatusUpdateModal(null)}
             role={loggedInUser?.role}
             referral={selectedReferral}
-            onUpdateStatus={handleStatusUpdate}
+            onStatusUpdate={()=>{
+              getReferrals(currentPage);
+            }}
           />
         )}
 
@@ -216,10 +218,7 @@ const ReferralTable: React.FC<ReferralTableProps> = ({
                         <TableCell className="px-5 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                               <button
                                 className="flex items-center text-primary gap-2 cursor-pointer"
-                                onClick={() => {
-                                  setSelectedReferral(item);
-                                  setIsStatusModalOpen(true);
-                                }}
+                                onClick={() =>handleOpenCloseStatusUpdateModal(item)}
                               >
                                 Status <FiEdit className="mr-1.5" />
                               </button>

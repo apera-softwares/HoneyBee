@@ -1,10 +1,12 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Modal } from "../ui/modal";
 import Button from "../ui/button/Button";
 import { BiSolidEditAlt } from "react-icons/bi";
-import toast from "react-hot-toast";
+import toast,{Toaster} from "react-hot-toast";
 import { capitalizeWord,capitalizeWords } from "@/utils/stringUtils";
+import { useAppDispatch,useAppSelector } from "@/lib/redux/hooks";
+import { updateReferral } from "@/lib/redux/slices/referralSlice";
 
 type Role = "A_TEAM" | "B_TEAM" | "ADMIN";
 
@@ -39,7 +41,7 @@ interface ReferralStatusModalProps {
   closeModal: () => void;
   role:Role;
   referral: any; // Pass the full referral object
-  onUpdateStatus: (id: string, status: string) => void;
+  onStatusUpdate: () => void;
 }
 
 const ReferralStatusModal: React.FC<ReferralStatusModalProps> = ({
@@ -47,19 +49,39 @@ const ReferralStatusModal: React.FC<ReferralStatusModalProps> = ({
   closeModal,
   role,
   referral,
-  onUpdateStatus,
+  onStatusUpdate,
 }) => {
+  const dispatch = useAppDispatch();
+  const {loading} = useAppSelector((state)=>state.referral);
   const [newStatus, setNewStatus] = useState(referral?.status || "");
-  const options = statusOptions[role] || [];
 
-  const handleSubmit = () => {
+  useEffect(()=>{
+    setNewStatus(referral?.status||"");
+  },[isOpen]);
+  
+  const options = statusOptions[role] || [];
+  
+  const handleUpdateStatus = async () => {
     if (!newStatus) {
       toast.error("Please select a valid status.");
       return;
     }
-    onUpdateStatus(referral.id, newStatus);
-    closeModal();
+    try {
+      const payload = { id:referral?.id, status:newStatus };
+      await dispatch(updateReferral(payload)).unwrap();
+      toast.success("Status updated successfully");
+      closeModal();
+      onStatusUpdate();
+    } catch (error:any) {
+    console.log(error, "error white status update");
+    const errorMessage = typeof error === "string"
+          ? error
+          : error?.message ||
+            "Something went  wrong while status update. Please try again.";
+      toast.error(errorMessage);
+    }
   };
+
 
   return (
     <Modal
@@ -67,6 +89,7 @@ const ReferralStatusModal: React.FC<ReferralStatusModalProps> = ({
       onClose={closeModal}
       className="max-w-md p-6 lg:p-8 pt-10"
     >
+      <Toaster/>
       <div className="w-full">
         {/* Header */}
         <div className="flex items-center mb-4">
@@ -124,10 +147,10 @@ const ReferralStatusModal: React.FC<ReferralStatusModalProps> = ({
 
         {/* Buttons */}
         <div className="flex items-center justify-end w-full gap-3 mt-4">
-          <Button size="sm" onClick={handleSubmit}>
-            Save
+          <Button disabled={loading} size="sm" onClick={handleUpdateStatus}>
+            {loading ? ("Saving Changes..."):("Save Changes")}
           </Button>
-          <Button size="sm" variant="outline" onClick={closeModal}>
+          <Button disabled={loading} size="sm" variant="outline" onClick={closeModal}>
             Cancel
           </Button>
         </div>
