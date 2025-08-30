@@ -163,15 +163,12 @@ const ReferralTable: React.FC<ReferralTableProps> = ({
                   >
                     Submitted On
                   </TableCell>
-                  {(loggedInUser.role == "A_TEAM" ||
-                    loggedInUser.role == "ADMIN") && (
-                      <TableCell
-                        isHeader
-                        className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400"
+                  <TableCell
+                    isHeader
+                    className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400"
                       >
                         Actions
-                      </TableCell>
-                    )}
+                  </TableCell>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -216,9 +213,7 @@ const ReferralTable: React.FC<ReferralTableProps> = ({
                         <TableCell className="px-5 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                           {item?.submittedOn?.slice(0, 10) || ""}
                         </TableCell>
-                        {(loggedInUser.role == "A_TEAM" ||
-                          loggedInUser.role == "ADMIN") && (
-                            <TableCell className="px-5 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                        <TableCell className="px-5 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                               <button
                                 className="flex items-center text-primary gap-2 cursor-pointer"
                                 onClick={() => {
@@ -228,8 +223,8 @@ const ReferralTable: React.FC<ReferralTableProps> = ({
                               >
                                 Status <FiEdit className="mr-1.5" />
                               </button>
-                            </TableCell>
-                          )}
+                        </TableCell>
+
                       </TableRow>
                     );
                   })

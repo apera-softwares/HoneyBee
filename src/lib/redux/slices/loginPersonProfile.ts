@@ -55,6 +55,33 @@ export const uploadProfileImage = createAsyncThunk(
   }
 );
 
+export const updateAccountDetails = createAsyncThunk(
+  "userProfile/updateAccountDetails",
+  async (data:any, thunkAPI) => {
+    try {
+      const state: any = thunkAPI.getState();
+      const token = state.user?.user?.token;
+
+      const response = await axios.post(
+        `${BACKEND_API}user/account-details`,
+        data,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "ngrok-skip-browser-warning": "true",
+          },
+        }
+      );
+      return response.data;
+    } catch (error: any) {
+      console.log(error, "error while updating account details");
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to update account details, Please try again"
+      );
+    }
+  }
+);
+
 interface UserState {
   userProfile: any;
   loading: boolean;
@@ -111,6 +138,21 @@ const userProfileSlice = createSlice({
         state.error = null;
       })
       .addCase(uploadProfileImage.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload as string;
+      });
+
+    //update account details
+    builder
+      .addCase(updateAccountDetails.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
+      .addCase(updateAccountDetails.fulfilled, (state) => {
+        state.loading = false;
+        state.error = null;
+      })
+      .addCase(updateAccountDetails.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload as string;
       });

@@ -15,15 +15,16 @@ interface StatusOption {
 
 const statusOptions: Record<Role, StatusOption[]> = {
   A_TEAM: [
-    { label: "Pitched", value: "Pitched" },
     { label: "Pending", value: "Pending" },
+    { label: "Contacted", value: "Contacted" },
+    { label: "Appointment Completed", value: "Appointment_Completed" },
     { label: "Sold", value: "Sold" },
-    { label: "Payout", value: "Payout" },
   ],
-  B_TEAM: [
+  B_TEAM:  [
     { label: "Pending", value: "Pending" },
-    { label: "Called", value: "Called" },
-    { label: "Completed", value: "Completed" },
+    { label: "Contacted", value: "Contacted" },
+    { label: "Appointment Completed", value: "Appointment_Completed" },
+    { label: "Sold", value: "Sold" },
   ],
   ADMIN: [
     { label: "Pitched", value: "Pitched" },
