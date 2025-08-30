@@ -58,7 +58,7 @@ export const fetchReferrals = createAsyncThunk(
       return response.data;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || "Failed to fetch product catalogs"
+        error.response?.data?.message || "Failed to fetch referrals"
       );
     }
   }
@@ -99,14 +99,14 @@ export const updateReferral = createAsyncThunk(
         status:status
       }
 
-      const response = await axios.put(`${BACKEND_API}lead/${id}`,data, {
+     const response = await axios.put(`${BACKEND_API}lead/${id}`,data, {
         headers: { Authorization: `Bearer ${token}`,  'ngrok-skip-browser-warning': 'true', },
       });
-
       return response.data;
     } catch (error: any) {
+      console.log("error while status update",error);
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || "Failed to update product catalog"
+        error.response?.data?.message || "Failed to update status. Please try again."
       );
     }
   }
@@ -128,7 +128,7 @@ export const deleteReferral = createAsyncThunk(
       return id ; 
     } catch (error: any) {
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || "Failed to delete product catalog"
+        error.response?.data?.message || "Failed to delete referrals"
       );
     }
   }
@@ -150,7 +150,7 @@ export const fetchPayout = createAsyncThunk(
       return response.data;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || "Failed to fetch product catalogs"
+        error.response?.data?.message || "Failed to fetch payout"
       );
     }
   }
