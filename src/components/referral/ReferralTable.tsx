@@ -10,11 +10,10 @@ import Badge from "../ui/badge/Badge";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import {
   fetchReferrals,
-  updateReferral,
 } from "@/lib/redux/slices/referralSlice";
 import Spinner from "../common/Spinner";
 import Pagination from "../tables/Pagination";
-import toast, { Toaster } from "react-hot-toast";
+import  { Toaster } from "react-hot-toast";
 import { FiEdit } from "react-icons/fi";
 import ReferralStatusModal from "./ReferralStatusModal";
 import { DEFAULT_PROFILE_IMAGE } from "@/constant/defaultImages";
