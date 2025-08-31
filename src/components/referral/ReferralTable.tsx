@@ -10,16 +10,16 @@ import Badge from "../ui/badge/Badge";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import {
   fetchReferrals,
-  updateReferral,
 } from "@/lib/redux/slices/referralSlice";
 import Spinner from "../common/Spinner";
 import Pagination from "../tables/Pagination";
-import toast, { Toaster } from "react-hot-toast";
+import  { Toaster } from "react-hot-toast";
 import { FiEdit } from "react-icons/fi";
 import ReferralStatusModal from "./ReferralStatusModal";
 import { DEFAULT_PROFILE_IMAGE } from "@/constant/defaultImages";
 import { BACKEND_API } from "@/api";
 import { capitalizeWord,capitalizeWords } from "@/utils/stringUtils";
+import { UserRole } from "@/constant/userRoles";
 
 interface ReferralTableProps {
   searchText: string;
@@ -46,6 +46,8 @@ const ReferralTable: React.FC<ReferralTableProps> = ({
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
   const [selectedReferral, setSelectedReferral] = useState<any>(null);
   const { user: loggedInUser } = useAppSelector((state) => state.user);
+
+  const shouldShowActionsCol = loggedInUser?.role === UserRole.ADMIN || loggedInUser?.role === UserRole.A_TEAM
 
   useEffect(() => {
     if(currentPage === 1 ){
@@ -94,17 +96,17 @@ const ReferralTable: React.FC<ReferralTableProps> = ({
     }
   };
 
-  const handleStatusUpdate = async (id: string, status: string) => {
-    const payload = { id, status };
-    try {
-      await dispatch(updateReferral(payload));
-      toast.success("Status updated successfully!");
-      getReferrals(currentPage);
-    } catch (error) {
-      console.log(error, "error white status update");
-      toast.error("Failed to update status. Please try again.");
+  const handleOpenCloseStatusUpdateModal=(referral:any)=>{
+    if(referral)
+    {
+      setIsStatusModalOpen(true);
+      setSelectedReferral(referral);
+      return;
     }
-  };
+    setIsStatusModalOpen(false);
+    setSelectedReferral(null);
+  }
+
 
   return (
     <div className="w-full overflow-hidden rounded-xl bg-white dark:bg-white/[0.03] shadow-md">
@@ -113,10 +115,12 @@ const ReferralTable: React.FC<ReferralTableProps> = ({
         {selectedReferral && (
           <ReferralStatusModal
             isOpen={isStatusModalOpen}
-            closeModal={() => setIsStatusModalOpen(false)}
+            closeModal={()=>handleOpenCloseStatusUpdateModal(null)}
             role={loggedInUser?.role}
             referral={selectedReferral}
-            onUpdateStatus={handleStatusUpdate}
+            onStatusUpdate={()=>{
+              getReferrals(currentPage);
+            }}
           />
         )}
 
@@ -163,15 +167,15 @@ const ReferralTable: React.FC<ReferralTableProps> = ({
                   >
                     Submitted On
                   </TableCell>
-                  {(loggedInUser.role == "A_TEAM" ||
-                    loggedInUser.role == "ADMIN") && (
-                      <TableCell
-                        isHeader
-                        className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400"
+                  {
+                    shouldShowActionsCol && (<TableCell
+                    isHeader
+                    className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400"
                       >
                         Actions
-                      </TableCell>
-                    )}
+                  </TableCell>)
+                  }
+
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -216,20 +220,18 @@ const ReferralTable: React.FC<ReferralTableProps> = ({
                         <TableCell className="px-5 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                           {item?.submittedOn?.slice(0, 10) || ""}
                         </TableCell>
-                        {(loggedInUser.role == "A_TEAM" ||
-                          loggedInUser.role == "ADMIN") && (
-                            <TableCell className="px-5 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                        {
+                          shouldShowActionsCol && ( <TableCell className="px-5 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                               <button
                                 className="flex items-center text-primary gap-2 cursor-pointer"
-                                onClick={() => {
-                                  setSelectedReferral(item);
-                                  setIsStatusModalOpen(true);
-                                }}
+                                onClick={() =>handleOpenCloseStatusUpdateModal(item)}
                               >
                                 Status <FiEdit className="mr-1.5" />
                               </button>
-                            </TableCell>
-                          )}
+                        </TableCell>)
+                        }
+                  
+
                       </TableRow>
                     );
                   })
