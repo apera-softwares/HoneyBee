@@ -19,6 +19,7 @@ import ReferralStatusModal from "./ReferralStatusModal";
 import { DEFAULT_PROFILE_IMAGE } from "@/constant/defaultImages";
 import { BACKEND_API } from "@/api";
 import { capitalizeWord,capitalizeWords } from "@/utils/stringUtils";
+import { UserRole } from "@/constant/userRoles";
 
 interface ReferralTableProps {
   searchText: string;
@@ -45,6 +46,8 @@ const ReferralTable: React.FC<ReferralTableProps> = ({
   const [isStatusModalOpen, setIsStatusModalOpen] = useState(false);
   const [selectedReferral, setSelectedReferral] = useState<any>(null);
   const { user: loggedInUser } = useAppSelector((state) => state.user);
+
+  const shouldShowActionsCol = loggedInUser?.role === UserRole.ADMIN || loggedInUser?.role === UserRole.A_TEAM
 
   useEffect(() => {
     if(currentPage === 1 ){
@@ -164,12 +167,15 @@ const ReferralTable: React.FC<ReferralTableProps> = ({
                   >
                     Submitted On
                   </TableCell>
-                  <TableCell
+                  {
+                    shouldShowActionsCol && (<TableCell
                     isHeader
                     className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400"
                       >
                         Actions
-                  </TableCell>
+                  </TableCell>)
+                  }
+
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -214,14 +220,17 @@ const ReferralTable: React.FC<ReferralTableProps> = ({
                         <TableCell className="px-5 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                           {item?.submittedOn?.slice(0, 10) || ""}
                         </TableCell>
-                        <TableCell className="px-5 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                        {
+                          shouldShowActionsCol && ( <TableCell className="px-5 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                               <button
                                 className="flex items-center text-primary gap-2 cursor-pointer"
                                 onClick={() =>handleOpenCloseStatusUpdateModal(item)}
                               >
                                 Status <FiEdit className="mr-1.5" />
                               </button>
-                        </TableCell>
+                        </TableCell>)
+                        }
+                  
 
                       </TableRow>
                     );
