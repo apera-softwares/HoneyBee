@@ -13,12 +13,12 @@ import {
 } from "@/lib/redux/slices/referralSlice";
 import Spinner from "../common/Spinner";
 import Pagination from "../tables/Pagination";
-import  { Toaster } from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import { FiEdit } from "react-icons/fi";
 import ReferralStatusModal from "./ReferralStatusModal";
 import { DEFAULT_PROFILE_IMAGE } from "@/constant/defaultImages";
 import { BACKEND_API } from "@/api";
-import { capitalizeWord,capitalizeWords } from "@/utils/stringUtils";
+import { capitalizeWord, capitalizeWords } from "@/utils/stringUtils";
 import { UserRole } from "@/constant/userRoles";
 
 interface ReferralTableProps {
@@ -47,12 +47,12 @@ const ReferralTable: React.FC<ReferralTableProps> = ({
   const [selectedReferral, setSelectedReferral] = useState<any>(null);
   const { user: loggedInUser } = useAppSelector((state) => state.user);
 
-  const shouldShowActionsCol = loggedInUser?.role === UserRole.ADMIN || loggedInUser?.role === UserRole.A_TEAM
+  const shouldShowActionsCol = loggedInUser?.role === UserRole.ADMIN || loggedInUser?.role === UserRole.A_TEAM || UserRole.B_TEAM
 
   useEffect(() => {
-    if(currentPage === 1 ){
+    if (currentPage === 1) {
       getReferrals(1);
-    }else{
+    } else {
       setCurrentPage(1);
     }
   }, [searchText, status]);
@@ -71,7 +71,7 @@ const ReferralTable: React.FC<ReferralTableProps> = ({
         status: status,
       };
       const response = await dispatch(fetchReferrals(params)).unwrap();
-      setTotalPages(response?.lastPage||0);
+      setTotalPages(response?.lastPage || 0);
     } catch (error: any) {
       console.log(error?.message || "Failed to fetch products");
     }
@@ -96,9 +96,8 @@ const ReferralTable: React.FC<ReferralTableProps> = ({
     }
   };
 
-  const handleOpenCloseStatusUpdateModal=(referral:any)=>{
-    if(referral)
-    {
+  const handleOpenCloseStatusUpdateModal = (referral: any) => {
+    if (referral) {
       setIsStatusModalOpen(true);
       setSelectedReferral(referral);
       return;
@@ -115,10 +114,10 @@ const ReferralTable: React.FC<ReferralTableProps> = ({
         {selectedReferral && (
           <ReferralStatusModal
             isOpen={isStatusModalOpen}
-            closeModal={()=>handleOpenCloseStatusUpdateModal(null)}
+            closeModal={() => handleOpenCloseStatusUpdateModal(null)}
             role={loggedInUser?.role}
             referral={selectedReferral}
-            onStatusUpdate={()=>{
+            onStatusUpdate={() => {
               getReferrals(currentPage);
             }}
           />
@@ -169,11 +168,11 @@ const ReferralTable: React.FC<ReferralTableProps> = ({
                   </TableCell>
                   {
                     shouldShowActionsCol && (<TableCell
-                    isHeader
-                    className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400"
-                      >
-                        Actions
-                  </TableCell>)
+                      isHeader
+                      className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400"
+                    >
+                      Actions
+                    </TableCell>)
                   }
 
                 </TableRow>
@@ -208,7 +207,7 @@ const ReferralTable: React.FC<ReferralTableProps> = ({
                             />
                             <span className="">
 
-                               {`${capitalizeWord(item?.referredBy?.user?.firstName)} ${capitalizeWord(item?.referredBy?.user?.lastName)}`}
+                              {`${capitalizeWord(item?.referredBy?.user?.firstName)} ${capitalizeWord(item?.referredBy?.user?.lastName)}`}
                             </span>
                           </div>
                         </TableCell>
@@ -221,16 +220,16 @@ const ReferralTable: React.FC<ReferralTableProps> = ({
                           {item?.submittedOn?.slice(0, 10) || ""}
                         </TableCell>
                         {
-                          shouldShowActionsCol && ( <TableCell className="px-5 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
-                              <button
-                                className="flex items-center text-primary gap-2 cursor-pointer"
-                                onClick={() =>handleOpenCloseStatusUpdateModal(item)}
-                              >
-                                Status <FiEdit className="mr-1.5" />
-                              </button>
-                        </TableCell>)
+                          shouldShowActionsCol && (<TableCell className="px-5 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
+                            <button
+                              className="flex items-center text-primary gap-2 cursor-pointer"
+                              onClick={() => handleOpenCloseStatusUpdateModal(item)}
+                            >
+                              Status <FiEdit className="mr-1.5" />
+                            </button>
+                          </TableCell>)
                         }
-                  
+
 
                       </TableRow>
                     );

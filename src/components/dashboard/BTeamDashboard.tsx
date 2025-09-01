@@ -4,7 +4,7 @@ import StatisticsAreaChart from "../statistic-charts/StatisticsAreaChart";
 import TeamAndMemberListing from "@/components/team/TeamAndMemberListing";
 import StatisticsPieChart from "../statistic-charts/StatisticsPieChart";
 import axios from "axios";
-import {useAppSelector } from "@/lib/redux/hooks";
+import { useAppSelector } from "@/lib/redux/hooks";
 import { BACKEND_API } from "@/api";
 //import DashboardProductsTable from "../product-catalog/DashboardProductsTable";
 import PayoutTable from "../referral/PayoutTable";
@@ -96,7 +96,7 @@ const BTeamDashboard = () => {
         </div>
       </div>
       <div className="mb-5">
-        <PayoutTable/>
+        <PayoutTable />
       </div>
 
       {team?.teamId && (
