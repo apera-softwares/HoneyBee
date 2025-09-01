@@ -3,9 +3,9 @@ import React, { useEffect, useState } from "react";
 import { Modal } from "../ui/modal";
 import Button from "../ui/button/Button";
 import { BiSolidEditAlt } from "react-icons/bi";
-import toast,{Toaster} from "react-hot-toast";
-import { capitalizeWord,capitalizeWords } from "@/utils/stringUtils";
-import { useAppDispatch,useAppSelector } from "@/lib/redux/hooks";
+import toast, { Toaster } from "react-hot-toast";
+import { capitalizeWord, capitalizeWords } from "@/utils/stringUtils";
+import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { updateReferral } from "@/lib/redux/slices/referralSlice";
 
 type Role = "A_TEAM" | "B_TEAM" | "ADMIN";
@@ -22,7 +22,7 @@ const statusOptions: Record<Role, StatusOption[]> = {
     { label: "Appointment Completed", value: "Appointment_Completed" },
     { label: "Sold", value: "Sold" },
   ],
-  B_TEAM:  [
+  B_TEAM: [
     { label: "Pending", value: "Pending" },
     { label: "Contacted", value: "Contacted" },
     { label: "Appointment Completed", value: "Appointment_Completed" },
@@ -39,7 +39,7 @@ const statusOptions: Record<Role, StatusOption[]> = {
 interface ReferralStatusModalProps {
   isOpen: boolean;
   closeModal: () => void;
-  role:Role;
+  role: Role;
   referral: any; // Pass the full referral object
   onStatusUpdate: () => void;
 }
@@ -51,33 +51,34 @@ const ReferralStatusModal: React.FC<ReferralStatusModalProps> = ({
   referral,
   onStatusUpdate,
 }) => {
+
   const dispatch = useAppDispatch();
-  const {loading} = useAppSelector((state)=>state.referral);
+  const { loading } = useAppSelector((state) => state.referral);
   const [newStatus, setNewStatus] = useState(referral?.status || "");
 
-  useEffect(()=>{
-    setNewStatus(referral?.status||"");
-  },[isOpen]);
-  
+  useEffect(() => {
+    setNewStatus(referral?.status || "");
+  }, [isOpen]);
+
   const options = statusOptions[role] || [];
-  
+
   const handleUpdateStatus = async () => {
     if (!newStatus) {
       toast.error("Please select a valid status.");
       return;
     }
     try {
-      const payload = { id:referral?.id, status:newStatus };
+      const payload = { id: referral?.id, status: newStatus };
       await dispatch(updateReferral(payload)).unwrap();
       toast.success("Status updated successfully");
       closeModal();
       onStatusUpdate();
-    } catch (error:any) {
-    console.log(error, "error white status update");
-    const errorMessage = typeof error === "string"
-          ? error
-          : error?.message ||
-            "Something went  wrong while status update. Please try again.";
+    } catch (error: any) {
+      console.log(error, "error white status update");
+      const errorMessage = typeof error === "string"
+        ? error
+        : error?.message ||
+        "Something went  wrong while status update. Please try again.";
       toast.error(errorMessage);
     }
   };
@@ -89,7 +90,7 @@ const ReferralStatusModal: React.FC<ReferralStatusModalProps> = ({
       onClose={closeModal}
       className="max-w-md p-6 lg:p-8 pt-10"
     >
-      <Toaster/>
+      <Toaster />
       <div className="w-full">
         {/* Header */}
         <div className="flex items-center mb-4">
@@ -105,7 +106,7 @@ const ReferralStatusModal: React.FC<ReferralStatusModalProps> = ({
 
         {/* Status Dropdown */}
 
-           <div className="p-4 border rounded-md bg-gray-50 flex justify-between items-center mb-4">
+        <div className="p-4 border rounded-md bg-gray-50 flex justify-between items-center mb-4">
           <div>
             <p className="font-semibold">
               {
@@ -116,9 +117,9 @@ const ReferralStatusModal: React.FC<ReferralStatusModalProps> = ({
               {
                 `Product: ${capitalizeWords(referral?.product?.name)}`
               }
-              </p>
+            </p>
           </div>
-        
+
         </div>
         <div className="my-6">
           <label className="block text-gray-700 font-medium mb-2">
@@ -134,21 +135,21 @@ const ReferralStatusModal: React.FC<ReferralStatusModalProps> = ({
             <option value="Pending">Pending</option>
             <option value="Sold">Sold</option>
             <option value="Payout">Payout</option> */}
-             {options.map((status) => (
-                <option key={status.value} value={status.value}>
-                   {status.label}
-                </option>
-              ))}
+            {options.map((status) => (
+              <option key={status.value} value={status.value}>
+                {status.label}
+              </option>
+            ))}
           </select>
         </div>
 
         {/* Referral Details */}
-     
+
 
         {/* Buttons */}
         <div className="flex items-center justify-end w-full gap-3 mt-4">
           <Button disabled={loading} size="sm" onClick={handleUpdateStatus}>
-            {loading ? ("Saving Changes..."):("Save Changes")}
+            {loading ? ("Saving Changes...") : ("Save Changes")}
           </Button>
           <Button disabled={loading} size="sm" variant="outline" onClick={closeModal}>
             Cancel
