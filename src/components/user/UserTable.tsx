@@ -98,7 +98,7 @@ const UserTable: React.FC<UserTableProps> = ({
                     isHeader
                     className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400"
                   >
-                    S.No
+                    No.
                   </TableCell>
                   <TableCell
                     isHeader

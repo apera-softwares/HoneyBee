@@ -1,6 +1,6 @@
 "use client";
 import { FORM_INPUT_CLASS, REQUIRED_ERROR, TEXT_SIZE } from "@/constant/constantClassName";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import { createProductCatalog, fetchProductCatalogs, updateProductCatalog } from "@/lib/redux/slices/productCatalogSlice";
 import { fetchStates } from "@/lib/redux/slices/appSlice";
@@ -11,6 +11,7 @@ import Button from "../ui/button/Button";
 import Loader from "../ui/loader/Loader";
 import ImageUploading from 'react-images-uploading';
 import { RiImageAddFill } from "react-icons/ri";
+import Select from "react-select";
 
 interface FormState {
   name: string;
@@ -44,21 +45,30 @@ interface AddEditProductCatalogFormProps {
 
 }
 
+interface StateOption {
+  value: string; // stateId
+  label: string; // state name
+}
+
 const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ filters, paginationData, setPaginationData, editData, onEditSuccess }) => {
 
   const dispatch = useAppDispatch();
   const maxNumber = 3;
   const [formData, setFormData] = useState<FormState>({ name: "", bulletPoint1: "", bulletPoint2: "", bulletPoint3: "", elevatorPitch: "", status: "", stateId: "", price: "", estimatedPrice:"" });
-  const [states, setStates] = useState<any[]>([]);
+  // const [states, setStates] = useState<any[]>([]);
   const [stateName, setStateName] = useState<string>("");
-  const [selectedState, setSelectedState] = useState<any>(null);
-  const [isStateDropdownOpen, setIsStateDropdownOpen] = useState(false);
-  const stateDropdownRef = useRef<HTMLDivElement | null>(null);
+  // const [selectedState, setSelectedState] = useState<any>(null);
+  // const [isStateDropdownOpen, setIsStateDropdownOpen] = useState(false);
+  // const stateDropdownRef = useRef<HTMLDivElement | null>(null);
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [errors, setErrors] = useState({
     name: "", bulletPoint1: "", bulletPoint2: "", bulletPoint3: "", elevatorPitch: "", status: "", stateId: "", image: "", price: "",estimatedPrice:""
   })
+
+  //states
+  const [stateoptions, setStateOptions] = useState<StateOption[]>([]);
+  const [selectedStates, setSelectedStates] = useState<StateOption[]>([]);
 
   const onChange = (imageList: any, addUpdateIndex: any) => {
     // data for submit
@@ -66,15 +76,25 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
     setImages(imageList);
   };
 
-  useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
+  const handleStateNameInputChange = (inputValue: string) => {
+      setStateName(inputValue);
+  };
+
+  // useEffect(() => {
+  //   document.addEventListener('mousedown', handleClickOutside);
+  //   return () => document.removeEventListener('mousedown', handleClickOutside);
+  // }, []);
 
   useEffect(() => {
     if (editData) {
       setImages(editData.media)
-      setSelectedState(editData.states[0].state)
+      //setSelectedState(editData.states[0].state);
+      const selectedStates = editData.states?.map((state:any)=>({
+        label:state?.state?.name||"",
+        value:state?.state?.id||"",
+      }))||[];
+      setSelectedStates(selectedStates);
+
       setFormData({
         ...formData,
         name: editData?.name,
@@ -102,17 +122,17 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
 
 
 
-  const handleClickOutside = (e: MouseEvent) => {
-    if (stateDropdownRef.current && !stateDropdownRef.current.contains(e.target as Node)) {
-      setIsStateDropdownOpen(false);
-      setStateName("");
-      setStates([]);
-    }
-  };
+  // const handleClickOutside = (e: MouseEvent) => {
+  //   if (stateDropdownRef.current && !stateDropdownRef.current.contains(e.target as Node)) {
+  //     setIsStateDropdownOpen(false);
+  //     setStateName("");
+  //     setStates([]);
+  //   }
+  // };
 
-  const handleOpenStateCityDropdown = () => {
-    setIsStateDropdownOpen(true);
-  };
+  // const handleOpenStateCityDropdown = () => {
+  //   setIsStateDropdownOpen(true);
+  // };
 
 
   const validateFormData = () => {
@@ -192,10 +212,19 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
     }
 
     //validate state
-    if (formData.stateId.trim() === "") {
-      tempErrors.stateId = "State is required";
+    // if (formData.stateId.trim() === "") {
+    //   tempErrors.stateId = "State is required";
+    //   isValidData = false;
+    // } else {
+    //   tempErrors.stateId = "";
+    // }
+
+    //validate states
+    if(selectedStates.length === 0)
+    {
+      tempErrors.stateId = "States is required";
       isValidData = false;
-    } else {
+    }else {
       tempErrors.stateId = "";
     }
 
@@ -209,26 +238,26 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSelectState = (value: any) => {
+  // const handleSelectState = (value: any) => {
 
-    if (value) {
-      setSelectedState(value);
-      setIsStateDropdownOpen(false);
-      setFormData((prev: FormState) => ({
-        ...prev,
-        stateId: `${value?.id}`,
-      }));
-      setStates([]);
-      setStateName("");
-      return;
-    }
+  //   if (value) {
+  //     setSelectedState(value);
+  //     setIsStateDropdownOpen(false);
+  //     setFormData((prev: FormState) => ({
+  //       ...prev,
+  //       stateId: `${value?.id}`,
+  //     }));
+  //     setStates([]);
+  //     setStateName("");
+  //     return;
+  //   }
 
-    setSelectedState(null);
-    setFormData((prev: FormState) => ({
-      ...prev,
-      stateId: "",
-    }));
-  };
+  //   setSelectedState(null);
+  //   setFormData((prev: FormState) => ({
+  //     ...prev,
+  //     stateId: "",
+  //   }));
+  // };
 
   const handleClearFormData = () => {
     setFormData({ name: "", bulletPoint1: "", bulletPoint2: "", bulletPoint3: "", elevatorPitch: "", status: "", stateId: "", price: "", estimatedPrice:"" });
@@ -236,8 +265,14 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
       name: "", bulletPoint1: "", bulletPoint2: "", bulletPoint3: "", elevatorPitch: "", status: "", stateId: "", image: "", price: "",  estimatedPrice:"" 
     })
     setImages([])
-    setSelectedState(null);
-    setIsStateDropdownOpen(false);
+    // setSelectedState(null);
+    // setIsStateDropdownOpen(false);
+    
+    //
+    setStateName("")
+    setSelectedStates([]);
+    setStateOptions([]);
+    
   };
 
   const handleSubmit = async () => {
@@ -260,9 +295,15 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
       data.append("bulletPoints", `${formData.bulletPoint1},${formData.bulletPoint2},${formData.bulletPoint3}`);
       data.append("elevatorPitch", formData.elevatorPitch);
       data.append("status", formData.status);
-      data.append("stateId", formData.stateId);
+      // data.append("stateId", formData.stateId);
       data.append("price", formData.price.toString());
       data.append("estimatedPrice", formData.estimatedPrice.toString());
+
+      //append states
+      selectedStates.forEach((state)=>{
+        data.append("states[]",state.value);
+      })
+
 
       const imgIds = [] as any
       // Append each file using 'files' as the field name
@@ -279,7 +320,6 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
       //console.log(imgIds, "imgIds")
 
       data.append("mediaIds", imgIds);
-
       const params = {
         searchQuery: filters.searchQuery,
         status: filters.status === "" ? "" : filters.status === "true" ? "true" : "false",
@@ -289,7 +329,6 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
 
       if (editData) {
         await dispatch(updateProductCatalog({ id: editData?.id, data })).unwrap();
-
         toast.success("Product updated successfully");
         onEditSuccess();
         handleClearFormData();
@@ -320,19 +359,78 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
 
   const getStates = async () => {
     const query = stateName.trim();
-    if (!query) {
-      setStates([]);
+    if (query==="") {
+      //setStates([]);
+      setStateOptions([])
       return;
     }
     try {
       const response = await dispatch(fetchStates(query)).unwrap();
-      setStates(response?.data || []);
+      //setStates(response?.data || []);
+      const formattedStatesData = response?.data?.map((state: any) => ({
+        label: state?.name,
+        value: state?.id,
+      }))||[]
+      setStateOptions(formattedStatesData);
     }
     catch (error) {
-      setStates([]);
+      //setStates([]);
+      setStateOptions([]);
       console.log("error while fetching state", error);
     }
   }
+
+
+  const handleStateChange = (selected: StateOption[]) => {
+    setSelectedStates(selected || []);
+  };
+
+
+  const customStyles = {
+    control: (provided: any, state: any) => ({
+      ...provided,
+      border: "none",
+      borderBottom: `1px solid ${state.isFocused ? "#FF9912" : "#E0E0E0"}`, 
+      borderRadius: 0,
+      boxShadow: "none",
+      minHeight: "2.5rem", // match Tailwind h-10
+      "&:hover": {
+        borderBottom: "1px solid #FF9912"
+      }
+    }),
+    valueContainer: (provided: any) => ({
+      ...provided,
+      padding: 0
+    }),
+    indicatorsContainer: (provided: any) => ({
+      ...provided,
+      padding: 0
+    }),
+    dropdownIndicator: (provided: any) => ({
+      ...provided,
+      padding: "0 4px",
+    }),
+    input: (provided: any) => ({
+      ...provided,
+      margin: 0,
+      padding: 0
+    }),
+    indicatorSeparator: () => ({
+      display: "none" // Remove vertical stick
+    }),
+    placeholder: (provided: any) => ({
+      ...provided,
+      color: "#b8b8b8",
+      fontSize: "18px",
+      paddingBottom:"8px",
+    }),
+      option: (provided: any, state: any) => ({
+      ...provided,
+      backgroundColor: state.isFocused ? "#f2f4f7" : "white",
+      color: state.isFocused ? "#333" : "#000",
+      cursor: "pointer",
+    }),
+  };
 
   return (
     <div className="w-full max-w-[1500px] bg-white px-6 md:px-8 py-8 rounded-xl ">
@@ -345,7 +443,7 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
                 type="text"
                 placeholder="Product Name"
                 name="name"
-                className={`${FORM_INPUT_CLASS} ${TEXT_SIZE}`}
+                className={`${FORM_INPUT_CLASS} ${TEXT_SIZE} `}
                 value={formData.name}
                 onChange={handleInputChange}
               />
@@ -441,12 +539,39 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
               />
               <span className={`${REQUIRED_ERROR}`}>{errors.estimatedPrice || ""}</span>
             </div>
+                   <div className="w-full ">
+              <div className="flex items-center  gap-6 ">
+                <label className="block text-base font-medium text-[#717171]  ">Status</label>
+                <div className="flex items-center flex-wrap space-x-4  ">
+                  <Radio
+                    id="radio1"
+                    label="Active"
+                    name="status"
+                    value="true"
+                    checked={formData.status === "true"}
+                    onChange={(value) => { setFormData((prev: FormState) => ({ ...prev, status: value })) }}
+                  />
+
+                  <Radio
+                    id="radio2"
+                    label="Inactive"
+                    name="status"
+                    value="false"
+                    checked={formData.status === "false"}
+                    onChange={(value) => { setFormData((prev: FormState) => ({ ...prev, status: value })) }}
+
+                  />
+                </div>
+              </div>
+
+              <span className={`${REQUIRED_ERROR}`}>{errors.status || ""}</span>
+            </div>
 
           </div>
 
           <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-8 md:gap-10 lg:gap-12 ">
 
-            <div className="relative w-full" ref={stateDropdownRef}>
+            {/* <div className="relative w-full" ref={stateDropdownRef}>
               <input
                 type="text"
                 readOnly
@@ -499,36 +624,20 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
                   </ul>
                 </div>
               )}
-            </div>
-
-          
-
-            <div className="w-full ">
-              <div className="flex items-center  gap-6 ">
-                <label className="block text-base font-medium text-gray-700  ">Status</label>
-                <div className="flex items-center flex-wrap space-x-6  ">
-                  <Radio
-                    id="radio1"
-                    label="Active"
-                    name="status"
-                    value="true"
-                    checked={formData.status === "true"}
-                    onChange={(value) => { setFormData((prev: FormState) => ({ ...prev, status: value })) }}
-                  />
-
-                  <Radio
-                    id="radio2"
-                    label="Inactive"
-                    name="status"
-                    value="false"
-                    checked={formData.status === "false"}
-                    onChange={(value) => { setFormData((prev: FormState) => ({ ...prev, status: value })) }}
-
-                  />
-                </div>
-              </div>
-
-              <span className={`${REQUIRED_ERROR}`}>{errors.status || ""}</span>
+            </div> */}
+            <div className="w-full">
+              <Select
+                isMulti
+                styles={customStyles}
+                options={stateoptions}
+                value={selectedStates}
+                onChange={(selected)=>handleStateChange(selected as StateOption[])}
+                onInputChange={handleStateNameInputChange}
+                placeholder="States"
+                isSearchable
+                noOptionsMessage={() => "No states found"} 
+              />
+               <span className={`${REQUIRED_ERROR}`}>{errors.stateId || ""}</span>
             </div>
           </div>
 

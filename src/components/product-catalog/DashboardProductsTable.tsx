@@ -82,7 +82,7 @@ const DashboardProductsTable = () => {
                     isHeader
                     className="px-6 py-4 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400"
                   >
-                    S.No
+                    No.
                   </TableCell>
                   <TableCell
                     isHeader
