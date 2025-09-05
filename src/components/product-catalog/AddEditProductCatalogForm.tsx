@@ -539,6 +539,33 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
               />
               <span className={`${REQUIRED_ERROR}`}>{errors.estimatedPrice || ""}</span>
             </div>
+                   <div className="w-full ">
+              <div className="flex items-center  gap-6 ">
+                <label className="block text-base font-medium text-[#717171]  ">Status</label>
+                <div className="flex items-center flex-wrap space-x-4  ">
+                  <Radio
+                    id="radio1"
+                    label="Active"
+                    name="status"
+                    value="true"
+                    checked={formData.status === "true"}
+                    onChange={(value) => { setFormData((prev: FormState) => ({ ...prev, status: value })) }}
+                  />
+
+                  <Radio
+                    id="radio2"
+                    label="Inactive"
+                    name="status"
+                    value="false"
+                    checked={formData.status === "false"}
+                    onChange={(value) => { setFormData((prev: FormState) => ({ ...prev, status: value })) }}
+
+                  />
+                </div>
+              </div>
+
+              <span className={`${REQUIRED_ERROR}`}>{errors.status || ""}</span>
+            </div>
 
           </div>
 
@@ -611,33 +638,6 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
                 noOptionsMessage={() => "No states found"} 
               />
                <span className={`${REQUIRED_ERROR}`}>{errors.stateId || ""}</span>
-            </div>
-            <div className="w-full ">
-              <div className="flex items-center  gap-6 ">
-                <label className="block text-base font-medium text-[#717171]  ">Status</label>
-                <div className="flex items-center flex-wrap space-x-6  ">
-                  <Radio
-                    id="radio1"
-                    label="Active"
-                    name="status"
-                    value="true"
-                    checked={formData.status === "true"}
-                    onChange={(value) => { setFormData((prev: FormState) => ({ ...prev, status: value })) }}
-                  />
-
-                  <Radio
-                    id="radio2"
-                    label="Inactive"
-                    name="status"
-                    value="false"
-                    checked={formData.status === "false"}
-                    onChange={(value) => { setFormData((prev: FormState) => ({ ...prev, status: value })) }}
-
-                  />
-                </div>
-              </div>
-
-              <span className={`${REQUIRED_ERROR}`}>{errors.status || ""}</span>
             </div>
           </div>
 
