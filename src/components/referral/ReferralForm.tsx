@@ -278,15 +278,28 @@ const ReferralForm = () => {
 
     // Validate phone number
     //const phoneRegex = /^\d{10}$/;
-    if (formData.phoneNumber.trim() === "") {
-      tempErrors.phoneNumber = "phone number is required";
-      isValidData = false;
-    } else if (formData.phoneNumber.length < 10) {
-      tempErrors.phoneNumber = "Please enter a valid phone number";
-      isValidData = false;
-    } else {
-      tempErrors.phoneNumber = "";
-    }
+    // if (formData.phoneNumber.trim() === "") {
+    //   tempErrors.phoneNumber = "phone number is required";
+    //   isValidData = false;
+    // } else if (formData.phoneNumber.length < 10) {
+    //   tempErrors.phoneNumber = "Please enter a valid phone number";
+    //   isValidData = false;
+    // } else {
+    //   tempErrors.phoneNumber = "";
+    // }
+
+  const usPhoneRegex =  /^(?:\+1\s?|1\s?)?(?:\([2-9]\d{2}\)|[2-9]\d{2})[-.\s]?[2-9]\d{2}[-.\s]?\d{4}$/;
+
+  if (formData.phoneNumber.trim() === "") {
+  tempErrors.phoneNumber = "Phone number is required";
+  isValidData = false;
+  } else if (!usPhoneRegex.test(formData.phoneNumber.trim())) {
+  tempErrors.phoneNumber =
+    "Please enter a valid US phone number e.g., (234) 567-8901";
+  isValidData = false;
+  } else {
+   tempErrors.phoneNumber = "";
+  }
 
     // Validate email
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -312,9 +325,12 @@ const ReferralForm = () => {
     if (formData.postalCode.trim() === "") {
       tempErrors.postalCode = "Postal code  is required";
       isValidData = false;
-    } else if (formData.postalCode.length !== 5) {
-      tempErrors.postalCode = "Please enter valid postal code";
-      isValidData = false;
+    } else if (
+      formData.postalCode.trim().length !== 5 &&
+      formData.postalCode.trim().length !== 6
+     ) {
+          tempErrors.postalCode = "Postal code must be 5 or 6 digits";
+          isValidData = false;
     } else {
       tempErrors.postalCode = "";
     }
@@ -419,29 +435,29 @@ const ReferralForm = () => {
   };
 
 
-  const handleCityClick = ()=>{
+  // const handleCityClick = ()=>{
 
-    if(!formData.address.trim())
-    {
-      setErrors((prev)=>({...prev,city:"Fill address first"}));
+  //   if(!formData.address.trim())
+  //   {
+  //     setErrors((prev)=>({...prev,city:"Fill address first"}));
 
-    }else{
-       setErrors((prev)=>({...prev,city:""}))
+  //   }else{
+  //      setErrors((prev)=>({...prev,city:""}))
 
-    }
+  //   }
 
-  }
-  const handleStateClick = ()=>{
-    if(!formData.address.trim())
-    {
-      setErrors((prev)=>({...prev,state:"Fill address first"}));
+  // }
+  // const handleStateClick = ()=>{
+  //   if(!formData.address.trim())
+  //   {
+  //     setErrors((prev)=>({...prev,state:"Fill address first"}));
 
-    }else{
-       setErrors((prev)=>({...prev,state:""}))
+  //   }else{
+  //      setErrors((prev)=>({...prev,state:""}))
 
-    }
+  //   }
 
-  }
+  // }
 
   return (
     <div className="w-full max-w-[1500px] bg-white p-6 lg:p-8 rounded-xl">
@@ -482,16 +498,17 @@ const ReferralForm = () => {
                 name="phoneNumber"
                 className={`${FORM_INPUT_CLASS}`}
                 value={formData.phoneNumber}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  // Allow only numbers and max 10 digits
-                  if (/^\d{0,10}$/.test(value)) {
-                    setFormData((prev: FormDataState) => ({
-                      ...prev,
-                      phoneNumber: value,
-                    }));
-                  }
-                }}
+                // onChange={(e) => {
+                //   const value = e.target.value;
+                //   // Allow only numbers and max 10 digits
+                //   if (/^\d{0,10}$/.test(value)) {
+                //     setFormData((prev: FormDataState) => ({
+                //       ...prev,
+                //       phoneNumber: value,
+                //     }));
+                //   }
+                // }}
+                onChange={handleChange}
               />
               <span className={`${REQUIRED_ERROR}`}>
                 {errors.phoneNumber || ""}
@@ -604,11 +621,10 @@ const ReferralForm = () => {
                 type="text"
                 placeholder="City"
                 name="city"
-                readOnly
                 className={`${FORM_INPUT_CLASS}`}
                 value={formData.city}
                 onChange={handleChange}
-                onClick={handleCityClick}
+                // onClick={handleCityClick}
               />
               <span className={`${REQUIRED_ERROR}`}>{errors.city || ""}</span>
             </div>
@@ -681,11 +697,10 @@ const ReferralForm = () => {
                 type="text"
                 placeholder="State"
                 name="state"
-                readOnly
                 className={`${FORM_INPUT_CLASS}`}
                 value={formData.state}
                 onChange={handleChange}
-                onClick={handleStateClick}
+                // onClick={handleStateClick}
               />
               <span className={`${REQUIRED_ERROR}`}>{errors.state || ""}</span>
             </div>
