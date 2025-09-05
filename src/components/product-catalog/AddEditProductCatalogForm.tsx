@@ -301,7 +301,7 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
 
       //append states
       selectedStates.forEach((state)=>{
-        data.append("states",state.value);
+        data.append("states[]",state.value);
       })
 
 
