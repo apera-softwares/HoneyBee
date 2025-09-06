@@ -157,7 +157,8 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
 
      //validate Price 
     if (formData.estimatedPrice === "") {
-      tempErrors.estimatedPrice = "Estimated Price is required";
+      //tempErrors.estimatedPrice = "Estimated Price is required";
+      tempErrors.estimatedPrice = "Commission percentage is required";
       isValidData = false;
     } else {
       tempErrors.estimatedPrice = "";
@@ -525,7 +526,7 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
              <div className="relative w-full">
               <input
                 type="text"
-                placeholder="Estimated Price ($)"
+                placeholder="Commission Percentage"
                 name="estimatedPrice"
                 className={`${FORM_INPUT_CLASS} ${TEXT_SIZE}`}
                 value={formData.estimatedPrice}
@@ -666,9 +667,9 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
                         onClick={onImageUpload}
                         {...dragProps}
                         className={`px-4 py-2 flex items-center gap-2 rounded-md border bg-gray-100 ${isDragging ? 'border-red-500 text-red-500' : 'border-gray-500 text-gray-500'
-                          } hover:bg-blue-100 transition-all`}
+                          } hover:bg-gray-200 transition-all`}
                       >
-                        <RiImageAddFill />
+                        <RiImageAddFill className="shrink-0" />
                         Upload Product Images
                       </button>
                       <button
