@@ -526,7 +526,7 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
              <div className="relative w-full">
               <input
                 type="text"
-                placeholder="Commission Percentage"
+                placeholder="Commission Percentage %"
                 name="estimatedPrice"
                 className={`${FORM_INPUT_CLASS} ${TEXT_SIZE}`}
                 value={formData.estimatedPrice}
