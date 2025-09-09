@@ -1,9 +1,10 @@
 "use client";
+import Link from "next/link";
 import React, { useEffect,useState } from "react";
 import CommonHeading from "@/components/common/CommonHeading";
 import ReferralForm from "@/components/referral/ReferralForm";
 import ProductCard from "@/components/product-catalog/ProductCard";
-import { useRouter } from "next/navigation";
+//import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { fetchSelectedProducts } from "@/lib/redux/slices/productCatalogSlice";
 import { UserRole } from "@/constant/userRoles";
@@ -14,7 +15,7 @@ import { DEFAULT_PRODUCT_IMAGE } from "@/constant/defaultImages";
 
 export default function ReferralFormPage() {
   const dispatch = useAppDispatch();
-  const router = useRouter();
+  //const router = useRouter();
   const [showViewProductDetailsModal,setShowViewProductDetailsModal] = useState<boolean>(false);
   const[selectedProduct,setSelectedProduct] = useState<any>(null);
   const { selectedProducts } = useAppSelector((state) => state.productCatalog);
@@ -42,9 +43,9 @@ export default function ReferralFormPage() {
     }
   };
 
-  const handleRedirectToLandingPage = () => {
-    router.push(`${LANDING_PAGE_URL}landing/${loggedInUser.userId}`);
-  }
+  // const handleRedirectToLandingPage = () => {
+  //   router.push(`${LANDING_PAGE_URL}landing/${loggedInUser.userId}`);
+  // }
   const handleCopyLink = async () => {
     const url = `${LANDING_PAGE_URL}landing/${loggedInUser.userId}`;
     try {
@@ -79,10 +80,17 @@ export default function ReferralFormPage() {
           />
         </div>
         <div className="flex items-center gap-2">
-          <button className=" px-6 py-3.5 rounded-md text-sm text-white bg-primary hover:bg-primary-hover transition-all duration-500"
+          <Link href={`${LANDING_PAGE_URL}landing/${loggedInUser.userId}`} 
+           target="_blank"
+           rel="noopener noreferrer"
+           className="px-6 py-3.5 rounded-md text-sm text-white text-nowrap whitespace-nowrap bg-primary hover:bg-primary-hover border border-primary transition-all duration-500" 
+           >
+             Landing Page
+          </Link>
+          {/* <button className=" px-6 py-3.5 rounded-md text-sm text-white bg-primary hover:bg-primary-hover transition-all duration-500"
             onClick={handleRedirectToLandingPage}
-          >Landing Page</button>
-          <button className=" px-6 py-3.5 rounded-md text-sm  border border-black transition-all duration-500"
+          >Landing Page</button> */}
+          <button className=" px-6 py-3.5 rounded-md text-sm  border border-black text-nowrap whitespace-nowrap transition-all duration-500"
             onClick={handleCopyLink}
           >Copy Link</button>
         </div>
