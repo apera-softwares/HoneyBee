@@ -244,7 +244,7 @@ export default function ForgotPassword() {
             <form onSubmit={handleResetPassword} className="space-y-6">
               <div>
                 <label className="block text-sm font-bold text-black mb-1">
-                  OTP
+                  Verification Code
                 </label>
                 <input
                   type="text"
@@ -267,7 +267,7 @@ export default function ForgotPassword() {
                   name="password"
                   value={formData.password}
                   onChange={handleChange}
-                  placeholder="Password"
+                  placeholder="Enter Password"
                   className={`${INPUT_CLASS}`}
                 />
                 <span className={`${INPUT_REQUIRED_ERROR_CLASS}`}>
