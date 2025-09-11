@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState, useCallback } from "react";
+import { persistor } from "./../lib/redux/store";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
@@ -406,6 +407,7 @@ const AppSidebar: React.FC = () => {
     localStorage.removeItem("user");
     dispatch(logout());
     dispatch(resetUserProfile());
+    persistor.purge(); 
     router.replace("/")
 
   }

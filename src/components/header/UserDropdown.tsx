@@ -3,6 +3,7 @@
 // import Link from "next/link";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import {persistor} from "./../../lib/redux/store";
 import { Dropdown } from "../ui/dropdown/Dropdown";
 import { DropdownItem } from "../ui/dropdown/DropdownItem";
 import { fetchUserProfile } from "@/lib/redux/slices/loginPersonProfile";
@@ -58,6 +59,7 @@ const getUserProfile = async () => {
     localStorage.removeItem("user");
     dispatch(logout());
     dispatch(resetUserProfile());
+    persistor.purge(); 
     router.replace("/")
   
   }
