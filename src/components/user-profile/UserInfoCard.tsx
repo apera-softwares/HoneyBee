@@ -22,42 +22,33 @@ export default function UserInfoCard() {
       </div>
       <div className="w-full space-y-4 lg:space-y-6">
         <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-4  lg:gap-6">
-          <div>
-            <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-              First Name
-            </p>
-            <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-              {capitalizeWord(userProfile?.firstName)}
-            </p>
-          </div>
-          <div>
-            <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-              Last Name
-            </p>
-            <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-              {capitalizeWord(userProfile?.lastName)}
-            </p>
-          </div>
+          <InfoRow
+            label="First Name"
+            value={capitalizeWord(userProfile?.firstName)||"NA"}
+          />
+          <InfoRow
+            label="Last Name"
+            value={capitalizeWord(userProfile?.lastName)||"NA"}
+          />
         </div>
         <div className="w-full grid grid-cols-1 lg:grid-cols-3 gap-4  lg:gap-6">
-          <div>
-            <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-              Email address
-            </p>
-            <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-              {userProfile?.email}
-            </p>
-          </div>
-          <div>
-            <p className="mb-2 text-xs leading-normal text-gray-500 dark:text-gray-400">
-              Role
-            </p>
-            <p className="text-sm font-medium text-gray-800 dark:text-white/90">
-              {formatRoleName(userProfile?.role)}
-            </p>
-          </div>
+          <InfoRow label="Email Address" value={userProfile?.email||"NA"} />
+          <InfoRow label="Role" value={formatRoleName(userProfile?.role)||"NA"} />
         </div>
       </div>
     </div>
   );
 }
+
+interface InfoRowProps {
+  label: string;
+  value: React.ReactNode | string;
+}
+const InfoRow: React.FC<InfoRowProps> = ({ label, value }) => {
+  return (
+    <div className="w-full">
+      <p className="mb-2 text-xs leading-normal text-gray-500">{label}</p>
+      <div className="text-sm font-medium text-gray-800">{value}</div>
+    </div>
+  );
+};
