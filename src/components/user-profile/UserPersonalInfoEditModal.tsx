@@ -8,12 +8,12 @@ import Label from "../form/Label";
 // import { TbArrowNarrowLeft, TbArrowNarrowRight } from "react-icons/tb";
 // import { capitalizeWords } from "@/utils/stringUtils";
 
-interface UserInfoEditModalProps {
+interface UserPersonalInfoEditModalProps {
   isOpen: boolean;
   closeModal: () => void;
 }
 
-const UserInfoEditModal: React.FC<UserInfoEditModalProps> = ({
+const UserPersonalInfoEditModal: React.FC<UserPersonalInfoEditModalProps> = ({
   isOpen,
   closeModal,
 }) => {
@@ -132,4 +132,4 @@ const UserInfoEditModal: React.FC<UserInfoEditModalProps> = ({
   );
 };
 
-export default UserInfoEditModal;
+export default UserPersonalInfoEditModal;

@@ -125,13 +125,15 @@ const ProductSelectTable: React.FC<ProductSelectTableProps> = ({
                     isHeader
                     className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400"
                   >
-                    Estimated Price
+                    {/* Estimated Price */}
+                    Referral Commission
                   </TableCell>
                   <TableCell
                     isHeader
                     className="px-5 py-3 font-medium text-[#1F1C3B] text-start text-theme-sm dark:text-gray-400"
                   >
-                    Sold Price
+                    {/* Sold Price */}
+                    Price Range
                   </TableCell>
                   <TableCell
                     isHeader

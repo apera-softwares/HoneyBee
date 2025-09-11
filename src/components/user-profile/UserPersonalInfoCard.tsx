@@ -4,7 +4,7 @@ import { useAppSelector } from "@/lib/redux/hooks";
 import { formatRoleName, capitalizeWord } from "@/utils/stringUtils";
 // import { FiEdit } from "react-icons/fi";
 
-export default function UserInfoCard() {
+export default function UserPersonalInfoCard() {
   const { userProfile } = useAppSelector((state) => state.userProfile);
 
   return (

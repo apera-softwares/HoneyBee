@@ -20,6 +20,8 @@ import Loader from "../ui/loader/Loader";
 import ImageUploading from "react-images-uploading";
 import { RiImageAddFill } from "react-icons/ri";
 import Select from "react-select";
+import { RiDeleteBin6Line } from "react-icons/ri";
+import { FiEdit } from "react-icons/fi";
 
 interface FormState {
   name: string;
@@ -270,8 +272,7 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({
       HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement
     >
   ) => {
-    const { name } = e.target;
-    let value = e.target.value;
+    const { name,value } = e.target;
 
     // Special case for price
     if (name === "price") {
@@ -281,8 +282,6 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({
 
     // Special case for estimatedPrice
     if (name === "estimatedPrice") {
-      value = value.replace("%", ""); // strip %
-
       // Regex: digits, optional dot, max 2 decimals
       const decimalRegex = /^\d{0,3}(\.\d{0,2})?$/;
 
@@ -614,6 +613,8 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({
               <span className={`${REQUIRED_ERROR}`}>
                 {errors.estimatedPrice || ""}
               </span>
+            
+              <span className={`absolute top-1 left-14  text-[#717171]  `}>{ formData.estimatedPrice ? `%`:`` }</span>
             </div>
             <div className="w-full ">
               <div className="flex items-center  gap-6 ">
@@ -758,7 +759,7 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({
                           isDragging
                             ? "border-red-500 text-red-500"
                             : "border-gray-500 text-gray-500"
-                        } hover:bg-gray-200 transition-all`}
+                        } hover:bg-gray-200 transition-all duration-300`}
                       >
                         <RiImageAddFill className="shrink-0" />
                         Upload Product Images
@@ -766,9 +767,9 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({
                       <button
                         type="button"
                         onClick={onImageRemoveAll}
-                        className=" w-full sm:w-auto text-center px-4 py-2 rounded-md border border-red-500 text-red-500 hover:bg-red-100 transition-all"
+                        className=" w-full sm:w-auto flex items-center justify-center gap-2  text-center px-4 py-2 rounded-md border border-red-500 text-red-500 hover:bg-red-100 transition-all duration-300"
                       >
-                        Remove All
+                         <RiDeleteBin6Line className=""/> Remove All
                       </button>
                     </div>
                     {/* <span className="text-orange-400">note: provide 3 images and a bullet point slide</span> */}
@@ -797,18 +798,18 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({
                               alt={`uploaded-${index}`}
                               className="w-full h-48 object-cover"
                             />
-                            <div className="absolute top-0 right-0 flex flex-col gap-1 m-2">
+                            <div className="absolute top-2 right-2 flex flex-col gap-1">
                               <button
                                 onClick={() => onImageUpdate(index)}
-                                className="bg-yellow-400 hover:bg-yellow-500 text-white px-2 py-1 text-xs rounded shadow"
+                                className="flex items-center justify-center bg-yellow-400 hover:bg-yellow-500 text-white px-2 py-1.5 text-xs  rounded-md transition-all duration-300"
                               >
-                                Update
+                                <FiEdit className="text-base"/>
                               </button>
                               <button
                                 onClick={() => onImageRemove(index)}
-                                className="bg-red-500 hover:bg-red-600 text-white px-2 py-1 text-xs rounded shadow"
+                                className="flex items-center justify-center bg-red-500 hover:bg-red-600 text-white px-2 py-1.5 text-xs rounded-md transition-all duration-300"
                               >
-                                Remove
+                                <RiDeleteBin6Line className="text-base"/>
                               </button>
                             </div>
                           </div>
