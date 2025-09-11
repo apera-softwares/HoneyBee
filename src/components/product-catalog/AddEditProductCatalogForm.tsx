@@ -157,17 +157,21 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
 
      //validate Price 
     if (formData.estimatedPrice === "") {
-      //tempErrors.estimatedPrice = "Estimated Price is required";
-      tempErrors.estimatedPrice = "Commission percentage is required";
+      tempErrors.estimatedPrice = "Referral Commission % is required";
       isValidData = false;
     } else {
       tempErrors.estimatedPrice = "";
     }
 
     if (images.length < 1) {
-      tempErrors.image = "Min 1 image required";
+      tempErrors.image = "Product images is required";
       isValidData = false;
-    } else {
+    } else if(images.length !==3){
+       tempErrors.image = "Please provide 3 product images";
+      isValidData = false;
+
+    }
+     else {
       tempErrors.image = "";
     }
 
@@ -235,7 +239,30 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
+  const { name } = e.target;
+  let value = e.target.value;
+
+  // Special case for price
+    if (name === "price") {
+    // Allow only digits and optional one decimal
+    if (!/^\d*\.?\d*$/.test(value)) return;
+  }
+
+ // Special case for estimatedPrice
+if (name === "estimatedPrice") {
+  value = value.replace("%", ""); // strip %
+
+  // Regex: digits, optional dot, max 2 decimals
+  const decimalRegex = /^\d{0,3}(\.\d{0,2})?$/;
+
+  if (
+    value !== "" &&
+    (!decimalRegex.test(value) || +value < 0 || +value > 100)
+  ) {
+    return; // ignore invalid input
+  }
+}
+
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
@@ -433,6 +460,8 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
     }),
   };
 
+  console.log("form data",formData);
+
   return (
     <div className="w-full max-w-[1500px] bg-white px-6 md:px-8 py-8 rounded-xl ">
 
@@ -508,17 +537,11 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
             <div className="relative w-full">
               <input
                 type="text"
-                placeholder="Sold Price ($)"
+                placeholder="Price Range ($)"
                 name="price"
                 className={`${FORM_INPUT_CLASS} ${TEXT_SIZE}`}
                 value={formData.price}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  // Allow only digits and optional one dot (decimal)
-                  if (/^\d*\.?\d*$/.test(value)) {
-                    handleInputChange(e);
-                  }
-                }}
+                onChange={handleInputChange}
               />
               <span className={`${REQUIRED_ERROR}`}>{errors.price || ""}</span>
             </div>
@@ -526,17 +549,11 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
              <div className="relative w-full">
               <input
                 type="text"
-                placeholder="Commission Percentage %"
+                placeholder="Referral Commission %"
                 name="estimatedPrice"
                 className={`${FORM_INPUT_CLASS} ${TEXT_SIZE}`}
                 value={formData.estimatedPrice}
-                onChange={(e) => {
-                  const value = e.target.value;
-                  // Allow only digits and optional one dot (decimal)
-                  if (/^\d*\.?\d*$/.test(value)) {
-                    handleInputChange(e);
-                  }
-                }}
+                onChange={handleInputChange}
               />
               <span className={`${REQUIRED_ERROR}`}>{errors.estimatedPrice || ""}</span>
             </div>
@@ -680,10 +697,12 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
                         Remove All
                       </button>
                     </div>
-                    <span className="text-orange-400">note: provide 3 images and a bullet point slide</span>
+                    {/* <span className="text-orange-400">note: provide 3 images and a bullet point slide</span> */}
+                    <span className="block text-sm font-medium text-orange-400">Note: Provide 3 product images</span>
 
                     {/* Uploaded Images Grid */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                    {
+                      images.length >= 1  && (    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                       {images.map((image: any, index) => (
                         <div
                           key={index}
@@ -712,7 +731,8 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({ f
                           </div>
                         </div>
                       ))}
-                    </div>
+                    </div>)                    }
+                
                   </div>
                 )}
               </ImageUploading>
