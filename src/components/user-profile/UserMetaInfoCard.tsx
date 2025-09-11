@@ -11,7 +11,7 @@ import { BACKEND_API } from "@/api";
 import { DEFAULT_PROFILE_IMAGE } from "@/constant/defaultImages";
 import { formatRoleName,capitalizeWord } from "@/utils/stringUtils";
 
-export default function UserMetaCard() {
+export default function UserMetaInfoCard() {
   const { isOpen, closeModal, openModal } = useModal();
   const [loading, setLoading] = useState(false)
   const dispatch = useAppDispatch();
@@ -62,10 +62,10 @@ export default function UserMetaCard() {
     <div className="">
       <div className="p-5 border border-gray-200 rounded-2xl dark:border-gray-800 lg:p-6">
         <Toaster/>
-        <div className="flex flex-col gap-5 xl:flex-row xl:items-center xl:justify-between">
-          <div className="flex flex-col items-center w-full gap-6 xl:flex-row">
+        <div className="w-full">
+          <div className="flex flex-col items-center w-full gap-6 lg:flex-row">
             <div className="flex flex-col items-center gap-2">
-              <div className="w-20 h-20 overflow-hidden border-2 border-primary rounded-full dark:border-gray-800">
+              <div className="w-20 h-20 overflow-hidden border-2 border-primary rounded-full ">
                 <img
                   width={80}
                   height={80}
@@ -83,13 +83,13 @@ export default function UserMetaCard() {
             </div>
 
             <div className="order-3 xl:order-2">
-              <h4 className="mb-2 text-lg font-semibold text-center text-gray-800 dark:text-white/90 xl:text-left">
+              <h4 className="mb-2 text-lg font-semibold text-center text-gray-800  lg:text-left">
               {
                 `${capitalizeWord(userProfile?.firstName)} ${capitalizeWord(userProfile?.lastName)}`
               }
               </h4>
-              <div className="flex flex-col items-center gap-1 text-center xl:flex-row xl:gap-3 xl:text-left">
-                <p className="text-sm text-gray-500 dark:text-gray-400">
+              <div className="flex flex-col items-center gap-1 text-center lg:flex-row lg:gap-3 lg:text-left">
+                <p className="text-sm text-gray-500 ">
                   {formatRoleName(userProfile?.role)}
                 </p>
               </div>
