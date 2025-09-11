@@ -182,7 +182,7 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({
 
     //validate Price
     if (formData.price === "") {
-      tempErrors.price = "Price is required";
+      tempErrors.price = "Price range is required";
       isValidData = false;
     } else {
       tempErrors.price = "";
@@ -514,7 +514,6 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({
     }),
   };
 
-  console.log("form data", formData);
 
   return (
     <div className="w-full max-w-[1500px] bg-white px-6 md:px-8 py-8 rounded-xl ">
@@ -750,12 +749,12 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({
                 }) => (
                   <div className="space-y-4 p-4 border border-gray-300 rounded-lg bg-white">
                     {/* Upload/Drop Button */}
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center flex-wrap gap-4">
                       <button
                         type="button"
                         onClick={onImageUpload}
                         {...dragProps}
-                        className={`px-4 py-2 flex items-center gap-2 rounded-md border bg-gray-100 ${
+                        className={`w-full sm:w-auto px-4 py-2 flex items-center justify-center gap-2 text-center rounded-md border bg-gray-100 ${
                           isDragging
                             ? "border-red-500 text-red-500"
                             : "border-gray-500 text-gray-500"
@@ -767,14 +766,14 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({
                       <button
                         type="button"
                         onClick={onImageRemoveAll}
-                        className="px-4 py-2 rounded-md border border-red-500 text-red-500 hover:bg-red-100 transition-all"
+                        className=" w-full sm:w-auto text-center px-4 py-2 rounded-md border border-red-500 text-red-500 hover:bg-red-100 transition-all"
                       >
                         Remove All
                       </button>
                     </div>
                     {/* <span className="text-orange-400">note: provide 3 images and a bullet point slide</span> */}
                     <span className="block text-sm font-medium text-orange-400">
-                      Note: Provide 3 product images
+                      Note : Provide 3 product images
                     </span>
 
                     {/* Uploaded Images Grid */}
