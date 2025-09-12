@@ -162,7 +162,7 @@ const ProductCatalogTable: React.FC<ProductCatalogTableProps> = ({
                       </TableCell>
                       <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
                         {product?.estimatedPrice
-                          ? `$${product?.estimatedPrice}`
+                          ? `${product?.estimatedPrice} %`
                           : `NA`}
                       </TableCell>
                       <TableCell className="px-5 py-3 text-gray-500 text-start text-theme-sm dark:text-gray-400">
