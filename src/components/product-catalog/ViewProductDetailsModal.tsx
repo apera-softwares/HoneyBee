@@ -116,15 +116,17 @@ const ViewProductDetailsModal: React.FC<ViewProductDetailsModalProps> = ({
 
               <div className="w-full border-b pb-1 ">
                 <p className="font-semibold text-sm text-gray-800 mb-1">
-                  Estimated Price
+                  {/* Estimated Price */}
+                  Referral Commission
                 </p>
                 <h2 className="">
-                  {selectedProduct?.estimatedPrice ? `$${selectedProduct?.estimatedPrice}` : "NA"}
+                  {selectedProduct?.estimatedPrice ? `${selectedProduct?.estimatedPrice} %` : "NA"}
                 </h2>
               </div>
               <div className="w-full border-b pb-1 ">
                 <p className="font-semibold text-sm text-gray-800 mb-1">
-                  Sold Price
+                  {/* Sold Price */}
+                  Price Range
                 </p>
                 <h2 className="">
                   {selectedProduct?.price ? `$${selectedProduct?.price}` : "NA"}
