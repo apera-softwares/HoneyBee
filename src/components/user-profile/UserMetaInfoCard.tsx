@@ -10,6 +10,8 @@ import { useAppDispatch,useAppSelector } from "@/lib/redux/hooks";
 import { BACKEND_API } from "@/api";
 import { DEFAULT_PROFILE_IMAGE } from "@/constant/defaultImages";
 import { formatRoleName,capitalizeWord } from "@/utils/stringUtils";
+import ButtonLoader from "../ui/loader/ButtonLoader";
+import { FiEdit } from "react-icons/fi";
 
 export default function UserMetaInfoCard() {
   const { isOpen, closeModal, openModal } = useModal();
@@ -64,11 +66,11 @@ export default function UserMetaInfoCard() {
         <Toaster/>
         <div className="w-full">
           <div className="flex flex-col items-center w-full gap-6 lg:flex-row">
-            <div className="flex flex-col items-center gap-2">
-              <div className="w-20 h-20 overflow-hidden border-2 border-primary rounded-full ">
+            <div className="relative flex flex-col items-center">
+              <div className=" w-24 h-24 overflow-hidden border-2 border-primary rounded-full">
                 <img
-                  width={80}
-                  height={80}
+                  width={96}
+                  height={96}
                   src={imageSrc}
                   alt="user"
                   className="w-full h-full object-cover rounded-full"
@@ -76,9 +78,9 @@ export default function UserMetaInfoCard() {
               </div>
               <button
                 onClick={openModal}
-                className="text-sm px-3 py-1 bg-primary text-white rounded-full hover:bg-orange-400 transition"
-              >
-                Update Image
+                className=" absolute bottom-1 right-1 bg-primary flex items-center justify-center text-sm p-1 text-white rounded"
+                >
+                <FiEdit/>
               </button>
             </div>
 
@@ -98,7 +100,10 @@ export default function UserMetaInfoCard() {
         </div>
       </div>
       {/* Image Upload Modal */}
-      <Modal isOpen={isOpen} onClose={closeModal} className="max-w-[500px] m-4">
+      <Modal isOpen={isOpen} onClose={()=>{
+        if(loading) return ;
+        closeModal();
+      }} className="max-w-[500px] m-4">
         <div className="relative w-full rounded-3xl bg-white p-4 dark:bg-gray-900 lg:p-8">
           <h4 className="mb-4 text-xl font-semibold text-gray-800 dark:text-white/90">
             Update Profile Image
@@ -142,11 +147,11 @@ export default function UserMetaInfoCard() {
           </ImageUploading>
 
           <div className="flex justify-end gap-3 mt-6">
-            <Button size="sm" variant="outline" onClick={closeModal}>
-              Cancel
+            <Button size="sm" disabled={loading} onClick={handleImageSave} className=" w-44 ">
+              {loading ? (<ButtonLoader/>) : ("Save Changes") }
             </Button>
-            <Button size="sm" onClick={handleImageSave}>
-              {loading ? "Loading..." : "Save Image"}
+            <Button size="sm" variant="outline" disabled={loading} onClick={closeModal}>
+              Cancel
             </Button>
           </div>
         </div>
