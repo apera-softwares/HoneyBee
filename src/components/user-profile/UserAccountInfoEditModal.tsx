@@ -5,6 +5,7 @@ import { GridIcon } from "../../icons/index";
 import toast, { Toaster } from "react-hot-toast";
 import { useAppDispatch,useAppSelector } from "@/lib/redux/hooks";
 import { fetchUserProfile, updateAccountDetails } from "@/lib/redux/slices/loginPersonProfile";
+import ButtonLoader from "../ui/loader/ButtonLoader";
 
 interface FormData {
   accountNumber: string;
@@ -137,10 +138,8 @@ const UserAccountInfoEditModal: React.FC<UserAccountInfoModalProps> = ({
     <Modal
       isOpen={isOpen}
       onClose={()=>{
-        if(!loading)
-        {
-          handleCloseModal();
-        }
+        if(loading) return ;
+        handleCloseModal() ;
       }}
       className="max-w-2xl px-6 lg:px-8 py-8"
     >
@@ -198,10 +197,10 @@ const UserAccountInfoEditModal: React.FC<UserAccountInfoModalProps> = ({
               <button
                 type="submit"
                 disabled={loading}
-                className=" bg-primary hover:bg-primary-hover text-white px-8 py-3 text-sm inline-flex items-center justify-center font-medium gap-2 rounded-lg  transition-all duration-300 shadow-theme-xs border border-primary disabled:bg-primary/70 disabled:cursor-not-allowed "
+                className=" w-44 bg-primary hover:bg-primary-hover text-white px-8 py-3 text-sm inline-flex items-center justify-center font-medium gap-2 rounded-lg  transition-all duration-300 shadow-theme-xs border border-primary disabled:bg-primary/70 disabled:cursor-not-allowed "
               >
                 {
-                  loading ? ("Saving Changes..."):("Save Changes")
+                  loading ? (<ButtonLoader/>):("Save Changes")
                 }
               </button>
               <button

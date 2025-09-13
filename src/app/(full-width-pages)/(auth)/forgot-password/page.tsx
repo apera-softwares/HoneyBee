@@ -13,6 +13,7 @@ import { IoArrowBackOutline } from "react-icons/io5";
 import { useAppSelector, useAppDispatch } from "@/lib/redux/hooks";
 import { sendOtp, resetPassword } from "@/lib/redux/slices/authSlice";
 import toast, { Toaster } from "react-hot-toast";
+import ButtonLoader from "@/components/ui/loader/ButtonLoader";
 
 export default function ForgotPassword() {
   const dispatch = useAppDispatch();
@@ -220,7 +221,7 @@ export default function ForgotPassword() {
                 disabled={loading}
                 className="flex justify-center items-center w-full h-14 text-white bg-gradient-to-r from-gradient-start to-gradient-end rounded-full shadow-lg font-bold hover:cursor-pointer disabled:cursor-not-allowed"
               >
-                Send OTP
+                {loading  ? (<ButtonLoader size="lg" color="text-white"/>):("Send OTP")}
               </button>
             </form>
 
@@ -296,8 +297,7 @@ export default function ForgotPassword() {
                 disabled={loading}
                 className="flex justify-center items-center w-full h-14 text-white bg-gradient-to-r from-gradient-start to-gradient-end rounded-full shadow-lg font-bold hover:cursor-pointer disabled:cursor-not-allowed"
               >
-                {/* {loading ? (<Loader/>):("Reset password")} */}
-                Reset Password
+                {loading ? (<ButtonLoader size="lg" color="text-white"/>):("Reset password")}
               </button>
             </form>
 

@@ -103,7 +103,7 @@ const TeamTable: React.FC<TeamTableProps> = ({ searchText, role, order,isCreateT
                 <Toaster />
 
                 <div className="w-full ">
-                    {loading ? (
+                    {loading.read ? (
                         <Spinner />
                     ) : (
                         <Table>

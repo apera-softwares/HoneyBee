@@ -36,7 +36,7 @@ export const fetchUsers = createAsyncThunk(
   
         return response.data;
       } catch (error: any) {
-        return thunkAPI.rejectWithValue(error.response?.data?.message || "Failed to fetch users");
+        return thunkAPI.rejectWithValue(error.response?.data?.message || "Failed to fetch users, Please try again");
       }
     }
   );
@@ -61,7 +61,7 @@ export const fetchUsers = createAsyncThunk(
         return response.data;
       } catch (error: any) {
         return thunkAPI.rejectWithValue(
-          error.response?.data?.message || "Failed to Create user"
+          error.response?.data?.message || "Failed to Create user, Please try again"
         );
       }
     }
@@ -88,7 +88,7 @@ export const fetchUsers = createAsyncThunk(
         return response.data;
       } catch (error: any) {
         return thunkAPI.rejectWithValue(
-          error.response?.data?.message || "Failed to update user"
+          error.response?.data?.message || "Failed to update user, Please try again"
         );
       }
     }

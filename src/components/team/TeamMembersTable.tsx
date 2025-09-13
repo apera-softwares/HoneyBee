@@ -83,7 +83,7 @@ const TeamMembersTable: React.FC<TeamMembersTableProps> = ({ searchText, role, o
                 <Toaster />
 
                 <div className="min-w-[1102px]">
-                    {loading ? (
+                    {loading.read ? (
                         <Spinner />
                     ) : (
                         <Table>

@@ -11,19 +11,18 @@ import { useRouter, useSearchParams } from "next/navigation";
 import toast from "react-hot-toast";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { signup } from "@/lib/redux/slices/authSlice";
-import Loader from "@/components/ui/loader/Loader";
-// import Radio from "@/components/form/input/Radio";
 import LeadCard from "@/components/common/LeadCard";
 import Spinner from "@/components/common/Spinner";
 import Checkbox from "@/components/form/input/Checkbox";
 import Link from "next/link";
+import ButtonLoader from "@/components/ui/loader/ButtonLoader";
 
 function CreateAccountPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const role = searchParams.get("role");
   const dispatch = useAppDispatch();
-  const loggedInUser = useAppSelector((state) => state.user.user);
+  const {user:loggedInUser,loading} = useAppSelector((state) => state.user);
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -32,7 +31,6 @@ function CreateAccountPage() {
     role: role === "a" ? "A_TEAM" : role === "b" ? "B_TEAM" : "",
     agree:false,
   });
-  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({
     firstName: "",
     lastName: "",
@@ -55,7 +53,6 @@ function CreateAccountPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!validateFormData()) return;
-    setLoading(true);
     try {
       await dispatch(signup(formData)).unwrap();
          toast.success(
@@ -69,8 +66,6 @@ function CreateAccountPage() {
           ? error
           : error?.message || "Failed to signup. Please try again.";
       toast.error(errorMessage);
-    } finally {
-      setLoading(false);
     }
   };
 
@@ -300,7 +295,7 @@ function CreateAccountPage() {
               disabled={loading}
               className="flex justify-center  items-center w-full h-14 text-white bg-gradient-to-r from-gradient-start to-gradient-end rounded-full shadow-lg font-bold hover:cursor-pointer disabled:cursor-not-allowed"
             >
-              {loading ? <Loader /> : "Create account"}
+              {loading ? (<ButtonLoader size="lg" color="text-white"/>): ("Create account")}
             </button>
           </form>
 

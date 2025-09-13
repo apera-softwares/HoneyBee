@@ -105,7 +105,7 @@ export const updateProductCatalog = createAsyncThunk(
     } catch (error: any) {
       console.log(error,"product error")
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || "Failed to update product catalog"
+        error.response?.data?.message || "Failed to update product catalog, Please try again"
       );
     }
   }
