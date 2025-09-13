@@ -159,7 +159,7 @@ export default function UserManagement() {
             <Toaster />
 
             <div className="w-full ">
-              {loading ? (
+              {loading.read ? (
                 <Spinner />
               ) : (
                 <Table>

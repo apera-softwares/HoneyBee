@@ -234,14 +234,24 @@ export const deleteTeamMember = createAsyncThunk(
 interface TeamState {
   teams: any[];
   members: any[];
-  loading: boolean;
+  loading:{
+    create:boolean;
+    read:boolean;
+    update:boolean;
+    delete:boolean;
+  }
   error: string | null;
 }
 
 const initialState: TeamState = {
   teams: [],
   members: [],
-  loading: false,
+  loading:{
+    create:false,
+    read:false,
+    update:false,
+    delete:false,
+  },
   error: null,
 };
 
@@ -253,32 +263,32 @@ const teamManagementSlice = createSlice({
     //Get Teams
     builder
       .addCase(fetchTeams.pending, (state) => {
-        state.loading = true;
+        state.loading.read = true;
         state.error = null;
         state.teams = [];
       })
       .addCase(fetchTeams.fulfilled, (state, action) => {
-        state.loading = false;
+        state.loading.read = false;
         state.teams = action.payload?.data||[];
       })
       .addCase(fetchTeams.rejected, (state, action) => {
-        state.loading = false;
+        state.loading.read = false;
         state.error = action.payload as string;
       });
 
     //fetch teams by userId
     builder
       .addCase(fetchTeamsByUserId.pending, (state) => {
-        state.loading = true;
+        state.loading.read = true;
         state.error = null;
         state.teams = [];
       })
       .addCase(fetchTeamsByUserId.fulfilled, (state, action) => {
-        state.loading = false;
+        state.loading.read = false;
         state.teams = action.payload;
       })
       .addCase(fetchTeamsByUserId.rejected, (state, action) => {
-        state.loading = false;
+        state.loading.read = false;
         state.error = action.payload as string;
       });
 
@@ -286,95 +296,95 @@ const teamManagementSlice = createSlice({
 
     builder
       .addCase(createTeam.pending, (state) => {
-        state.loading = true;
+        state.loading.create = true;
         state.error = null;
         state.teams = [];
       })
       .addCase(createTeam.fulfilled, (state, action) => {
-        state.loading = false;
+        state.loading.create = false;
         state.teams = action.payload;
       })
       .addCase(createTeam.rejected, (state, action) => {
-        state.loading = false;
+        state.loading.create = false;
         state.error = action.payload as string;
       });
 
     //Update Team
     builder
       .addCase(updateTeam.pending, (state) => {
-        state.loading = true;
+        state.loading.update = true;
         state.error = null;
         state.teams = [];
       })
       .addCase(updateTeam.fulfilled, (state, action) => {
-        state.loading = false;
+        state.loading.update = false;
         state.teams = action.payload;
       })
       .addCase(updateTeam.rejected, (state, action) => {
-        state.loading = false;
+        state.loading.update = false;
         state.error = action.payload as string;
       });
 
     //change team by B_TEAM user
     builder
       .addCase(changeTeam.pending, (state) => {
-        state.loading = true;
+        state.loading.update = true;
         state.error = null;
       })
       .addCase(changeTeam.fulfilled, (state) => {
-        state.loading = false;
+        state.loading.update = false;
       })
       .addCase(changeTeam.rejected, (state, action) => {
-        state.loading = false;
+        state.loading.update = false;
         state.error = action.payload as string;
       });
 
     //Get Team Memebrs
     builder
       .addCase(fetchTeamMembers.pending, (state) => {
-        state.loading = true;
+        state.loading.read = true;
         state.error = null;
         state.members = [];
       })
       .addCase(fetchTeamMembers.fulfilled, (state, action) => {
-        state.loading = false;
+        state.loading.read = false;
         state.members = action.payload;
       })
       .addCase(fetchTeamMembers.rejected, (state, action) => {
-        state.loading = false;
+        state.loading.read = false;
         state.error = action.payload as string;
       });
 
     //Add Team Memebr
     builder
       .addCase(addTeamMember.pending, (state) => {
-        state.loading = true;
+        state.loading.create = true;
         state.error = null;
         // ✅ Don't reset teams here
       })
 
       .addCase(addTeamMember.fulfilled, (state, action) => {
-        state.loading = false;
+        state.loading.create = false;
         state.members = action.payload;
       })
       .addCase(addTeamMember.rejected, (state, action) => {
-        state.loading = false;
+        state.loading.create = false;
         state.error = action.payload as string;
       });
 
     //Delete Team Memebr
     builder
       .addCase(deleteTeamMember.pending, (state) => {
-        state.loading = true;
+        state.loading.delete = true;
         state.error = null;
         state.members = [];
       })
       .addCase(deleteTeamMember.fulfilled, (state, action) => {
-        state.loading = false;
+        state.loading.delete = false;
         state.members = action.payload;
       })
       .addCase(deleteTeamMember.rejected, (state, action) => {
-        state.loading = false;
+        state.loading.delete = false;
         state.error = action.payload as string;
       });
   },

@@ -164,7 +164,7 @@ const TeamAddEdit: React.FC<TeamAddEditProps> = ({
   };
 
   const handleCloseModal = () => {
-    if (loading) return;
+    if (loading.create||loading.update) return;
     clear();
     closeModal();
   };
@@ -257,16 +257,16 @@ const TeamAddEdit: React.FC<TeamAddEditProps> = ({
         <div className="flex items-center justify-end w-full gap-3">
           <Button
             size="sm"
-            disabled={loading}
+            disabled={(loading.create||loading.update)}
             onClick={type == "add" ? handleAddUser : handleEdit}
             className=" w-24"
           >
-            {loading ? <ButtonLoader size="md" color="text-white" /> : "Save"}
+            {(loading.create||loading.update) ? <ButtonLoader size="md" color="text-white" /> : "Save"}
           </Button>
           <Button
             size="sm"
             variant="outline"
-            disabled={loading}
+            disabled={(loading.create||loading.update)}
             onClick={handleCloseModal}
           >
             Cancel
