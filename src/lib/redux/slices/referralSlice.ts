@@ -17,7 +17,7 @@ export const createReferral = createAsyncThunk(
       return response.data;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || "Failed to create referral "
+        error.response?.data?.message || "Failed to create referral, Please try again "
       );
     }
   }
@@ -58,7 +58,7 @@ export const fetchReferrals = createAsyncThunk(
       return response.data;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || "Failed to fetch referrals"
+        error.response?.data?.message || "Failed to fetch referrals, Please try again"
       );
     }
   }
@@ -106,7 +106,7 @@ export const updateReferral = createAsyncThunk(
     } catch (error: any) {
       console.log("error while status update",error);
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || "Failed to update status. Please try again."
+        error.response?.data?.message || "Failed to update referral status, Please try again."
       );
     }
   }

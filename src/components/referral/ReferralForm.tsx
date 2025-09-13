@@ -9,6 +9,7 @@ import { fetchStatisticsNumbers } from "@/lib/redux/slices/statisticsSlice";
 import {  fetchAddress } from "@/lib/redux/slices/appSlice";
 import toast, { Toaster } from "react-hot-toast";
 import ProductDropdown from "../product-catalog/ProductDropdown";
+import ButtonLoader from "../ui/loader/ButtonLoader";
 
 interface FormDataState {
   firstName: string;
@@ -229,9 +230,10 @@ const ReferralForm = () => {
   const handleSubmitReferrals = async () => {
     if (!validateFormData()) return;
     setLoading(true);
+    const payload = { ...formData, teamMemberId: loggedInUser?.userId };
 
     try {
-      const payload = { ...formData, teamMemberId: loggedInUser?.userId };
+      
       await dispatch(createReferral(payload)).unwrap();
       toast.success("Referral created successfully");
       handleClearFormData();
@@ -241,7 +243,7 @@ const ReferralForm = () => {
       const errorMessage =
         typeof error === "string"
           ? error
-          : error?.message || "Failed to create referral.";
+          : error?.message || "Failed to create referral, Please try again";
 
       toast.error(errorMessage);
     } finally {
@@ -783,8 +785,11 @@ const ReferralForm = () => {
             variant="primary"
             disabled={loading}
             onClick={handleSubmitReferrals}
+            className="w-44"
           >
-            Send Referral
+            {
+              loading ? (<ButtonLoader size="md" color="text-white"/>):("Send Referral")
+            }
           </Button>
           <Button
             size="md"

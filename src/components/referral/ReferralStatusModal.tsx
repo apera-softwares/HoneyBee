@@ -7,6 +7,7 @@ import toast, { Toaster } from "react-hot-toast";
 import { capitalizeWord, capitalizeWords } from "@/utils/stringUtils";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
 import { updateReferral } from "@/lib/redux/slices/referralSlice";
+import ButtonLoader from "../ui/loader/ButtonLoader";
 
 type Role = "A_TEAM" | "B_TEAM" | "ADMIN";
 
@@ -70,7 +71,7 @@ const ReferralStatusModal: React.FC<ReferralStatusModalProps> = ({
     try {
       const payload = { id: referral?.id, status: newStatus };
       await dispatch(updateReferral(payload)).unwrap();
-      toast.success("Status updated successfully");
+      toast.success("Referral status updated successfully");
       closeModal();
       onStatusUpdate();
     } catch (error: any) {
@@ -78,16 +79,21 @@ const ReferralStatusModal: React.FC<ReferralStatusModalProps> = ({
       const errorMessage = typeof error === "string"
         ? error
         : error?.message ||
-        "Something went  wrong while status update. Please try again.";
+        "Something went  wrong while referral status update, Please try again.";
       toast.error(errorMessage);
     }
   };
+
+  const handleCloseModal = ()=>{
+    if(loading) return;
+    closeModal();
+  }
 
 
   return (
     <Modal
       isOpen={isOpen}
-      onClose={closeModal}
+      onClose={handleCloseModal}
       className="max-w-md p-6 lg:p-8 pt-10"
     >
       <Toaster />
@@ -148,10 +154,10 @@ const ReferralStatusModal: React.FC<ReferralStatusModalProps> = ({
 
         {/* Buttons */}
         <div className="flex items-center justify-end w-full gap-3 mt-4">
-          <Button disabled={loading} size="sm" onClick={handleUpdateStatus}>
-            {loading ? ("Saving Changes...") : ("Save Changes")}
+          <Button disabled={loading} size="sm" onClick={handleUpdateStatus} className="w-44">
+            {loading ? (<ButtonLoader size="md" color="text-white"/>) : ("Save Changes")}
           </Button>
-          <Button disabled={loading} size="sm" variant="outline" onClick={closeModal}>
+          <Button disabled={loading} size="sm" variant="outline" onClick={handleCloseModal}>
             Cancel
           </Button>
         </div>
