@@ -164,7 +164,7 @@ export const changeTeam = createAsyncThunk(
       return response.data;
     } catch (error: any) {
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || "Failed to change team"
+        error.response?.data?.message || "Failed to change team, Please try again"
       );
     }
   }

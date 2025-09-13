@@ -18,9 +18,9 @@ export const fetchUserProfile = createAsyncThunk(
       });
       return request.data?.user;
     } catch (error: any) {
-      console.log(error, "User Profile error");
+      console.log(error, "error while getting user profile");
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || "Login failed"
+        error.response?.data?.message || "Failed to fetch user profile, Please try again"
       );
     }
   }
@@ -49,7 +49,7 @@ export const uploadProfileImage = createAsyncThunk(
     } catch (error: any) {
       console.log(error, "User Profile Image Update error");
       return thunkAPI.rejectWithValue(
-        error.response?.data?.message || "Failed to update profile image"
+        error.response?.data?.message || "Failed to update profile image, Please try again"
       );
     }
   }

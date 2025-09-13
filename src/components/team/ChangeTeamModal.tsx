@@ -11,6 +11,7 @@ import { fetchTeams,changeTeam } from "@/lib/redux/slices/teamManagementSlice";
 import { useAppSelector } from "@/lib/redux/hooks";
 import { RxCross2 } from "react-icons/rx";
 import { fetchUserProfile } from "@/lib/redux/slices/loginPersonProfile";
+import ButtonLoader from "../ui/loader/ButtonLoader";
 
 interface ChangeTeamModalProps {
   isOpen: boolean;
@@ -64,17 +65,18 @@ const ChangeTeamModal: React.FC<ChangeTeamModalProps> = ({
     setLoading(true); 
 
     try {
-      await dispatch(changeTeam(payload));
+      await dispatch(changeTeam(payload)).unwrap();
       toast.success("Team changed successfully");
-      await dispatch(fetchUserProfile());
       handleCloseModal();
+      await dispatch(fetchUserProfile()).unwrap();
+      
     } catch (error: any) {
         console.error(
           "Error changing team ",
           error.response?.data || error.message
         );
       const errorMessage =
-      typeof error === "string"? error : error?.message || "Failed to select product";
+      typeof error === "string"? error : error?.message || "Failed to change team, Please try again";
       toast.error(errorMessage);
     } finally {
      setLoading(false);
@@ -132,7 +134,7 @@ const ChangeTeamModal: React.FC<ChangeTeamModalProps> = ({
             <label className="block font-medium mb-1">Team</label>
             <input
               type="text"
-              placeholder="search team "
+              placeholder="search team name here "
               className={`${FORM_INPUT_CLASS} mb-2`}
               value={searchText}
               onChange={(e) => setSearchText(e.target.value)}
@@ -178,8 +180,10 @@ const ChangeTeamModal: React.FC<ChangeTeamModalProps> = ({
         </div>
 
         <div className="flex items-center justify-end w-full gap-3">
-          <Button disabled={loading} size="sm" onClick={handleChangeTeam}>
-            Save Changes
+          <Button disabled={loading} size="sm" onClick={handleChangeTeam} className="w-44" >
+            {
+              loading ? (<ButtonLoader size="md" />):("Save Changes")
+            }
           </Button>
           <Button disabled={loading}  size="sm" variant="outline" onClick={handleCloseModal}>
             Cancel
