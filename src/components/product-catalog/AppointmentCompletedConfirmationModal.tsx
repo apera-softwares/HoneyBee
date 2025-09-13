@@ -6,6 +6,7 @@ import { BsBookmarkCheckFill } from "react-icons/bs";
 import toast, { Toaster } from "react-hot-toast";
 import { useAppDispatch } from "@/lib/redux/hooks";
 import { updateProductCatalog } from "@/lib/redux/slices/productCatalogSlice";
+import ButtonLoader from "../ui/loader/ButtonLoader";
 
 interface AppointmentCompletedConfirmationModalProps {
   isOpen: boolean;
@@ -34,7 +35,7 @@ const AppointmentCompletedConfirmationModal: React.FC<
       onAppointmentCompleted();
     } catch (error: any) {
       console.error("Error while appointment completed:", error);
-      const message = "Failed to mark as appointment completed";
+      const message = "Failed to mark as appointment completed, Please try again";
       const errorMessage =
         typeof error === "string" ? error : error?.message || message;
       toast.error(errorMessage);
@@ -44,9 +45,8 @@ const AppointmentCompletedConfirmationModal: React.FC<
   };
 
   const handleModalClose = () => {
-    if (!loading) {
-      closeModal();
-    }
+    if(loading) return ;
+    closeModal();
   };
 
   return (
@@ -82,8 +82,10 @@ const AppointmentCompletedConfirmationModal: React.FC<
 
         {/* Buttons */}
         <div className="flex items-center justify-end w-full gap-3 mt-4 ">
-          <Button size="sm" disabled={loading} onClick={handleSubmit}>
-            Yes, Sure
+          <Button size="sm" disabled={loading} onClick={handleSubmit} className="w-32">
+            {
+              loading ?(<ButtonLoader/>):("Yes, Sure")
+            }
           </Button>
           <Button
             size="sm"

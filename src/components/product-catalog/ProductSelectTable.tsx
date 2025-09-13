@@ -215,7 +215,11 @@ const ProductSelectTable: React.FC<ProductSelectTableProps> = ({
                         </TableCell>
                         <TableCell className="px-5 py-3 text-gray-500 text-theme-sm dark:text-gray-400">
                           <div className="flex flex-col items-start gap-1">
-                            {isSelected ? (
+                            {isSelected ? selectedProductId === product.id ? (
+                               <span className="w-full flex items-center justify-center  text-primary">
+                                <TbLoader2 className="text-xl animate-spin" />
+                              </span>
+                            ) :  (
                               <button
                                 className="w-24 flex justify-center items-center font-medium text-red-500 bg-red-500/10 px-3 py-1 rounded-full gap-1.5 disabled:cursor-not-allowed cursor-pointer"
                                 disabled={Boolean(selectedProductId)}
@@ -225,8 +229,8 @@ const ProductSelectTable: React.FC<ProductSelectTableProps> = ({
                                 Unselect
                               </button>
                             ) : selectedProductId === product.id ? (
-                              <span className="flex items-center  text-primary">
-                                <TbLoader2 className="text-xl animate-spin ml-5" />
+                              <span className="w-full flex items-center justify-center  text-primary">
+                                <TbLoader2 className="text-xl animate-spin" />
                               </span>
                             ) : (
                               <button

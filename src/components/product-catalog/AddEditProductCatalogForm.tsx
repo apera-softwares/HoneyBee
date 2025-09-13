@@ -16,12 +16,12 @@ import { BACKEND_API } from "@/api";
 import toast from "react-hot-toast";
 import Radio from "../form/input/Radio";
 import Button from "../ui/button/Button";
-import Loader from "../ui/loader/Loader";
 import ImageUploading from "react-images-uploading";
 import { RiImageAddFill } from "react-icons/ri";
 import Select from "react-select";
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { FiEdit } from "react-icons/fi";
+import ButtonLoader from "../ui/loader/ButtonLoader";
 
 interface FormState {
   name: string;
@@ -430,8 +430,8 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({
     } catch (error: any) {
       console.error("Error while creating product:", error);
       const message = editData
-        ? "Failed to update product"
-        : "Failed to create product";
+        ? "Failed to update product, Please try again"
+        : "Failed to create product, Please try again";
       const errorMessage =
         typeof error === "string" ? error : error?.message || message;
       toast.error(errorMessage);
@@ -825,9 +825,9 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({
         </div>
 
         <div className="w-full flex justify-center md:justify-start items-center gap-4 ">
-          <Button size="md" onClick={handleSubmit}>
+          <Button size="md" disabled={loading} onClick={handleSubmit} className="w-52">
             {loading ? (
-              <Loader />
+              <ButtonLoader size="md" color="text-white" />
             ) : editData ? (
               "Update Product"
             ) : (
@@ -838,6 +838,7 @@ const AddEditProductCatalogForm: React.FC<AddEditProductCatalogFormProps> = ({
           <Button
             size="md"
             variant="outline"
+            disabled={loading}
             onClick={() => {
               handleClearFormData();
               onEditSuccess();
