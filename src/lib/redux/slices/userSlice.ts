@@ -32,7 +32,7 @@ export const userSignup = createAsyncThunk(
       return response;
     } catch (error: any) {
       console.log(error, "signup error");
-      return thunkAPI.rejectWithValue(error?.response?.data?.message || "Signup Failed");
+      return thunkAPI.rejectWithValue(error?.response?.data?.message || "Signup Failed, Please try again");
     }
   }
 );
@@ -60,7 +60,7 @@ export const loginUser = createAsyncThunk(
       }
     } catch (error: any) {
       console.log(error, "login error");
-      return thunkAPI.rejectWithValue(error.response?.data?.message || "Login failed");
+      return thunkAPI.rejectWithValue(error.response?.data?.message || "Login failed, Please try again");
     }
   }
 );

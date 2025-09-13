@@ -8,15 +8,15 @@ import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import { loginUser } from "@/lib/redux/slices/userSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/redux/hooks";
-import Loader from "@/components/ui/loader/Loader";
 import { fetchUserProfile } from "@/lib/redux/slices/loginPersonProfile";
 import Checkbox from "@/components/form/input/Checkbox";
+import ButtonLoader from "@/components/ui/loader/ButtonLoader";
 
 export default function Login() {
 
     const router = useRouter();
     const dispatch = useAppDispatch();
-    const loggedInUser = useAppSelector((state) => state.user.user);
+    const {user:loggedInUser,loading} = useAppSelector((state) => state.user);
     const [formData, setFormData] = useState({
         email: "",
         password: "",
@@ -25,7 +25,6 @@ export default function Login() {
         email: "",
         password: "",
     });
-    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
 
@@ -43,23 +42,19 @@ export default function Login() {
         if (!validateFormData()) return;
 
         dispatch(loginUser(formData)).then((res: any) => {
-            setLoading(true)
             if (res.meta.requestStatus === "fulfilled") {
                 if (!res.payload) {
                     toast.error("User not verified");
                     setFormData({ email: "", password: "" });
-                    setLoading(false);
                     return;
                 } else {
                     dispatch(fetchUserProfile());
                     toast.success("Login successful!");
                     setFormData({ email: "", password: "" });
                     router.push("/");
-                    setLoading(false)
                 }
             } else {
                 toast.error(res.payload || "Login failed. Please try again.");
-                setLoading(false)
             }
         });
     };
@@ -160,8 +155,7 @@ export default function Login() {
                             className="flex justify-center items-center  w-full h-14 text-white bg-gradient-to-r from-gradient-start to-gradient-end rounded-full shadow-lg font-bold hover:cursor-pointer disabled:cursor-not-allowed "
                         >
 
-
-                            {loading ? (<Loader />) : ("Login")}
+                            {loading ? (<ButtonLoader size="lg" color="text-white" />) : ("Login")}
                         </button>
                     </form>
 
